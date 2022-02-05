@@ -2,19 +2,21 @@ from sys import stdin
 
 def clean(X, Y, D):
     global cnt
-    if board[X][Y] == 0:
+    if board[X][Y] == 0 :
         board[X][Y] = -1
         cnt += 1
-    for _ in range(4):
+    for _ in range(4) :
         nd = (D + 3) % 4
-        nx, ny = X + dx[nd], Y + dy[nd]
-        if (0 <= nx < N and 0 <= ny < M and board[nx][ny] == 0):
+        nx = X + dx[nd]
+        ny = Y + dy[nd]
+        if (0 <= nx < N and 0 <= ny < M and board[nx][ny] == 0) :
             clean(nx, ny, nd)
             return
         D = nd
-    nx, ny = X - dx[D], Y - dy[D]
+    nx = X - dx[D]
+    ny = Y - dy[D]
     if 0 <= nx < N and 0 <= ny < M:
-        if board[nx][ny] == 1:
+        if board[nx][ny] == 1 :
             print(cnt)
             return
         clean(nx, ny, D)
