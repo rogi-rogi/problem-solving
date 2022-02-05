@@ -1,11 +1,5 @@
 from sys import stdin
-N, M = map(int, stdin.readline().split())
-board = [list(map(int, stdin.readline().split())) for _ in range(N)]
-visited = [[0] * M for _ in range(N)]
-directions = [(-1, 0), (0, 1), (1, 0), (0, -1)]
 
-result = 0
-max_block_val = max(map(max, board))
 def dfs(X, Y, total, block) :
     if block == 4 :
         global result
@@ -24,9 +18,16 @@ def dfs(X, Y, total, block) :
             dfs(nx, ny, board[nx][ny] + total, block + 1)
             visited[nx][ny] = 0
             
-for i in range(N) :
-    for j in range(M) :
-        visited[i][j] = 1
-        dfs(i, j, board[i][j], 1)
-        visited[i][j] = 0
-print(result)
+if __name__ == "__main__" :
+    N, M = map(int, stdin.readline().split())
+    board = [list(map(int, stdin.readline().split())) for _ in range(N)]
+    visited = [[0] * M for _ in range(N)]
+    directions = [(-1, 0), (0, 1), (1, 0), (0, -1)]
+    result = 0
+    max_block_val = max(map(max, board))
+    for i in range(N) :
+        for j in range(M) :
+            visited[i][j] = 1
+            dfs(i, j, board[i][j], 1)
+            visited[i][j] = 0
+    print(result)
