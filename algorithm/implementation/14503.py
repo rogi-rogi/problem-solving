@@ -1,10 +1,4 @@
 from sys import stdin
-N, M = map(int, stdin.readline().split())
-dx = [-1, 0, 1, 0]
-dy = [0, 1, 0, -1]
-X, Y, DIR = map(int , stdin.readline().split())
-board = [list(map(int, stdin.readline().split())) for _ in range(N)]
-cnt = 0
 
 def clean(X, Y, D):
     global cnt
@@ -24,5 +18,12 @@ def clean(X, Y, D):
             print(cnt)
             return
         clean(nx, ny, D)
-        
-clean(X, Y, DIR)
+
+if __name__ == "__main__" :
+    N, M = map(int, stdin.readline().split())
+    dx = [-1, 0, 1, 0]
+    dy = [0, 1, 0, -1]
+    X, Y, DIR = map(int , stdin.readline().split())
+    board = [list(map(int, stdin.readline().split())) for _ in range(N)]
+    cnt = 0
+    clean(X, Y, DIR)
