@@ -8,7 +8,8 @@ def dfs(X, Y, total, block) :
     elif total + max_block_val * (4 - block) < result :
         return
     for direction in directions :
-        nx, ny = X + direction[0], Y + direction[1]
+        nx = X + direction[0]
+        ny = Y + direction[1]
         if 0 <= nx < N and 0 <= ny < M and visited[nx][ny] == 0 :
             if block == 2 :
                 visited[nx][ny] = 1
