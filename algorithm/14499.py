@@ -1,6 +1,6 @@
 from sys import stdin
 
-if __name__ == "__main__"" :
+if __name__ == "__main__" :
     N, M, X, Y, K = map(int, stdin.readline().split())
     board = [list(map(int, stdin.readline().split())) for _ in range(N)]
     moves = list(map(int, stdin.readline().split()))
