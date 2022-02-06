@@ -8,9 +8,8 @@ if __name__ == "__main__" :
     for _ in range(K) :
         x, y = map(int, stdin.readline().split())
         board[x - 1][y - 1] = 1
-    L = int(stdin.readline())
     turns = dict()
-    for _ in range(L) :
+    for _ in range(int(stdin.readline())) :
         X, C = stdin.readline().split()
         turns[int(X)] = C
         
@@ -19,7 +18,7 @@ if __name__ == "__main__" :
     direction = 1
     sec = 1
     x = y = 0
-    visited = deque([[x,y]])
+    visited = deque([(x,y)])
     board[x][y] = -1
     while True :
         x = x + dx[direction]
@@ -29,7 +28,7 @@ if __name__ == "__main__" :
                 tail_x, tail_y = visited.popleft()
                 board[tail_x][tail_y] = 0
             board[x][y] = -1
-            visited.append([x,y])
+            visited.append((x,y))
             if sec in turns.keys() :
                 direction = (direction + 3) % 4 if turns[sec] == 'L' else (direction + 1) % 4
             sec += 1
