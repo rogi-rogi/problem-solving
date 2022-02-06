@@ -8,11 +8,9 @@ if __name__ == "__main__" :
     dy = [1, -1, 0, 0]
     dice = [0] * 6
     roll = [2,1,4,3]
-
     for move in moves :
         nx = X + dx[move - 1]
         ny = Y + dy[move - 1]
-    
         if 0 <= nx < N and 0 <= ny < M :
             X = nx
             Y = ny
