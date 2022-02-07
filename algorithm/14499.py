@@ -7,7 +7,7 @@ if __name__ == "__main__" :
     dx = [0, 0, -1, 1]
     dy = [1, -1, 0, 0]
     dice = [0] * 6
-    roll = [2,1,4,3]
+    roll = [2, 1, 4, 3]
     for move in moves :
         nx = X + dx[move - 1]
         ny = Y + dy[move - 1]
