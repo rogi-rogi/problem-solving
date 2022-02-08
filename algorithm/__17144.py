@@ -26,12 +26,15 @@ if __name__ == "__main__" :
         board = temp[:]
         for i in range(1, -2, -2) :
             d = 0 if i == 1 else 2
-            x = clean_bot[i], y = 0
+            x = clean_bot[i]
+            y = 0
             while True :
                 nx = x + dx[d]
                 ny = y + dy[d]
                 if 0 <= nx < N and 0 <= ny < M :
-                    if board[nx][ny] == -1 : board[nx][ny] = 0
+                    if board[nx][ny] == -1 : 
+                        break
+                    if board[x][y] == -1 : board[nx][ny] = 0
                     else : board[x][y] = board[nx][ny]
                 else : d = (d + 4 + i) % 4
         sec += 1
@@ -41,5 +44,3 @@ if __name__ == "__main__" :
                 total += sum(board[i])
             print(total)
             break
-    
-            
