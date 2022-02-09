@@ -27,35 +27,32 @@ if __name__ == "__main__" :
                     temp[x][y] += board[x][y] - (board[x][y] // 5) * cnt
                 else : temp[x][y] += board[x][y]
         board = temp[:]
-        for i in range(N) :
-            print(board[i])
         for i in range(2) :
-            d = 0 if i == 0 else 2
             x = clean_bot[i]
             y = 0
+            if i == 0 :
+                d = 0
+                rows = [0, clean_bot[i] + 1]
+            else :
+                d = 2
+                rows = [clean_bot[i], N]
             while True :
                 nx = x + dx[d]
                 ny = y + dy[d]
-                if 0 <= nx < N and 0
-
-
-
-                <= ny < clean_bot[i] + 1 :
-                    if board[nx][ny] == -1 : break
+                if rows[0] <= nx < rows[1] and  0 <= ny < M :
+                    if board[nx][ny] == -1 :
+                        board[x][y] = 0
+                        break
                     if board[x][y] == -1 : board[nx][ny] = 0
                     else : board[x][y] = board[nx][ny]
                     x = nx
                     y = ny
                 else :
-                    d = (d + 1)%4 if i == 0 else (d + 3) % 4
-                    print(x, y, d)
-                    x = x + dx[d]
-                    y = y + dy[d]
+                    d = (d + 1) if i == 0 else (d + 3) % 4
         sec += 1
         if sec == T :
             total = 0
             for i in range(N) :
                 total += sum(board[i])
-            print(total)
+            print(total + 2)
             break
-        
