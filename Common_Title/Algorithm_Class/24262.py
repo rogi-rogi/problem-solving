@@ -1,1 +1,1 @@
-print(1,0,sep='\n')
+print(1, 0, sep='\n')
