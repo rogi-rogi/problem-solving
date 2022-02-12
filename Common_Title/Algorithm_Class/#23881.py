@@ -10,4 +10,4 @@ for i in range(N, 1, -1) :
             print(arr[i - 1], arr[max_idx])
             exit(0)
         arr[max_idx], arr[i - 1] = arr[i - 1], arr[max_idx], 
-if change < K : print(-1)
+print(-1)
