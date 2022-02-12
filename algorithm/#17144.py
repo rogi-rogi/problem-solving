@@ -1,3 +1,4 @@
+#pypy3
 from sys import stdin
     
 if __name__ == "__main__" :
