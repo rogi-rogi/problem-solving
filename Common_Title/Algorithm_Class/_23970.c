@@ -29,3 +29,23 @@ int main()
   putchar('0');
 }
 
+#pypy3
+#75%
+from sys import stdin
+N = int(stdin.readline())
+A = list(map(int, stdin.readline().split()))
+B = list(map(int, stdin.readline().split()))
+if A == B : print(1)
+else :
+    i = N - 1
+    while i > 0 :
+        last = 0
+        for j in range(i) :
+            if A[j] > A[j + 1] :
+                A[j], A[j + 1] = A[j + 1], A[j]
+                last = j
+                if A == B :
+                    print(1)
+                    exit(0)
+        i = last
+    print(0)
