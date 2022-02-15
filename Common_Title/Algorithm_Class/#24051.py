@@ -6,7 +6,6 @@ else :
     cnt = 0
     for i in range(1, N) :
         temp = A[i]
-        j = i - 1
         if A[i - 1] > temp :
             while A[i - 1] > temp and i >= 1 :
                 A[i] = A[i - 1]
