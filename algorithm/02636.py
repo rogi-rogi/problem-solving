@@ -11,9 +11,9 @@ if __name__ == "__main__" :
         melt = 0
         airs = deque([(0, 0)])
         visited = [[0] * M for _ in range(N)]
+        visited[0][0] = 1
         while airs :
             x, y = airs.popleft()
-            visited[x][y] = 1
             for dx, dy in directions :
                 nx = x + dx
                 ny = y + dy
