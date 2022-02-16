@@ -1,3 +1,4 @@
+#pypy3
 def EPF(N) :
     euler = N
     p = 2
