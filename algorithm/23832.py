@@ -10,7 +10,6 @@ if __name__ == "__main__" :
     print(sum(EulerList(int(input()))) - 1)
 
     
-    
 #pypy3
 #Euler phi function ver
 def EPF(N) :
