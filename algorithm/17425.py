@@ -1,5 +1,4 @@
 from sys import stdin
-input = stdin.readline
 MAX  = 1000001
 
 if __name__ == "__main__" : 
@@ -10,5 +9,5 @@ if __name__ == "__main__" :
             F[j] += i
     for i in range(1, MAX) :
         G[i] = G[i - 1] + F[i]
-    for _ in range(int(input())) :
-        print(G[int(input())])
+    for _ in range(int(stdin.readline())) :
+        print(G[int(stdin.readline())])
