@@ -1,3 +1,4 @@
+#pypy3
 from sys import stdin
 MAX  = 1000001
 
