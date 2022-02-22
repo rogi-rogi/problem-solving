@@ -1,10 +1,11 @@
 from sys import stdin
 
 def isPrime(n) :
-    p = 2
+    if n == 2 : return True
+    p = 3
     while p * p <= n :
         if n % p == 0 : return False
-        p += 1
+        p += 2
     return True
 
 if __name__ == "__main__" :
@@ -15,4 +16,3 @@ if __name__ == "__main__" :
         if isPrime(p) : print("no")
         elif pow(a, p, p) == a : print("yes")
         else : print("no")
-        
