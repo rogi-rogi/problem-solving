@@ -1,7 +1,7 @@
 from math import gcd
 from random import randint
 
-_primes = (2, 3, 5, 7, 11, 13, 17, 19, 61)
+_primes = (2, 3, 5, 7, 11, 13, 17, 19, 23, 61)
 
 def isComposite(a, d, n, s) :
     if a >= n : return False
