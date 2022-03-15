@@ -8,7 +8,8 @@ int fibo(int n)
   return fiboNum[n % 2];
 }
 
-int main(){
+int main()
+{
   int n;
   scanf("%d", &n);
   printf("%d", fibo(n));
