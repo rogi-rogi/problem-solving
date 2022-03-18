@@ -3,8 +3,7 @@ from sys import stdin
 input = stdin.readline
 
 if __name__ == "__main__" :
-    N = int(input())
-    nums = [int(input()) for _ in range(N)]
+    nums = [int(input()) for _ in range(int(input()))]
     result = 0
     heapq.heapify(nums)
     while len(nums) > 1 :
