@@ -4,7 +4,7 @@ input = stdin.readline
 
 if __name__ == "__main__" :
     for _ in range(int(input())) :
-        N = int(input())
+        input()
         nums = list(map(int, input().split()))
         result = 0
         heapq.heapify(nums)
