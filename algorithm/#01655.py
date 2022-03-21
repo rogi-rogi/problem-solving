@@ -12,5 +12,5 @@ if __name__ == "__main__" :
         else : heappush(right_min_heap, num)
         if right_min_heap and -left_max_heap[0] > right_min_heap[0] :
             heappush(left_max_heap, -heappop(right_min_heap))
-            heappush(right_num, -heappop(left_max_heap))
+            heappush(right_min_heap, -heappop(left_max_heap))
         print(-left_max_heap[0])
