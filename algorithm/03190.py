@@ -3,7 +3,7 @@ from sys import stdin
 input = stdin.readline
 
 def isInArea(x, y) :
-    return (0 <= x < N and 0 <= y < M)
+    return (0 <= x < N and 0 <= y < N)
     
 def move() :
     d = 1
