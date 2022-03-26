@@ -1,9 +1,9 @@
 from sys import stdin
 input = stdin.readline
 
-def isAreaOver(x, y) :
-    return not (0 <= x < N and 0 <= y < M)
-
+def isInArea(x, y) :
+    return (0 <= x < N and 0 <= y < M)
+    
 def clean(x, y, d):
     cnt = 0
     if board[x][y] == 0:
@@ -13,13 +13,13 @@ def clean(x, y, d):
         d = (d + 3) % 4     #(2)
         nx = x + D[d][0] 
         ny = y + D[d][1]
-        if not isAreaOver(nx, ny) and board[nx][ny] == 0 :  #(2) - (a)
+        if isInArea(nx, ny) and board[nx][ny] == 0 :  #(2) - (a)
             return cnt + clean(nx, ny, d)
         #(2) - (b)
     #(2) - (c)
     nx = x - D[d][0]
     ny = y - D[d][1]
-    if not isAreaOver(nx, ny) : 
+    if isInArea(nx, ny) : 
         return cnt + (0 if board[nx][ny] == 1 else clean(nx, ny, d)) #(2) - (d)
         
 if __name__ == "__main__" :
