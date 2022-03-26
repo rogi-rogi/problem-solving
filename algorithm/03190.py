@@ -2,8 +2,8 @@ from collections import deque
 from sys import stdin
 input = stdin.readline
 
-def isAreaOver(x, y) :
-    return not (0 <= x < N and 0 <= y < N)
+def isInArea(x, y) :
+    return (0 <= x < N and 0 <= y < M)
     
 def move() :
     d = 1
@@ -14,7 +14,7 @@ def move() :
     while True :
         x = x + D[d][0]
         y = y + D[d][1]
-        if not isAreaOver(x, y) and board[x][y] != -1 :
+        if isInArea(x, y) and board[x][y] != -1 :
             if board[x][y] == 0 :   # no apple
                 tail_x, tail_y = visited.popleft()
                 board[tail_x][tail_y] = 0
