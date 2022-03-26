@@ -1,31 +1,30 @@
 from sys import stdin
+input = stdin.readline
 
-def clean(X, Y, D):
-    global cnt
-    if board[X][Y] == 0 :
-        board[X][Y] = -1
-        cnt += 1
-    for _ in range(4) :
-        nd = (D + 3) % 4
-        nx = X + dx[nd]
-        ny = Y + dy[nd]
-        if (0 <= nx < N and 0 <= ny < M and board[nx][ny] == 0) :
-            clean(nx, ny, nd)
-            return
-        D = nd
-    nx = X - dx[D]
-    ny = Y - dy[D]
-    if 0 <= nx < N and 0 <= ny < M:
-        if board[nx][ny] == 1 :
-            print(cnt)
-            return
-        clean(nx, ny, D)
+def isAreaOver(x, y) :
+    return not (0 <= x < N and 0 <= y < M)
 
-if __name__ == "__main__" :
-    N, M = map(int, stdin.readline().split())
-    dx = [-1, 0, 1, 0]
-    dy = [0, 1, 0, -1]
-    X, Y, DIR = map(int , stdin.readline().split())
-    board = [list(map(int, stdin.readline().split())) for _ in range(N)]
+def clean(x, y, d):
     cnt = 0
-    clean(X, Y, DIR)
+    if board[x][y] == 0:
+        board[x][y] = -1    #(1)
+        cnt += 1
+    for _ in range(4) : 
+        d = (d + 3) % 4     #(2)
+        nx = x + D[d][0] 
+        ny = y + D[d][1]
+        if not isAreaOver(nx, ny) and board[nx][ny] == 0 :  #(2) - (a)
+            return cnt + clean(nx, ny, d)
+        #(2) - (b)
+    #(2) - (c)
+    nx = x - D[d][0]
+    ny = y - D[d][1]
+    if not isAreaOver(nx, ny) : 
+        return cnt + (0 if board[nx][ny] == 1 else clean(nx, ny, d)) #(2) - (d)
+        
+if __name__ == "__main__" :
+    N, M = map(int, input().split())
+    D = [(-1, 0), (0, 1), (1, 0), (0, -1)]
+    x, y, d = map(int, input().split())
+    board = [list(map(int, input().split())) for _ in range(N)]
+    print(clean(x, y, d))
