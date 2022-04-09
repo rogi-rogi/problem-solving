@@ -38,3 +38,15 @@ if __name__ == "__main__" :
     for _ in range(int(input())) :
         if BT(0, [list(map(int, input().rstrip())) for _ in range(9)]) == -1 :
             print("Could not complete this grid.")
+
+            
+1
+123456789
+123456789
+123456789
+123456789
+123456789
+123456789
+123456779
+123456779
+123456790
