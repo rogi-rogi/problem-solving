@@ -9,7 +9,7 @@ def PIE(op) : # Priority in expression
     res = -1
     if op == '*' or op == '/' : res = 2
     elif op == '+' or op == '-'  : res = 1
-    elif op == '(' : res = 4
+    elif op == '(' : res = 3
     return res
     
 if __name__ == "__main__" :
