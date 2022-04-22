@@ -17,8 +17,7 @@ def check(x, y, val, board) :
     if row[val] > 0 or col[val] > 0 : #가로/세로선에 대입하려는 값과 동일한 숫자가 1개 이상 존재
         return -1
     for i in range(1, 10) : #가로/세로선에 서로 같은 숫자가 2개 이상 존재
-        if row[i] > 1 or col[i] > 1 :
-            return -1
+        if row[i] > 1 or col[i] > 1 : return -1
     x = (x // 3) * 3
     y = (y // 3) * 3
     nums = [0] * 10
@@ -29,11 +28,9 @@ def check(x, y, val, board) :
     for i in range(1, 9) : #블럭안에 서로 같은 숫자가 2개 이상 존재
         if nums[i] > 1 : return -1
     return 0 #위의 조건을 모두 통과하면 모순이 없다.
-    
 
 def BT(N, board) :
-    if N == 81 :
-        return printBoard(board)
+    if N == 81 : return printBoard(board)
     x = N // 9
     y = N % 9
     if board[x][y] == 0 :
