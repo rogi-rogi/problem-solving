@@ -5,9 +5,9 @@ while True :
         num = 0
         space = 0
         for i in list(input()) :
-            if 97 <= ord(i) <= 122 : lower += 1
-            elif 65 <= ord(i) <= 90 : upper += 1
-            elif ord(i) == 32 : space += 1
-            else : num += 1
+            if i.islower() : lower += 1
+            elif i.isupper() : upper += 1
+            elif i.isdigit() : num += 1
+            else : space += 1
         print(lower, upper, num, space)
     except : break
