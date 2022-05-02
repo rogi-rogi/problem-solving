@@ -7,4 +7,4 @@ for i in range(26) :
     if alpha[i] >= 5 : 
         surrender = False
         res += chr(i + 97)
-print("PREDAJA" if surrender else res )
+print("PREDAJA" if surrender else res)
