@@ -7,4 +7,3 @@ while True :
         res += (-1 if i == '/' else op.index(i)) * pow(8, exponent)
         exponent += 1
     print(res)
-        
