@@ -2,7 +2,6 @@ from collections import deque
 
 def bfs() :
     queue = deque([N])
-    time = 0
     time = [0] * 100001
     while queue :
         x = queue.popleft()
