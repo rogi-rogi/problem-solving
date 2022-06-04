@@ -2,7 +2,7 @@
 #include <math.h>
 
 typedef struct circle_info{
-    int x, y, r;
+    	int x, y, r;
 } Circle;
 
 int main()
