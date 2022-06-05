@@ -1,6 +1,7 @@
 from collections import deque
 
 def bfs() :
+    if N >= K : return N - K
     queue = deque([N])
     time = [0] * 100001
     while queue :
