@@ -1,14 +1,3 @@
-# priority queue ver.
-from heapq import heappush, heappop
-
-if __name__ == "__main__" :
-    N, L = map(int, input().split())
-    pq = []
-    for idx, a in enumerate([*map(int, input().split())]) :
-        while pq and idx - pq[0][1] >= L : heappop(pq)
-        heappush(pq, (a, idx))
-        print(pq[0][0], end = ' ')
-        
 # deque ver.
 from collections import deque
 
