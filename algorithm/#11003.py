@@ -11,3 +11,17 @@ if __name__ == "__main__" :
         dq.append((idx, a))
         D.append(dq[0][1])
     print(*D)
+
+# pypy3
+# priority queue ver.
+from heapq import heappush, heappop
+
+if __name__ == "__main__" :
+    N, L = map(int, input().split())
+    pq = []
+    D = []
+    for idx, a in enumerate([*map(int, input().split())]) :
+        while pq and idx - pq[0][1] >= L : heappop(pq)
+        heappush(pq, (a, idx))
+        D.append(pq[0][0])
+    print(*D)
