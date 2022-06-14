@@ -1,4 +1,4 @@
-# queue ver.
+# deque ver.
 from collections import deque
 
 if __name__ == "__main__" :
