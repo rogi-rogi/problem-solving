@@ -20,4 +20,9 @@ if __name__ == "__main__" :
             if left_stack[-1] == A_last_chr and ''.join(left_stack[-len_A:]) == A :
                 del left_stack[-len_A:]
                 reverse = not reverse
-    print(*left_stack, *right_stack[::-1])
+    stack = []
+    for s in left_stack + right_stack[::-1] :
+        stack.append(s)
+        if s == A_last_chr and ''.join(stack[-len_A:]) == A :
+            del stack[-len_A:]
+    print(''.join(stack))
