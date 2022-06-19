@@ -2,8 +2,8 @@
 #include <stdlib.h>
 
 typedef struct _node {
-int data;
-	struct _node *left, *right;
+    int data;
+    struct _node *left, *right;
 }*pNode;
 
 void postorder(pNode root)
