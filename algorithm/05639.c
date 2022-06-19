@@ -32,7 +32,7 @@ int main()
 {
     int data;
     pNode tree = NULL;
-	while (scanf("%d", &data) != EOF)
-		tree = make_tree(tree, data); 
-	postorder(tree);
+    while (scanf("%d", &data) != EOF)
+        tree = make_tree(tree, data); 
+    postorder(tree);
 }
