@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 typedef struct _node {
-	int data;
+int data;
 	struct _node *left, *right;
 }*pNode;
 
