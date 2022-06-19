@@ -5,6 +5,6 @@ if __name__ == "__main__" :
     res = 0
     for i in range(N) :
         jooheon_pain_level = pow(2, i, MOD) - pow(2, N - i - 1, MOD)
-        res = (res + SHU_list[i] * Jooheon_Pain_level) % MOD
+        res = (res + SHU_list[i] * jooheon_pain_level) % MOD
     print(res)
     
