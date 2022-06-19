@@ -1,0 +1,13 @@
+from sys import stdin
+input = stdin.readline
+
+if __name__ == "__main__" :
+    N, M = map(int, input().split())
+    status_of_lamp = [input().rstrip() for _ in range(N)]
+    print(int("0b" + ''.join(status_of_lamp),2))
+    status_of_lamp = int("0b" + ''.join(status_of_lamp),2)
+    for _ in range(M) :
+        temp = status_of_lamp
+        status_of_lamp <<= 1
+        status_of_lamp ^= temp
+    print(bin(status_of_lamp))
