@@ -16,8 +16,8 @@ void postorder(pNode root)
 
 pNode make_tree(pNode root, int data)
 {
-	if (root == NULL) {
-		root = (pNode)malloc(sizeof(pNode));
+    if (root == NULL) {
+        root = (pNode)malloc(sizeof(pNode));
 		root->data = data;
 		root->left = NULL;
 		root->right = NULL;
