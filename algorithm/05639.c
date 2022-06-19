@@ -30,8 +30,8 @@ pNode make_tree(pNode root, int data)
 
 int main()
 {
-	int data;
-	pNode tree = NULL;
+    int data;
+    pNode tree = NULL;
 	while (scanf("%d", &data) != EOF)
 		tree = make_tree(tree, data); 
 	postorder(tree);
