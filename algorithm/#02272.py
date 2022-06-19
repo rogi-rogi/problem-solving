@@ -9,7 +9,7 @@ if __name__ == "__main__" :
     while i <= M :
         if i & M :
             for j in range(N) :
-                temp[j] = status_of_lamp[j] ^ status_of_lamp[(i+j)%N]
+                temp[j] = status_of_lamp[j] ^ status_of_lamp[(i + j) % N]
             for j in range(N) :
                 status_of_lamp[j] = temp[j]
         i <<= 1
