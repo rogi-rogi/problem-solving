@@ -18,4 +18,4 @@ for _ in range(int(input())):
     word = input()
     if list(word) == sorted(word, key=word.find):
         cnt += 1
-print(result)
+print(cnt)
