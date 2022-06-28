@@ -4,20 +4,13 @@ visited = [[[False] * 2 for _ in range(C)] for _ in range(R)]
 res = []
 for i in range(R) :
     for j in range(C) :
-        for k in range(2) :
-            if not visited[i][j][k] :
+        for d in range(2) :
+            if not visited[i][j][d] :
                 temp = ""
                 nx, ny = i, j
-                if k == 0 :
-                    while ny < C and words[i][ny] != '#' :
-                        temp += words[i][ny]
-                        visited[i][ny][k] = True
-                        ny += 1
-                elif k == 1 :
-                    while nx < R and words[nx][j] != '#' :
-                        temp += words[nx][j]
-                        visited[nx][j][k] = True
-                        nx += 1
-                if len(temp) > 1 :
-                    res.append(temp)
+                while nx < R and ny < C and words[nx][ny] != '#' :
+                    visited[nx][ny][d] = True
+                    temp += words[nx][ny]
+                    nx, ny = [(nx + 1, ny), (nx, ny + 1)][d == 0]
+                if nx - i > 1 or ny - j > 1 : res.append(temp)
 print(*sorted(res)[0], sep = '')
