@@ -21,5 +21,5 @@ print(*sorted(res)[0], sep = '')
 #parsing ver...
 R, C = map(int, input().split())
 words = [[i for i in [*input().split('#')] if len(i) > 1] for _ in range(R)]
-print(words)
+
 '''
