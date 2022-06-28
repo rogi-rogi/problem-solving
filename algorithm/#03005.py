@@ -14,3 +14,8 @@ for i in range(R) :
                     nx, ny = [(nx + 1, ny), (nx, ny + 1)][d == 0]
                 if nx - i > 1 or ny - j > 1 : res.append(temp)
 print(*sorted(res)[0], sep = '')
+'''
+R, C = map(int, input().split())
+words = [[i for i in [*input().split('#')] if len(i) > 1] for _ in range(R)]
+print(words)
+'''
