@@ -1,4 +1,3 @@
-#no parsing
 R, C = map(int, input().split())
 words = [[*input()] for _ in range(R)]
 visited = [[[False] * 2 for _ in range(C)] for _ in range(R)]
