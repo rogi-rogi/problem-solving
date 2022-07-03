@@ -14,15 +14,17 @@ if __name__ == "__main__" :
     for _ in range(int(input())) :
         K, C = map(int, input().split())
         MAX = int(1e9)
-        possible = True
-        if gcd(K, C) != 1 : possible = False
+        impossible = False
+        if gcd(K, C) != 1 :
+            impossible = True
         else :
             if C == 1 :
-                if K + 1 > MAX : possible = False
+                if K + 1 > MAX :
+                    impossible = True
                 else :
                     print(K + 1)
                     continue
             else :
                 X = exEuclid(C, K)
-                if X > MAX : possible = False
-        print("IMPOSSIBLE" if possible else X)
+                if X > MAX : impossible = True
+        print("IMPOSSIBLE" if impossible else X)
