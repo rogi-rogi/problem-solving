@@ -6,13 +6,14 @@ def EulerPhiList(n) :
     return eulerList
     
 def power_towers(X, mod, x_size) :
-    if mod == 1 or x_size == 0 : return 1
+    if mod == 1 : return 1
     if x_size >= 1 :
         x1 = X.pop(0)
-        if x_size >= 2 :
+        if x_size > 1 :
             temp = pow(x1, power_towers(X, eulerList[mod], x_size - 1), mod)
-            return temp + [0, eulerList[mod]][temp >= mod]
+            return temp + [0, mod][temp < mod]
         return x1
+    return 1
     
 if __name__ == "__main__" :
     T, M = map(int, input().split())
