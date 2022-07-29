@@ -1,14 +1,14 @@
-from sys import stdin
-input = stdin.readline
+from heapq import heappush, heappop
 
-N = int(input())
-rooms = [[*map(int, input().split())] for _ in range(N)]
-rooms.sort(key = lambda x : x[0])
-rooms.sort(key = lambda x : x[1])
-cnt, end = 0, 0
-for s, e in rooms :
-    if s >= end :
-        end = e
-        cnt += 1
-    else : continue
-print(cnt)
+if __name__ == "__main__" :
+    N = int(input())
+    rooms = sorted([[*map(int, input().split())] for i in range(N)])
+    pq = []
+    heappush(pq, rooms[0][1])
+    for i in range(1, N) :
+        if pq[0] > rooms[i][0] :
+            heappush(pq, rooms[i][1])
+        else :
+            heappop(pq)
+            heappush(pq, rooms[i][1])
+    print(len(pq))
