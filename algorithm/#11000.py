@@ -1,4 +1,6 @@
 from heapq import heappush, heappop
+from sys import stdin
+input = stdin.readline
 
 if __name__ == "__main__" :
     N = int(input())
