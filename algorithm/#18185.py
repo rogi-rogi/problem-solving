@@ -1,3 +1,6 @@
+from sys import stdin
+input = stdin.readline
+
 def buy(idx, no, t = -1) :
     if t == -1 : t = min(A[idx : idx + no])
     if no >= 2 :
