@@ -30,5 +30,5 @@ for _ in range(M) :
 cnt = 0
 for i in range(1, N + 1) :
     if not visited[i] :
-        cnt += bfs(i)
+        cnt += dfs(i) #bfs(i)
 print(cnt)
