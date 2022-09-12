@@ -17,7 +17,7 @@ def spreadVirus(queue, visited) :
     
 def chooseVirus() :
     cnt = N ** 2 - M - wall_cnt
-    res = -1
+    res = N ** 2
     for select_virus in combinations(virus, M) :
         visited = [[0] * N for _ in range(N)]
         queue = deque(select_virus)
@@ -25,10 +25,10 @@ def chooseVirus() :
             graph[x][y] = 2
             visited[x][y] = 1
         if cnt - spreadVirus(queue, visited) == 0 :
-            res = max(res, max(max(visited[i] for i in range(N))))
+            res = min(res, max(max(visited[i] for i in range(N))))
         for x, y in queue :
             graph[x][y] = 0
-    return res
+    return [res, -1][res == N ** 2]
     
 if __name__ == "__main__" :
     N, M = map(int, input().split())
