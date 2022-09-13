@@ -13,21 +13,18 @@ def spreadVirus(queue, visited) :
                 visited[nx][ny] = visited[x][y] + 1
                 queue.append((nx, ny))
                 spread_cnt += 1
-    return spread_cnt
+    return spread_cnt, max(max(visited[i]) for i in range(N))   # is max_sec
     
 def chooseVirus() :
-    cnt = N ** 2 - M - wall_cnt
+    empty_cnt = N ** 2 - M - wall_cnt
     res = N ** 2
     for select_virus in combinations(virus, M) :
         visited = [[0] * N for _ in range(N)]
         queue = deque(select_virus)
-        for x, y in queue :
-            graph[x][y] = 2
-            visited[x][y] = 1
-        if cnt - spreadVirus(queue, visited) == 0 :
-            res = min(res, max(max(visited[i] for i in range(N))))
-        for x, y in queue :
-            graph[x][y] = 0
+        for x, y in select_virus : graph[x][y] = 2      # mark virus
+        cnt_spread, max_sec = spreadVirus(queue, visited)
+        if empty_cnt - cnt_spread == 0 : res = min(res, max_sec)
+        for x, y in select_virus : graph[x][y] = 0      # unvirus virus
     return [res, -1][res == N ** 2]
     
 if __name__ == "__main__" :
@@ -40,6 +37,8 @@ if __name__ == "__main__" :
             if graph[i][j] == 2 :
                 virus.append([i, j])
                 graph[i][j] = 0
-            elif graph[i][j] == 1 : wall_cnt += 1
+            elif graph[i][j] == 1 :
+                graph[i][j] = -1;           # mark wall
+                wall_cnt += 1
     cnt_virus = len(virus)
     print(chooseVirus())
