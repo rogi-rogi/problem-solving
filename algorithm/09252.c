@@ -6,7 +6,7 @@
 int dp[SIZE][SIZE];
 char str1[SIZE], str2[SIZE];
 
-int LCS_length(const char* str1, const char* str2, int s1, int s2)
+int LCS_length(int s1, int s2)
 {
     return ((str1[s1] == str2[s2]) ? dp[s1][s2] + 1 : max(dp[s1][s2 + 1], dp[s1 + 1][s2]));
 }
@@ -28,7 +28,7 @@ int main()
     int s1, s2;
     for (s1 = 0; str1[s1] != EOS; ++s1)
         for (s2 = 0; str2[s2] != EOS; ++s2)
-            dp[s1 + 1][s2 + 1] = LCS_length(str1, str2, s1, s2);
+            dp[s1 + 1][s2 + 1] = LCS_length(s1, s2);
     printf("%d\n", dp[s1][s2]);
     print_LCS(s1, s2);
 }
