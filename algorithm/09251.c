@@ -12,7 +12,7 @@ int LCS_length(const char* str1, const char* str2, int s1, int s2)
 int main()
 {
     char str1[1001], str2[1001];
-    scanf("%s %s", &str1[0], &str2[0]);
+    scanf("%s %s", str1, str2);
     int s1, s2;
     for (s2 = 0; str2[s2] != EOS; ++s2)
         for (s1 = 0; str1[s1] != EOS; ++s1)
