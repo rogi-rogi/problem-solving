@@ -26,9 +26,9 @@ int main()
 {
     scanf("%s %s", str1, str2);
     int s1, s2;
-    for (s2 = 0; str2[s2] != EOS; ++s2)
-        for (s1 = 0; str1[s1] != EOS; ++s1)
-            dp[s1 + 1][s2 + 1] = LCS_length(&str1[0], &str2[0], s1, s2);
+    for (s1 = 0; str1[s1] != EOS; ++s1)
+        for (s2 = 0; str2[s2] != EOS; ++s2)
+            dp[s1 + 1][s2 + 1] = LCS_length(str1, str2, s1, s2);
     printf("%d\n", dp[s1][s2]);
     print_LCS(s1, s2);
 }
