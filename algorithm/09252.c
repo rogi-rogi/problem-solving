@@ -1,9 +1,10 @@
 #include <stdio.h>
 #define EOS '\0'
+#define SIZE 1001
 #define max(a, b) (((a) > (b)) ? (a) : (b))
 
-int dp[1001][1001];
-char str1[1001], str2[1001];
+int dp[SIZE][SIZE];
+char str1[SIZE], str2[SIZE];
 
 int LCS_length(const char* str1, const char* str2, int s1, int s2)
 {
