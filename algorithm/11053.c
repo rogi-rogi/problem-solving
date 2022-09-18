@@ -1,17 +1,18 @@
 #include <stdio.h>
+
+int dp[1000];
+
 int main()
 {
-    int N;
+    int N, res = 0, A[1000];
     scanf("%d", &N);
-    int arr[N], dp[N], max = 0;
-    for (int i = 0; i < N; ++i){
-        scanf("%d", &arr[i]);
-        int length = 0;
+    for (int i = 0; i < N; ++i) {
+        scanf("%d", &A[i]);
         for (int j = 0; j < i; ++j)
-            if (arr[i] > arr[j] && length < dp[j])
-                length = dp[j];
-        dp[i] = length + 1;
-       	max < dp[i] && (max = dp[i]);    
+            if (A[j] < A[i] && dp[i] < dp[j])
+                dp[i] = dp[j];
+        dp[i] = dp[i] + 1; 
+        if (res < dp[i]) res = dp[i];  
     }
-    printf("%d", max);
+    printf("%d", res);
 }
