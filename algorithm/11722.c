@@ -1,17 +1,24 @@
 #include <stdio.h>
+
+int A[1000], dp[1000];
+
+int LIS_length(int i)
+{
+    int length = 0;
+    for (int j = 0; j < i; ++j)
+        if (A[j] > A[i] && length < dp[j])
+            length = dp[j];
+    return length + 1;
+}
+
 int main()
 {
-    int N;
+    int N, res = 0;
     scanf("%d", &N);
-    int arr[N], dp[N], max = 0;
-    for (int i = 0; i < N; ++i){
-        scanf("%d", &arr[i]);
-        int length = 0;
-        for (int j = 0; j < i; ++j)
-            if (arr[i] < arr[j] && length < dp[j])
-                length = dp[j];
-        dp[i] = length + 1;
-       	max < dp[i] && (max = dp[i]);    
+    for (int i = 0; i < N; ++i) {
+        scanf("%d", &A[i]);
+        dp[i] = LIS_length(i);
+        if (res < dp[i]) res = dp[i];  
     }
-    printf("%d", max);
+    printf("%d", res);
 }
