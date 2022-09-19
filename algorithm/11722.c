@@ -18,7 +18,7 @@ int main()
     for (int i = 0; i < N; ++i) {
         scanf("%d", &A[i]);
         dp[i] = LIS_length(i);
-        if (res < dp[i]) res = dp[i];  
+        res = max(res, dp[i]);  
     }
     printf("%d", res);
 }
