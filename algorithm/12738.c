@@ -1,7 +1,7 @@
 #include <stdio.h>
 #define SIZE 1000000
 
-int dp[SIZE];
+int temp[SIZE];
 
 int lowerBound(int *arr, int right, int key)
 {
@@ -15,14 +15,14 @@ int lowerBound(int *arr, int right, int key)
 
 int main()
 {
-    int N, idx = 0, res = 0, temp;
+    int N, idx = 0, res = 0, val;
     scanf("%d", &N);
-    scanf("%d", &temp);
-    dp[idx++] = temp;
+    scanf("%d", &val);
+    temp[idx++] = val;
     while (--N) {
-        scanf("%d", &temp);
-        if (dp[idx - 1] < temp) dp[idx++] = temp;
-        else dp[lowerBound(dp, idx, temp)] = temp;
+        scanf("%d", &val);
+        if (temp[idx - 1] < val) temp[idx++] = val;
+        else temp[lowerBound(temp, idx, val)] = val;
     }
     printf("%d", idx);
 }
