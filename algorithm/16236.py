@@ -17,6 +17,7 @@ def eatFish(x, y) :
                         min_time = time
                         move_list.append((time + 1, nx, ny))
                     if time <= min_time : queue.append((nx, ny, time + 1))
+    # sorting criteria : (1) time(=distance), (2) x(=up), (3) y(=left)
     return sorted(move_list)[0] if move_list else False
                     
 if __name__ == "__main__" :
