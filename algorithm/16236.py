@@ -11,7 +11,7 @@ def eatFish(x, y) :
         for dx, dy in [(-1, 0), (0, 1), (1, 0), (0, -1)] :
             nx, ny = x + dx, y + dy
             if 0 <= nx < N and 0 <= ny < N and not visited[nx][ny] :
-                if graph[nx][ny] <= shark_size :    # empty area or 
+                if graph[nx][ny] <= shark_size :
                     visited[nx][ny] = True
                     if 0 < graph[nx][ny] < shark_size :
                         min_time = time
