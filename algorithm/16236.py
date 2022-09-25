@@ -8,7 +8,6 @@ def eatFish(x, y) :
     min_time = 400                  # 20 * 20
     while queue :
         x, y, time = queue.popleft()
-        # up(-1, 0) -> left(0, -1)
         for dx, dy in [(-1, 0), (0, 1), (1, 0), (0, -1)] :
             nx, ny = x + dx, y + dy
             if 0 <= nx < N and 0 <= ny < N and not visited[nx][ny] :
