@@ -4,7 +4,8 @@ input = stdin.readline
 '''
 # This code is too slow. Isn't there a faster way...?
 # day 1 : (0, 0) ~ (N - 1, N - 1) 의 영역이 탐색 범위가 될 수 있다.
-# day 2 : day 1에서 연합이 형성된 지역 또는 해당 지역의 인접한 범위의 지역이 탐색범위가 된다.
+# day 2 : day 1에서 연합이 형성된 지역(nx, ny) 또는 해당 지역의 인접한 범위(+dx, +dy)의 지역이 탐색범위가 된다.
+# day n : day (n - 1)에서 ~~
 # solution -> 방문 여부 기준이 아닌 몇일날까지 이동을 했는지 기록하여 중복되는 visited선언이 불필요하고,
 # 전날에 해당되지 않은 영역을 기준으로 인접한 영역은 탐색할 필요가 없어진다. (= queue로 전날에 탐색한 범위 기록)
 
