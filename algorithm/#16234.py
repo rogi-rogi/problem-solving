@@ -2,6 +2,12 @@ from collections import deque
 from sys import stdin
 input = stdin.readline
 '''
+# This code is too slow. Isn't there a faster way...?
+# day 1 : (0, 0) ~ (N - 1, N - 1) 의 영역이 탐색 범위가 될 수 있다.
+# day 2 : day 1에서 연합이 형성된 지역 또는 해당 지역의 인접한 범위의 지역이 탐색범위가 된다.
+# solution -> 방문 여부 기준이 아닌 몇일날까지 이동을 했는지 기록하여 중복되는 visited선언이 불필요하고,
+# 전날에 해당되지 않은 영역을 기준으로 인접한 영역은 탐색할 필요가 없어진다. (= queue로 전날에 탐색한 범위 기록)
+
 def getUnitedInfo(x, y) :
     queue = deque([(x, y)])
     united_nations = [(x, y)]                   # maybe (x, y) is united nations
@@ -30,7 +36,7 @@ if __name__ == "__main__" :
                     visited[i][j] = True
                     nations, population = getUnitedInfo(i, j)
                     cnt_nations = len(nations)
-                    if cnt_nations > 1 :       # maybe united nation and real unsited nations ?
+                    if cnt_nations > 1 :                # is list of united nation and real unsited nations ?
                         flag = True
                         population //= cnt_nations
                         for x, y in nations :
@@ -38,8 +44,7 @@ if __name__ == "__main__" :
         if not flag : break
         day += 1
     print(day)
-'''    
-
+'''
 def getUnitedInfo(x, y) :
     queue = deque([(x, y)])
     united_nations = [(x, y)]                   # maybe (x, y) is united nations
@@ -53,7 +58,8 @@ def getUnitedInfo(x, y) :
                     united_nations.append((nx, ny))
                     sum_population += graph[nx][ny]
                     queue.append((nx, ny))
-    return united_nations, sum_population
+    cnt_nations = len(united_nations)       
+    return united_nations, cnt_nations, (sum_population // cnt_nations)
     
 if __name__ == "__main__" :
     N, L, R = map(int, input().split())
@@ -66,12 +72,11 @@ if __name__ == "__main__" :
             x, y = nations.popleft()
             if days[x][y] != day :
                 days[x][y] = day
-                united_nations, population =  getUnitedInfo(x, y)
-                cnt_nations = len(nations)
-                if cnt_nations > 1 :       # maybe united nation and real unsited nations ?
-                    population //= cnt_nations
-                    for x, y in united_nations :
-                        graph[x][y] = population
-                        
-        pass
+                united_nations, cnt_nations, avg_population =  getUnitedInfo(x, y)
+                if cnt_nations > 1 :       # is list of united nation and real unsited nations ?
+                    for nx, ny in united_nations :
+                        graph[nx][ny] = avg_population
+                        nations.append((nx, ny))
+        if not nations : break
+        day += 1
     print(day)
