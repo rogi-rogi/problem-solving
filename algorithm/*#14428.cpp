@@ -51,7 +51,7 @@ int query(int start, int end, int node, int i, int j)
 int main()
 {
     ios_base::sync_with_stdio(false);
-	cin.tie(nullptr);
+    cin.tie(nullptr);
     int N;
     cin >> N;
     leaf.resize(N + 1);
