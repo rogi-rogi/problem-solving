@@ -31,9 +31,8 @@ void init(int start, int end, int node)
 void update(int start, int end, int node, int idx, bool val)
 {
     if (start <= idx && idx <= end) {
-        if (start == end) {
-            tree[node] = (leaf[idx] = oddOrEven(val));
-        } else {
+        if (start == end) tree[node] = (leaf[idx] = oddOrEven(val));
+        else {
             int mid = (start + end) / 2;
             update(start, mid, node * 2, idx, val);
             update(mid + 1, end, node * 2 + 1, idx, val);
