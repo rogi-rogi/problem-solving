@@ -10,7 +10,7 @@ map<string, int> name;
 int main()
 {
     ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
+    cin.tie(nullptr);
     int N, M;
     cin >> N >> M;
     vector<string> res;
