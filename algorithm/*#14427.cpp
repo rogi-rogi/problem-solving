@@ -43,7 +43,7 @@ int query(int node) { return tree[1]; }
 int main()
 {
     ios_base::sync_with_stdio(false);
-	cin.tie(nullptr);
+    cin.tie(nullptr);
     int N;
     cin >> N;
     leaf.resize(N + 1);
