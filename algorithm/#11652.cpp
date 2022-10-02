@@ -20,7 +20,7 @@ int main()
         if (cnt < iter->second) {
             cnt = iter->second;
             res = iter->first;;
-        } else if (cnt == iter->second && res > iter->first) res = iter->first;
+        }   // 'map' has been in ascending order according to the 'key'
     }
     cout << res << '\n';
 }
