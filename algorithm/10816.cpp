@@ -6,7 +6,7 @@ using namespace std;
 int main()
 {
     ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
+    cin.tie(nullptr);
     int N;
     cin >> N;
     vector<int> v1(N);
@@ -31,7 +31,7 @@ map<int, int> card;
 int main()
 {
     ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
+    cin.tie(nullptr);
     int N;
     cin >> N;
     for (int i = 0, val; i < N; ++i) {
