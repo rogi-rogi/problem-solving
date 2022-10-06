@@ -17,6 +17,6 @@ int main()
     for (int i = 0; i < M; ++i) {
         cin >> str;
         if (set_str[str]) ++cnt;
-    
+    }
     cout << cnt << '\n';
 }
