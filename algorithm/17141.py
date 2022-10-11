@@ -40,5 +40,4 @@ if __name__ == "__main__" :
             elif graph[i][j] == 1 :
                 graph[i][j] = -1;           # mark wall
                 wall_cnt += 1
-    cnt_virus = len(virus)
     print(chooseVirus())
