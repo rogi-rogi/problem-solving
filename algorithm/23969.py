@@ -6,10 +6,9 @@ def bubbleSort() :
             if A[j] > A[j + 1] :
                 swap_cnt += 1
                 A[j], A[j + 1] = A[j + 1], A[j]
-                if swap_cnt == K : return swap_cnt
-    return swap_cnt
+                if swap_cnt == K : return print(*A)
+    print(-1)
     
 N, K = map(int, input().split())
 A = [*map(int, input().split())]
-if bubbleSort() == K : print(*A)
-else : print(-1)
+bubbleSort()
