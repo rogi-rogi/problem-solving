@@ -1,12 +1,13 @@
+def selectionSort() :
+    swap_cnt = 0
+    for i in range(N - 1, 0, -1) :
+        max_idx = A.index(max(A[:i + 1]))
+        if max_idx != i :
+            A[max_idx], A[i] = A[i], A[max_idx]
+            swap_cnt += 1
+            if swap_cnt == K : return print(A[max_idx], A[i])
+    print(-1)
+    
 N, K = map(int, input().split())
-arr = list(map(int, input().split()))
-change = 0
-for i in range(N, 1, -1) :
-    max_idx = arr.index(max(arr[:i]))
-    if max_idx != i - 1 :
-        change += 1
-        if change == K :
-            print(arr[i - 1], arr[max_idx])
-            exit(0)
-        arr[max_idx], arr[i - 1] = arr[i - 1], arr[max_idx], 
-print(-1)
+A = [*map(int, input().split())]
+selectionSort()
