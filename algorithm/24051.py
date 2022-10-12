@@ -1,22 +1,20 @@
 #pypy3
-N, K = map(int, input().split())
-A = list(map(int, input().split()))
-if (N * (N + 1) // 2) - 1 < K : print(-1)
-else :
-    cnt = 0
+def insertionSort() :
+    if (N * (N - 1)) // 2 < K : return print(-1)
+    swap_cnt = 0
     for i in range(1, N) :
         temp = A[i]
         if A[i - 1] > temp :
             while A[i - 1] > temp and i >= 1 :
                 A[i] = A[i - 1]
-                cnt += 1
-                if cnt == K : 
-                    print(A[i - 1])
-                    exit(0)
+                swap_cnt += 1
+                if swap_cnt == K : return print(A[i - 1])
                 i -= 1
             A[i] = temp
-            cnt += 1
-            if cnt == K : 
-                print(A[j])
-                exit(0)
+            swap_cnt += 1
+            if swap_cnt == K : return print(A[i])
     print(-1)
+
+N, K = map(int, input().split())
+A = [*map(int, input().split())]
+insertionSort()
