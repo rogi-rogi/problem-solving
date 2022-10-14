@@ -6,6 +6,18 @@ using namespace std;
 
 vector<int> A(MAX), index_list(MAX), LIS, res;
 
+void print_LIS(int end, int length)
+{
+    for (int i = end; i >= 0; --i) {
+        if (index_list[i] == length) {
+            res.push_back(A[i]);
+            --length;
+        }
+    }
+    reverse(res.begin(), res.end());
+    for (auto r : res) cout << r << ' ';
+}
+
 int main()
 {
     ios::sync_with_stdio(false);
@@ -24,12 +36,5 @@ int main()
         }
     }
     cout << LIS.size() << '\n';
-    for (int i = N - 1, length = LIS.size() - 1; i >= 0; --i) {
-        if (index_list[i] == length) {
-            res.push_back(A[i]);
-            --length;
-        }
-    }
-    reverse(res.begin(), res.end());
-    for (auto r : res) cout << r << ' ';
+    print_LIS(N - 1, LIS.size() - 1);
 }
