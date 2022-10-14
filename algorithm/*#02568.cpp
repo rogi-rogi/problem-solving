@@ -4,7 +4,7 @@
 using namespace std;
 
 vector<pair<int, int>> A;
-vector<int> index_list(1000000), LIS, res;
+vector<int> index_list(100000), LIS, res;
 
 void print_LIS(int end, int length)
 {
