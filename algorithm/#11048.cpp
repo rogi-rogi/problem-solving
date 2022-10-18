@@ -1,8 +1,8 @@
 #include <iostream>
-#define MAX 1001
+#define SIZE 1001
 using namespace std;
 
-int dp[MAX][MAX];
+int dp[SIZE][SIZE];
 
 int main()
 {
