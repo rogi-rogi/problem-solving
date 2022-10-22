@@ -1,5 +1,5 @@
 N = int(input())
-A = list(map(int, input().split()))
+A = [*map(int, input().split())]
 X, Y = map(int, input().split())
 cnt = 0
 for i in A :
