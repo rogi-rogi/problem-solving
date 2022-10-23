@@ -3,7 +3,7 @@ from math import inf
 from sys import stdin
 input = stdin.readline
 
-def Dijkstra(v) : # start V 
+def Dijkstra(v) : # start Vertex
     pq = []
     heappush(pq, (0, v))
     dist[v] = 0
@@ -21,7 +21,7 @@ if __name__ == "__main__" :
     graph = [[] for _ in range(V + 1)]
     dist = [inf] * (V + 1)
     for _ in range(E) :
-        v1, v2, w = map(int, input().split())  # v1 --(w)--> v2
+        v1, v2, w = map(int, input().split())  # v1 --(w)--> v2 
         graph[v1].append((v2, w))
     Dijkstra(1)
     for i in range(1, V + 1) :
