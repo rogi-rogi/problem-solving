@@ -23,6 +23,6 @@ if __name__ == "__main__" :
     for _ in range(E) :
         v1, v2, w = map(int, input().split())  # v1 --(w)--> v2
         graph[v1].append((v2, w))
-    dijkstra(1)
+    Dijkstra(1)
     for i in range(1, V + 1) :
         print([dist[i], "INF"][dist[i] == inf])
