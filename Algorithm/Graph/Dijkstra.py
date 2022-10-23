@@ -9,9 +9,9 @@ def Dijkstra(v) : # start V
     dist[v] = 0
     while pq :
         w, v = heappop(pq)
-        if dist[v] < w : continue
+        if dist[v] < w : continue # distance previously calculated is shorter
         for nv, nw in graph[v] :
-            nw = w + nw
+            nw += w
             if nw < dist[nv] :
                 dist[nv] = nw
                 heappush(pq, (nw, nv))
