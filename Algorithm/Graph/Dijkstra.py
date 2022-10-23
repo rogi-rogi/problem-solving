@@ -3,7 +3,7 @@ from math import inf
 from sys import stdin
 input = stdin.readline
 
-def dijkstra(v) : # start V 
+def Dijkstra(v) : # start V 
     pq = []
     heappush(pq, (0, v))
     dist[v] = 0
