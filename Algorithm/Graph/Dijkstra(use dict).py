@@ -9,7 +9,7 @@ def Dijkstra(v) : # start Vertex
     dist[v] = 0
     while pq :
         w, v = heappop(pq)
-        if dist[v] < w : continue # distance previously calculated is shorter
+        if dist[v] < w : continue
         for nv, nw in graph[v].items() :
             nw += w
             if nw < dist[nv] :
@@ -21,7 +21,7 @@ if __name__ == "__main__" :
     graph = [dict() for _ in range( + 1)]
     dist = [inf] * (V + 1)
     for _ in range(E) :
-        v1, v2, w = map(int, input().split())  # v1 --(w)--> v2 
+        v1, v2, w = map(int, input().split())
         graph[v1][v2] = min(graph[v1][v2], w) if v2 in graph[v1].keys() else w
     Dijkstra(1)
     for i in range(1, V + 1) :
