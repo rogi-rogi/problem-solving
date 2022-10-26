@@ -2,6 +2,7 @@ from math import inf
 from sys import stdin
 input = stdin.readline
 
+# O(V^2)
 def Dijkstra(v) :
     dist[v] = 0
     visited[v] = True
