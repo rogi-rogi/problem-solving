@@ -1,4 +1,3 @@
-from heapq import heappop, heappush
 from math import inf
 from sys import stdin
 input = stdin.readline
@@ -8,9 +7,9 @@ def Dijkstra(v) :
     visited[v] = True
     for av, aw in graph[v] : # vertex adjacent to the start vertex
         dist[av] = aw
-    for _ in range(V - 1) : # other vertex
+    for _ in range(V - 1) :  # other vertex
         min_weighted = inf
-        nv = 0
+        nv = 0               # get adjacent vertex with low weights
         for av in range(1, V + 1) :
             if not visited[av] and dist[av] < min_weighted :
                 min_weighted = dist[av]
@@ -27,7 +26,7 @@ if __name__ == "__main__" :
     dist = [inf] * (V + 1)
     visited = [False] * (V + 1)
     for _ in range(E) :
-        v1, v2, w = map(int, input().split())  # v1 --(w)--> v2 
+        v1, v2, w = map(int, input().split())
         graph[v1].append((v2, w))
     Dijkstra(1)
     for i in range(1, V + 1) :
