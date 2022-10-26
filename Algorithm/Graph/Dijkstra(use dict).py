@@ -18,7 +18,7 @@ def Dijkstra(v) : # start Vertex
                 
 if __name__ == "__main__" :
     V, E = map(int, input().split())
-    graph = [dict() for _ in range( + 1)]
+    graph = [dict() for _ in range( + 1)] # The edge may not be given for both vertex.
     dist = [inf] * (V + 1)
     for _ in range(E) :
         v1, v2, w = map(int, input().split())
