@@ -3,7 +3,7 @@ from math import inf
 from sys import stdin
 input = stdin.readline
 
-# O((V + E)logV)
+# O((V + E)log V)
 def Dijkstra(v) : # start Vertex
     pq = []
     heappush(pq, (0, v))
