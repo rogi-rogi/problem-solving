@@ -21,7 +21,7 @@ def Dijkstra(v) : # start Vertex
     while pq :
         w, v = heappop(pq)
         if dist[v] < w : continue # distance previously calculated is shorter
-        for nv, nw in graph[v].items() : # graph[v] :
+        for nv, nw in graph[v].items() : # in graph[v] :
             nw += w
             if nw < dist[nv] :
                 dist[nv] = nw
