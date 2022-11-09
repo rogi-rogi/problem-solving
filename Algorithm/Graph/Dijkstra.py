@@ -3,7 +3,12 @@ from math import inf
 from sys import stdin
 input = stdin.readline
 
-# O((V + E) log V)
+'''
+[ Time Complexity ] : O((V + E) log V)
+find the shortest distance node : O (V log V)
+update the shortest distance of the node : O (E log V)
+'''
+
 def Dijkstra(v) : # start Vertex
     pq = []
     heappush(pq, (0, v))
@@ -25,5 +30,4 @@ if __name__ == "__main__" :
         v1, v2, w = map(int, input().split())  # v1 --(w)--> v2 
         graph[v1].append((v2, w))
     Dijkstra(1)
-    for i in range(1, V + 1) :
-        print([dist[i], "INF"][dist[i] == inf])
+    print(*dist[1:])
