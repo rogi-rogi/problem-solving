@@ -7,6 +7,11 @@ input = stdin.readline
 [ Time Complexity ] : O((V + E) log V)
 find the shortest distance node : O (V log V)
 update the shortest distance of the node : O (E log V)
+
+target : DAG(Directed Acyclic Graph) / cycle graph with positive weight
+
+if no negative cycle, but has a negative weight, can get the shortest distance.
+but, it takes a long time.
 '''
 
 def Dijkstra(v) : # start Vertex
