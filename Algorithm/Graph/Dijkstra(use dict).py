@@ -24,5 +24,4 @@ if __name__ == "__main__" :
         v1, v2, w = map(int, input().split())
         graph[v1][v2] = min(graph[v1][v2], w) if v2 in graph[v1].keys() else w
     Dijkstra(1)
-    for i in range(1, V + 1) :
-        print([dist[i], "INF"][dist[i] == inf])
+    print(*dist[1:])
