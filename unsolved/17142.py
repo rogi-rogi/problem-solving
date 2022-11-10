@@ -17,7 +17,7 @@ def spreadVirus(queue, visited) :
                 elif visited[nx][ny] == -1 :                      # Deactivate virus is no count
                     visited[nx][ny] = -(abs(visited[x][y]) + 1)   # count from next area
                     queue.append((nx, ny))
-    return spread_cnt, max(max(visited[i]) for i in range(N))   # is max_sec
+    return spread_cnt, max(max(visited[i]) for i in range(N))     # is max_sec
     
 def chooseVirus() :
     empty_cnt = N ** 2 - wall_cnt - len(virus)
