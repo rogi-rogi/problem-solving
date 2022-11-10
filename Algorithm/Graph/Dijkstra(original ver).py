@@ -4,7 +4,9 @@ input = stdin.readline
 
 # O(V^2)
 def Dijkstra(v) :
+    dist = [inf] * (V + 1)
     dist[v] = 0
+    visited = [False] * (V + 1)
     visited[v] = True
     for av, aw in graph[v] : # vertex adjacent to the start vertex
         dist[av] = aw
@@ -20,14 +22,13 @@ def Dijkstra(v) :
             nw = dist[nv] + aw
             if nw < dist[av] :
                 dist[av] = nw
+    return dist
                 
 if __name__ == "__main__" :
     V, E = map(int, input().split())
     graph = [[] for _ in range(V + 1)]
-    dist = [inf] * (V + 1)
-    visited = [False] * (V + 1)
     for _ in range(E) :
         v1, v2, w = map(int, input().split())
         graph[v1].append((v2, w))
-    Dijkstra(1)
+    dist = Dijkstra(1)
     print(*dist[1:])
