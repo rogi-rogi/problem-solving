@@ -4,27 +4,29 @@ from sys import stdin
 input = stdin.readline
 
 def Dijkstra(v) :
+    dist = [inf] * (n + 1)
+    dist[v] = 0
     pq = []
     heappush(pq, (0, v))
-    dist[v] = 0
+    
     while pq :
         w, v = heappop(pq)
-        if v == t : return
+        if v == t : return dist
         if dist[v] < w : continue
         for nv, nw in graph[v] :
             nw += w
             if nw < dist[nv] :
                 dist[nv] = nw
                 heappush(pq, (nw, nv))
+    return dist
 
 if __name__ == "__main__" :
     n, m = map(int, input().split())
     graph = [[] for _ in range(n + 1)]
-    dist = [inf] * (n + 1)
     for _ in range(m) :
         a, b, c = map(int, input().split())
         graph[a].append((b, c))
         graph[b].append((a, c))
     s, t = map(int, input().split())
-    Dijkstra(s)
+    dist = Dijkstra(s)
     print(dist[t])
