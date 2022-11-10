@@ -15,9 +15,10 @@ but, it takes a long time.
 '''
 
 def Dijkstra(v) : # start Vertex
+    dist = [inf] * (V + 1)
+    dist[v] = 0
     pq = []
     heappush(pq, (0, v))
-    dist[v] = 0
     while pq :
         w, v = heappop(pq)
         if dist[v] < w : continue # distance previously calculated is shorter
@@ -26,14 +27,14 @@ def Dijkstra(v) : # start Vertex
             if nw < dist[nv] :
                 dist[nv] = nw
                 heappush(pq, (nw, nv))
+    return dist
                 
 if __name__ == "__main__" :
     V, E = map(int, input().split())
     # graph = [[] for _ in range(V + 1)]  # The edge may not be given for both vertex.
     graph = [dict() for _ in range(V + 1)]
-    dist = [inf] * (V + 1)
     for _ in range(E) :
         v1, v2, w = map(int, input().split())  # v1 --(w)--> v2
         graph[v1][v2] = min(graph[v1][v2], w) if v2 in graph[v1].keys() else w # graph[v1].append((v2, w))
-    Dijkstra(1)
+    dist = Dijkstra(1)
     print(*dist[1:])
