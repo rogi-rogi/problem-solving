@@ -8,7 +8,6 @@ def Dijkstra(v) :
     dist[v] = 0
     pq = []
     heappush(pq, (0, v))
-    
     while pq :
         w, v = heappop(pq)
         if v == N - 1 : return dist
