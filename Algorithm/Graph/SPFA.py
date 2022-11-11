@@ -19,7 +19,7 @@ def SPFA(v) :
     while pq :
         v1 = pq.popleft()
         isEnQueue[v1] = False
-        for v2, w in graph[v1].items() :
+        for v2, w in edges[v1].items() :
             if dist[v1] + w < dist[v2] :
                 dist[v2] = dist[v1] + w
                 if not isEnQueue[v2] :
@@ -31,10 +31,10 @@ def SPFA(v) :
 
 if __name__ == "__main__" :
     V, E = map(int, input().split())
-    graph = [dict() for _ in range(V + 1)]
+    edges = [dict() for _ in range(V + 1)]
     for _ in range(E) :
         v1, v2, w = map(int, input().split())
-        graph[v1][v2] = min(graph[v1][v2], w) if v2 in graph[v1].keys() else w
+        edges[v1][v2] = min(edges[v1][v2], w) if v2 in edges[v1].keys() else w
     dist = SPFA(1)
     if dist : print(*dist[1:])
     else : print(-1)
