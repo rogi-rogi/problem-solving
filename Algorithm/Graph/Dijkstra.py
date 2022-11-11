@@ -32,7 +32,7 @@ def Dijkstra(v) : # start Vertex
 if __name__ == "__main__" :
     V, E = map(int, input().split())
     # graph = [[] for _ in range(V + 1)]  # The edge may not be given for both vertex.
-    graph = [dict() for _ in range(V)]
+    graph = [dict() for _ in range(V + 1)]
     for _ in range(E) :
         v1, v2, w = map(int, input().split())  # v1 --(w)--> v2
         graph[v1][v2] = min(graph[v1][v2], w) if v2 in graph[v1].keys() else w # graph[v1].append((v2, w))
