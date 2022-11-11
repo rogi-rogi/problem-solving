@@ -12,7 +12,7 @@ def Dijkstra(v) :
         w, v = heappop(pq)
         if dist[v] < w : continue
         if v == N : return dist
-        for nv, nw in graph[v] :
+        for nv, nw in edges[v] :
             nw += w
             if nw < dist[nv] :
                 dist[nv] = nw
@@ -21,10 +21,10 @@ def Dijkstra(v) :
 
 if __name__ == "__main__" :
     N, M = map(int, input().split())
-    graph = [[] for _ in range(N + 1)]
+    edges = [[] for _ in range(N + 1)]
     for _ in range(M) :
         A_i, B_i, C_i = map(int, input().split())
-        graph[A_i].append((B_i, C_i))
-        graph[B_i].append((A_i, C_i))
+        edges[A_i].append((B_i, C_i))
+        edges[B_i].append((A_i, C_i))
     dist = Dijkstra(1)
     print(dist[N])
