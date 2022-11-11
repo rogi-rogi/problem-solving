@@ -8,12 +8,11 @@ def Dijkstra(v) :
     dist[v] = 0
     pq = []
     heappush(pq, (0, v))
-    
     while pq :
         w, v = heappop(pq)
         if dist[v] < w : continue
         w += 1
-        for nv in graph[v] :
+        for nv in edges[v] :
             if w < dist[nv] :
                 dist[nv] = w
                 heappush(pq, (w, nv))
@@ -21,10 +20,10 @@ def Dijkstra(v) :
 
 if __name__ == "__main__" :
     N, M, K, X = map(int, input().split())
-    graph = [[] for _ in range(N + 1)]
+    edges = [[] for _ in range(N + 1)]
     for _ in range(M) :
         A, B = map(int, input().split())
-        graph[A].append(B)
+        edges[A].append(B)
     dist = Dijkstra(X)
     res = []
     for idx, d in enumerate(dist) :
