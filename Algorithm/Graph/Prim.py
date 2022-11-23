@@ -20,7 +20,7 @@ def Pime(v) :
   visited[v] = True
   # pq <<< edges[v]
   heapify(pq)
-  MST = []
+  MST = []    # Minimum Spanning Tree
   MST_weight = 0
   while pq :
     # w, v1, v2 = heappop(pq)
