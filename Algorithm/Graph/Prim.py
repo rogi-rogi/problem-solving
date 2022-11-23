@@ -1,4 +1,4 @@
-from heapq import heappop, heappush, heapify
+from heapq import heappop, heappush
 from sys import stdin
 input = stdin.readline
 
@@ -18,12 +18,11 @@ for 'V' vertex, have at least 'V - 1' minimum edge
 def Pime(v) :
   visited = [False] * (V + 1)
   visited[v] = True
-  # pq <<< edges[v]
-  heapify(pq)
+  for v2, w in edges[v].items() : heappush(pq, (w, v, v2))
   MST = []    # Minimum Spanning Tree
   MST_weight = 0
   while pq :
-    # w, v1, v2 = heappop(pq)
+    w, v1, v2 = heappop(pq)
     if not visited[v2] :
       visited[v2] = True
       MST_weight += w
@@ -37,5 +36,6 @@ if __name__ == "__main__" :
     edges = [dict() for _ in range(V + 1)]
     for _ in range(E) :
         v1, v2, w = map(int, input().split())
-        # append (w, v1, v2) ?
+        edges[v1][v2] = min(edges[v1][v2], w) if v2 in edges[v1].keys() else w
+        edges[v2][v1] = min(edges[v2][v1], w) if v1 in edges[v2].keys() else w
     Prim(1)
