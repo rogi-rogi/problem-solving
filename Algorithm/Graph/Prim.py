@@ -8,7 +8,7 @@ input = stdin.readline
 
 target : DAG(Directed Acyclic Graph), graph with dense edges
 
-[ spanning tree ]
+[ MST(Minimum Spanning Tree) ]
 tree containing all vertex of the graph
 this is the graph of the least connected subgraph
 for 'V' vertex, have at least 'V - 1' minimum edge
