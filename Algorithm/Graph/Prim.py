@@ -15,22 +15,23 @@ for 'V' vertex, have at least 'V - 1' minimum edge
 
 '''
 
-def Pime(v) :
-  visited = [False] * (V + 1)
-  visited[v] = True
-  for v2, w in edges[v].items() : heappush(pq, (w, v, v2))
-  MST = []    # Minimum Spanning Tree
-  MST_weight = 0
-  while pq :
-    w, v1, v2 = heappop(pq)
-    if not visited[v2] :
-      visited[v2] = True
-      MST_weight += w
-      MST.append((v1, v2))
-      for e in edges[v2] :
-        if not visited[e[2]]) : heappush(pq, e)
-  return MST, MST_weight
-
+def Prim(v) :
+    visited = [False] * (V + 1)
+    visited[v] = True
+    pq = []
+    for v2, w in edges[v].items() : heappush(pq, (w, v, v2))
+    MST = []    # Minimum Spanning Tree
+    MST_weight = 0
+    while pq :
+      w, v1, v2 = heappop(pq)
+      if not visited[v2] :
+        visited[v2] = True
+        MST_weight += w
+        MST.append((v1, v2))
+        #for e in edges[v2].items() :
+          #if not visited[e[2]] : heappush(pq, e + )
+    return MST, MST_weight
+  
 if __name__ == "__main__" :
     V, E = map(int, input().split())
     edges = [dict() for _ in range(V + 1)]
