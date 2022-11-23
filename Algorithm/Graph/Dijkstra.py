@@ -8,7 +8,7 @@ input = stdin.readline
 find the shortest distance node : O (V log V)
 update the shortest distance of the node : O (E log V)
 
-target : DAG(Directed Acyclic Graph) / cycle graph with positive weight
+target : DAG(Directed Acyclic Graph), cycle graph with positive weight
 
 if no negative cycle, but has a negative weight, can get the shortest distance.
 but, it takes a long time.
