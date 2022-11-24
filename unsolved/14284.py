@@ -20,7 +20,7 @@ def Dijkstra(v) :
 
 if __name__ == "__main__" :
     n, m = map(int, input().split())
-    edges = [[] for _ in range(n + 1)]
+    edges = [dict() for _ in range(n + 1)]
     for _ in range(m) :
         a, b, c = map(int, input().split())
         edges[a][b] = min(edges[a][b], c) if b in edges[a].keys() else c
