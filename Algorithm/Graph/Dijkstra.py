@@ -37,6 +37,7 @@ if __name__ == "__main__" :
     for _ in range(E) :
         v1, v2, w = map(int, input().split())  # v1 --(w)--> v2
         # edges[v1].append((v2, w))
-        edges[v1][v2] = min(edges[v1][v2], w) if v2 in edges[v1].keys() else w 
+        edges[v1][v2] = min(edges[v1][v2], w) if v2 in edges[v1].keys() else w
+        edges[v2][v1] = min(edges[v2][v1], w) if v1 in edges[v2].keys() else w 
     dist = Dijkstra(1)
     print(*dist[1:])
