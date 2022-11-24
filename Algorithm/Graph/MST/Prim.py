@@ -18,11 +18,11 @@ def Prim(v) :
     while pq :
         w, v1, v2 = heappop(pq)
         if not visited[v2] :
-        visited[v2] = True
-        MST_weight += w
-        MST.append((v1, v2))
-        for nv, nw in edges[v2].items() :
-            if not visited[nv] : heappush(pq, (nw, v2, nv))
+            visited[v2] = True
+            MST_weight += w
+            MST.append((v1, v2))
+            for nv, nw in edges[v2].items() :
+                if not visited[nv] : heappush(pq, (nw, v2, nv))
     return MST_list, MST_weight
   
 if __name__ == "__main__" :
