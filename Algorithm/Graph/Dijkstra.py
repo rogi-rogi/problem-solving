@@ -17,8 +17,7 @@ target : 유향 비순환 그래프(DAG :Directed Acyclic Graph), 양의 가중�
 def Dijkstra(v) : # start Vertex
     dist = [inf] * (V + 1)
     dist[v] = 0
-    pq = []
-    heappush(pq, (0, v))
+    pq = [(0, v)]
     while pq :
         w, v = heappop(pq)
         if dist[v] < w : continue # distance previously calculated is shorter
