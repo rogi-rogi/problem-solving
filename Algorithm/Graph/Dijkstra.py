@@ -32,8 +32,8 @@ def Dijkstra(v) : # start Vertex
                 
 if __name__ == "__main__" :
     V, E = map(int, input().split())
-    # edges = [[] for _ in range(V + 1)]  # The edge may not be given for both vertex.
-    edges = [dict() for _ in range(V + 1)]
+    # edges = [[] for _ in range(V + 1)]  
+    edges = [dict() for _ in range(V + 1)] # The edge may not be given for both vertex.
     for _ in range(E) :
         v1, v2, w = map(int, input().split())  # v1 --(w)--> v2
         # edges[v1].append((v2, w))
