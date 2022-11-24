@@ -3,16 +3,16 @@ from sys import stdin
 input = stdin.readline
 
 '''
-[ Time Complexity ]
+[ Time Complexity ] : O (E log V)
+
+target : 유향 비순환 그래프(DAG :Directed Acyclic Graph), dense graph
+
+최소 신장 트리(MST : Minimum Spanning Tree)를 찾기 위한 알고리즘이다.  
 
 
-target : DAG(Directed Acyclic Graph), graph with dense edges
-
-[ MST(Minimum Spanning Tree) ]
-tree containing all vertex of the graph
-this is the graph of the least connected subgraph
-for 'V' vertex, have at least 'V - 1' minimum edge
-
+[ 신장트리 : Spanning Tree ]
+그래프의 모든 정점을 포함하는 트리이다. (=최소 연결 부분 그래프)
+N개의 정점에 대해 최소 N - 1개의 간선을 가지며, 사이클을 포함해서는 안된다.
 '''
 
 def Prim(v) :
