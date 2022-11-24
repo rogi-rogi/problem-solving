@@ -30,6 +30,5 @@ if __name__ == "__main__" :
     for _ in range(E) :
         v1, v2, w = map(int, input().split())
         edges[v1].append((v2, w))
-        edges[v2].append((v1, w))
     dist = Dijkstra(1)
     print(*dist[1:])
