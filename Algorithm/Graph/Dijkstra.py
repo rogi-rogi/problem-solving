@@ -11,7 +11,7 @@ input = stdin.readline
 target : 유향 비순환 그래프(DAG :Directed Acyclic Graph), 양의 가중치를 갖는 순환 그래프
 
 음의 가중치를 갖는 순환이 없을 경우, 음의 가중치를 가지는 간선이 포함되어 있어도 구할 수 있다.
-하지만, 좀 오래 걸릴 수 있다..
+하지만, 상대적으로 많은 시간이 걸린다.
 '''
 
 def Dijkstra(v) : # start Vertex
