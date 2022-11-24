@@ -5,13 +5,13 @@ input = stdin.readline
 
 '''
 [ Time Complexity ] : O((V + E) log V)
-find the shortest distance node : O (V log V)
-update the shortest distance of the node : O (E log V)
+최단 거리의 정점을 찾는시간    : O (V log V)
+최단 거리를 업데이트 하는 시간 : O (E log V)
 
-target : DAG(Directed Acyclic Graph), cycle graph with positive weight
+target : 유향 비순환 그래프(DAG :Directed Acyclic Graph), 양의 가중치를 갖는 순환 그래프
 
-if no negative cycle, but has a negative weight, can get the shortest distance.
-but, it takes a long time.
+음의 가중치를 갖는 순환이 없을 경우, 음의 가중치를 가지는 간선이 포함되어 있어도 구할 수 있다.
+하지만, 좀 오래 걸릴 수 있다..
 '''
 
 def Dijkstra(v) : # start Vertex
