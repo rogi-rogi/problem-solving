@@ -16,8 +16,8 @@ def Prim(v) :
     MST_list = []
     MST_weight = 0
     while pq :
-      w, v1, v2 = heappop(pq)
-      if not visited[v2] :
+        w, v1, v2 = heappop(pq)
+        if not visited[v2] :
         visited[v2] = True
         MST_weight += w
         MST.append((v1, v2))
