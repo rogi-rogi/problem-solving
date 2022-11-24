@@ -6,8 +6,7 @@ input = stdin.readline
 def Dijkstra(v) :
     dist = [inf] * (N + 1)
     dist[v] = 0
-    pq = []
-    heappush(pq, (0, v))
+    pq = [(0, v)]
     while pq :
         w, v = heappop(pq)
         if dist[v] < w : continue
