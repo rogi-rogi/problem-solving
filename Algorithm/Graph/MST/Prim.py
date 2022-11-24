@@ -13,7 +13,7 @@ def Prim(v) :
     visited[v] = True
     pq = []
     for v2, w in edges[v].items() : heappush(pq, (w, v, v2))
-    MST = []    # Minimum Spanning Tree
+    MST_list = []
     MST_weight = 0
     while pq :
       w, v1, v2 = heappop(pq)
@@ -21,9 +21,9 @@ def Prim(v) :
         visited[v2] = True
         MST_weight += w
         MST.append((v1, v2))
-        #for e in edges[v2].items() :
-          #if not visited[e[2]] : heappush(pq, e + )
-    return MST, MST_weight
+        for nv, nw in edges[v2].items() :
+            if not visited[nv] : heappush(pq, (nw, v2, nv))
+    return MST_list, MST_weight
   
 if __name__ == "__main__" :
     V, E = map(int, input().split())
@@ -32,4 +32,6 @@ if __name__ == "__main__" :
         v1, v2, w = map(int, input().split())
         edges[v1][v2] = min(edges[v1][v2], w) if v2 in edges[v1].keys() else w
         edges[v2][v1] = min(edges[v2][v1], w) if v1 in edges[v2].keys() else w
-    Prim(1)
+    MST_list, MST_weight = Prim(1)
+    print(*MST_list)
+    print(MST_weight)
