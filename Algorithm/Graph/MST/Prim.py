@@ -3,9 +3,9 @@ from sys import stdin
 input = stdin.readline
 
 '''
-[ Time Complexity ] : O (V log V)
+[ Time Complexity ] : O (E log V)
 
-target : 유향 비순환 그래프(DAG :Directed Acyclic Graph), dense graph
+target : undirected graph, dense graph
 '''
 
 def Prim(v) :
