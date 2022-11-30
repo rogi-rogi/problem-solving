@@ -3,7 +3,7 @@ from sys import stdin
 input = stdin.readline
 
 '''
-[ Time Complexity ] : O (E log V)
+[ Time Complexity ] : O ((V + E) log V) = O (E log V), (dense graph)
 
 target : undirected graph, dense graph
 '''
