@@ -6,15 +6,15 @@ def Prim(v) :
     visited = [False] * (V + 1)
     visited[v] = True
     pq = []
-    for v2, w in edges[v].items() : heappush(pq, (w, v, v2))
+    for v2, w in edges[v].items() : heappush(pq, (w, v2))
     MST_weight = 0
     while pq :
-        w, v1, v2 = heappop(pq)
-        if not visited[v2] :
-            visited[v2] = True
+        w, v = heappop(pq)
+        if not visited[v] :
+            visited[v] = True
             MST_weight += w
-            for nv, nw in edges[v2].items() :
-                if not visited[nv] : heappush(pq, (nw, v2, nv))
+            for nv, nw in edges[v].items() :
+                if not visited[nv] : heappush(pq, (nw, nv))
     return MST_weight
   
 if __name__ == "__main__" :
