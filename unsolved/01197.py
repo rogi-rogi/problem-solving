@@ -1,27 +1,39 @@
-from heapq import heappop, heappush
 from sys import stdin
 input = stdin.readline
 
-def Prim(v) :
-    visited = [False] * (V + 1)
-    visited[v] = True
-    pq = []
-    for v2, w in edges[v].items() : heappush(pq, (w, v2))
+class DisjointSet :
+    def __init__(self, V) :
+        self.parents = [*range(V + 1)]
+    
+    def find(self, v) :
+        if self.parents[v] == v : return v
+        self.parents[v] = self.find(self.parents[v])
+        return self.parents[v]
+        
+    def union(self, v1, v2) :
+        v1 = self.find(v1)
+        v2 = self.find(v2)
+        if v1 != v2 :
+            self.parents[max(v1, v2)] = min(v1, v2)
+            return True
+        return False
+
+def Kruskal(V) :
+    graph = DisjointSet(V)
     MST_weight = 0
-    while pq :
-        w, v = heappop(pq)
-        if not visited[v] :
-            visited[v] = True
+    edges_cnt = 0
+    for w, v1, v2 in edges :
+        if graph.union(v1, v2) :
+            edges_cnt += 1
             MST_weight += w
-            for nv, nw in edges[v].items() :
-                if not visited[nv] : heappush(pq, (nw, nv))
+            if edges_cnt >= V - 1 : break
     return MST_weight
-  
+    
 if __name__ == "__main__" :
     V, E = map(int, input().split())
-    edges = [dict() for _ in range(V + 1)]
+    edges = []
     for _ in range(E) :
         v1, v2, w = map(int, input().split())
-        edges[v1][v2] = min(edges[v1][v2], w) if v2 in edges[v1].keys() else w
-        edges[v2][v1] = min(edges[v2][v1], w) if v1 in edges[v2].keys() else w
-    print(Prim(1))
+        edges.append((w, v1, v2))
+    edges.sort()
+    print(Kruskal(V))
