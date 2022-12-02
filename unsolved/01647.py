@@ -22,7 +22,7 @@ def Kruskal(V, divide = 1) :
     graph = DisjointSet(V)
     MST_weight = 0
     edges_cnt = 0
-    for w, v1, v2 in edges :
+    for v1, v2, w in edges :
         if graph.union(v1, v2) :
             MST_weight += w
             edges_cnt += 1
@@ -31,9 +31,5 @@ def Kruskal(V, divide = 1) :
     
 if __name__ == "__main__" :
     V, E = map(int, input().split())
-    edges = []
-    for _ in range(E) :
-        v1, v2, w = map(int, input().split())
-        edges.append((v1, v2, w))
-    edges = sorted(edges, key = lambda x : x[2])
+    edges = sorted([tuple(map(int, input().split())) for _ in range(E)], key = lambda x : x[2])
     print(Kruskal(V, 2))
