@@ -8,7 +8,7 @@ input = stdin.readline
 target : undirected graph, dense graph
 '''
 
-def Prim(v) :
+def Prim(v, divide = 1) :
     visited = [False] * (V + 1)
     visited[v] = True
     pq = []
@@ -20,6 +20,8 @@ def Prim(v) :
         if not visited[v2] :
             visited[v2] = True
             MST_weight += w
+            edge_cnt += 1
+            if edge_cnt >= V - divide : break
             MST_list.append((v1, v2))
             for nv, nw in edges[v2].items() :
                 if not visited[nv] : heappush(pq, (nw, v2, nv))
