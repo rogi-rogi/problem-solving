@@ -34,6 +34,6 @@ if __name__ == "__main__" :
     edges = []
     for _ in range(E) :
         v1, v2, w = map(int, input().split())
-        edges.append((w, v1, v2))
-    edges.sort()
+        edges.append((v1, v2, w))
+    edges = sorted(edges, key = lambda x : x[2])
     print(Kruskal(V, 2))
