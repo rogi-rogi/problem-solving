@@ -7,18 +7,19 @@ union(v1, v2) : v1과 v2를 하나의 그래프로 연결한다.
 
 '''
 
-def find(v) :
-  if parent[v] == v : return v
-  parent[v] = find(parent[v])
-  return parent[v]
-
-def union(v1, v2) :
-  v1 = find(v1)
-  v2 = find(v2)
-  if v1 != v2 :
-    parent[max(v1, v2)] = min(v1, v2)
-    return True
-  return False
-
-if __name__ == "__main__" :
-  parent = [i for i in range(V + 1)]
+class Disjoint-Set :
+  def __init__(self, V) :
+    self.parents = [*range(V + 1)]
+    
+  def find(self, v) :
+    if self.parents[v] == v : return v
+    self.parents[v] = self.find(self.parents[v])
+    return self.parents[v]
+  
+  def union(self, v1, v2) :
+    v1 = self.find(v1)
+    v2 = self.find(v2)
+    if v1 != v2 :
+      self.parents[max(v1, v2)] = min(v1, v2)
+      return True
+    return False
