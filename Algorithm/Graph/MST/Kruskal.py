@@ -22,12 +22,12 @@ class DisjointSet :
 def Kruskal(V, divide = 1) :
     graph = DisjointSet(V)
     MST_weight = 0
-    edges_cnt = 0
+    connected_edge = 0
     for w, v1, v2 in edges :
         if graph.union(v1, v2) :
             MST_weight += w
-            edges_cnt += 1
-            if edges_cnt >= V - divide : break
+            connected_edge += 1
+            if connected_edge >= V - divide : break
     return MST_weight
     
 if __name__ == "__main__" :
