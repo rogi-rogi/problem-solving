@@ -15,14 +15,11 @@ def Prim(v, divide = 1) :
     for v2, w in edges[v].items() : heappush(pq, (w, v, v2))
     MST_list = []
     MST_weight = 0
-    edges_cnt = 0
     while pq :
         w, v1, v2 = heappop(pq)
         if not visited[v2] :
             visited[v2] = True
             MST_weight += w
-            edges_cnt += 1
-            if edges_cnt >= V - divide : break
             MST_list.append((v1, v2))
             for nv, nw in edges[v2].items() :
                 if not visited[nv] : heappush(pq, (nw, v2, nv))
