@@ -1,4 +1,4 @@
-from heapq import heappop, heappush
+from heapq import heapify, heappop, heappush
 from sys import stdin
 input = stdin.readline
 
@@ -11,19 +11,24 @@ target : undirected graph, dense graph
 def Prim(v, divide = 1) :
     visited = [False] * (V + 1)
     visited[v] = True
-    pq = []
-    for v2, w in edges[v].items() : heappush(pq, (w, v, v2))
+    pq = [(w, v, v2) for v2, w in edges[v].items()]
+    heapify(pq)
     MST_list = []
     MST_weight = 0
+    MST_weights = []
+    connected_edge = 0
     while pq :
         w, v1, v2 = heappop(pq)
         if not visited[v2] :
             visited[v2] = True
+            connected_edge += 1
             MST_weight += w
             MST_list.append((v1, v2))
+            MST_weights.append(w)
             for nv, nw in edges[v2].items() :
                 if not visited[nv] : heappush(pq, (nw, v2, nv))
-    return MST_list, MST_weight
+        if connected_edge >= V - 1 : break
+    return MST_list, MST_weight - sum(sorted(MST_weights, reverse = True)[:divide - 1])
   
 if __name__ == "__main__" :
     V, E = map(int, input().split())
