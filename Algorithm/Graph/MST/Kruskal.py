@@ -25,8 +25,8 @@ def Kruskal(V, divide = 1) :
     edges_cnt = 0
     for w, v1, v2 in edges :
         if graph.union(v1, v2) :
-            edges_cnt += 1
             MST_weight += w
+            edges_cnt += 1
             if edges_cnt >= V - divide : break
     return MST_weight
     
