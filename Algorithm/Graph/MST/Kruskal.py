@@ -23,9 +23,10 @@ def Kruskal(V) :
     MST_weight = 0
     edges_cnt = 0
     for w, v1, v2 in edges :
-        edges_cnt += 1
         if graph.union(v1, v2) :
+            edges_cnt += 1
             MST_weight += w
+            if edges_cnt >= V - 1 : break
     return MST_weight
     
 if __name__ == "__main__" :
