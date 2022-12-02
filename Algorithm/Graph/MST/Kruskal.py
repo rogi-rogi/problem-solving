@@ -19,7 +19,7 @@ class DisjointSet :
             return True
         return False
 
-def Kruskal(V) :
+def Kruskal(V, divide = 1) :
     graph = DisjointSet(V)
     MST_weight = 0
     edges_cnt = 0
@@ -27,7 +27,7 @@ def Kruskal(V) :
         if graph.union(v1, v2) :
             edges_cnt += 1
             MST_weight += w
-            if edges_cnt >= V - 1 : break
+            if edges_cnt >= V - divide : break
     return MST_weight
     
 if __name__ == "__main__" :
