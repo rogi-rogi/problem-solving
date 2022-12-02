@@ -1,5 +1,6 @@
 '''
-
+[ Time Complexity ] : O (E log E)
+target : undirected graph, sparse graph
 '''
 class DisjointSet :
     def __init__(self, V) :
