@@ -4,30 +4,30 @@ input = stdin.readline
 class DisjointSet :
     def __init__(self, V) :
         self.parents = [*range(V + 1)]
-    
+        self.weight = 0
+        self.connected_edge = 0
+        
     def find(self, v) :
         if self.parents[v] == v : return v
         self.parents[v] = self.find(self.parents[v])
         return self.parents[v]
         
-    def union(self, v1, v2) :
+    def union(self, v1, v2, w) :
         v1 = self.find(v1)
         v2 = self.find(v2)
         if v1 != v2 :
             self.parents[max(v1, v2)] = min(v1, v2)
+            self.weight += w
+            self.connected_edge += 1
             return True
         return False
 
-def Kruskal(V, divide = 1) :
+def Kruskal(V) :
     graph = DisjointSet(V)
-    MST_weight = 0
-    edges_cnt = 0
     for w, v1, v2 in edges :
-        if graph.union(v1, v2) :
-            MST_weight += w
-            edges_cnt += 1
-            if edges_cnt >= V - divide : break
-    return MST_weight
+        if graph.union(v1, v2, w) :
+            if graph.connected_edge >= V - 1 : break
+    return graph.weight
     
 if __name__ == "__main__" :
     while True :
