@@ -23,8 +23,8 @@ def Prim(v, divide = 1) :
             MST_weights.append(w)
             for nv, nw in edges[v2].items() :
                 if not visited[nv] : heappush(pq, (nw, v2, nv))
-        if connected_edge >= V - 1 : break
-    return sum(MST_weights) - sum(sorted(MST_weights, reverse = True)[:divide - 1])
+        if connected_edge >= V - 1 : return sum(MST_weights) - sum(sorted(MST_weights, reverse = True)[:divide - 1])
+    return -1
   
 if __name__ == "__main__" :
     V, E = map(int, input().split())
