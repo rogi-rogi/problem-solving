@@ -27,8 +27,8 @@ def Kruskal(V, divide = 1) :
     graph = DisjointSet(V)
     for w, v1, v2 in edges :
         if graph.union(v1, v2, w) :
-            if graph.connected_edge >= V - divide : break
-    return graph.weight
+            if graph.connected_edge >= V - divide : return graph.weight
+    return -1
     
 if __name__ == "__main__" :
     V, E = map(int, input().split())
