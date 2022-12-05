@@ -36,7 +36,7 @@ def Kruskal(V) :
         if parents[v] == v : return v
         parents[v] = find(parents, parents[v])
         return parents[v]
-        
+    
     def union(parents, v1, v2) :
         v1 = find(parents, v1)
         v2 = find(parents, v2)
@@ -44,6 +44,7 @@ def Kruskal(V) :
             parents[max(v1, v2)] = min(v1, v2)
             return True
         return False
+    
     parents = [*range(V + 1)]
     MST_weight = 0
     connected_edge = 0
