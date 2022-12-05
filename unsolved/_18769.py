@@ -1,6 +1,7 @@
 from sys import stdin
 input = stdin.readline
 
+'''
 class DisjointSet :
     def __init__(self, V) :
         self.parents = [*range(V + 1)]
@@ -28,7 +29,31 @@ def Kruskal(V) :
         if graph.union(v1, v2, w) :
             if graph.connected_edge >= V - 1 : break
     return graph.weight
+''' # slow...
 
+def Kruskal(V) :
+    def find(parents, v) :
+        if parents[v] == v : return v
+        parents[v] = find(parents, parents[v])
+        return parents[v]
+        
+    def union(parents, v1, v2) :
+        v1 = find(parents, v1)
+        v2 = find(parents, v2)
+        if v1 != v2 :
+            parents[max(v1, v2)] = min(v1, v2)
+            return True
+        return False
+    parents = [*range(V + 1)]
+    MST_weight = 0
+    connected_edge = 0
+    for w, v1, v2 in edges :
+        if union(parents, v1, v2) :
+            MST_weight += w
+            connected_edge += 1
+            if connected_edge >= V - 1 : break
+    return MST_weight
+    
 if __name__ == "__main__" :
     for _ in range(int(input())) :
         R, C = map(int, input().split())
