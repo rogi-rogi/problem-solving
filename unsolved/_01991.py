@@ -22,8 +22,8 @@ def postorder(node) :
 if __name__ == "__main__" :
     tree = dict()
     for _ in range(int(input())) :
-        node, left, right = input().split()
-        tree[node] = Node(node, left, right)
+        num, left, right = input().split()
+        tree[num] = Node(num, left, right)
     preorder(tree['A'])
     print()
     inorder(tree['A'])
