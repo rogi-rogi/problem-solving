@@ -3,31 +3,29 @@
 target : undirected graph, sparse graph
 '''
 class DisjointSet :
-    def __init__(self, V) :
-        self.parents = [*range(V + 1)]
-        self.weight = 0
-        self.connected_edge = 0
+    def find(self, v, parents) :
+        if parents[v] == v : return v
+        parents[v] = self.find(parents[v], parents)
+        return parents[v]
         
-    def find(self, v) :
-        if self.parents[v] == v : return v
-        self.parents[v] = self.find(self.parents[v])
-        return self.parents[v]
-        
-    def union(self, v1, v2, w) :
-        v1 = self.find(v1)
-        v2 = self.find(v2)
+    def union(self, v1, v2, parents) :
+        v1 = self.find(v1, parents)
+        v2 = self.find(v2, parents)
         if v1 != v2 :
-            self.parents[max(v1, v2)] = min(v1, v2)
-            self.weight += w
-            self.connected_edge += 1
+            parents[max(v1, v2)] = min(v1, v2)
             return True
         return False
 
 def Kruskal(V, divide = 1) :
-    graph = DisjointSet(V)
+    parents = [*range(V + 1)]
+    MST_weight = 0
+    connected_edge = 0
+    graph = DisjointSet()
     for w, v1, v2 in edges :
-        if graph.union(v1, v2, w) :
-            if graph.connected_edge >= V - divide : return graph.weight
+        if graph.union(v1, v2, parents) :
+            MST_weight += w
+            connected_edge += 1
+            if connected_edge >= V - divide : return MST_weight
     return -1
     
 if __name__ == "__main__" :
