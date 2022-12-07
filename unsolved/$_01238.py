@@ -9,6 +9,7 @@ def Dijkstra(start, end) :
     pq = [(0, start)]
     while pq :
         w, v = heappop(pq)
+        if v == end : break
         if dist[v] < w : continue
         for nv, nw in edges[v].items() :
             nw += w
