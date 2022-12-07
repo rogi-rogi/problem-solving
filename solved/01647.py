@@ -15,7 +15,7 @@ class DisjointSet :
             return True
         return False
 
-def Kruskal(V) :
+def Kruskal(V, divide = 1) :
     parents = [*range(V + 1)]
     MST_weight = 0
     connected_edge = 0
@@ -24,7 +24,7 @@ def Kruskal(V) :
         if graph.union(v1, v2, parents) :
             MST_weight += w
             connected_edge += 1
-            if connected_edge >= V - 1 : break
+            if connected_edge >= V - divide : break
     return MST_weight
     
 if __name__ == "__main__" :
