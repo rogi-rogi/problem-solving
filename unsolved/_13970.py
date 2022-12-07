@@ -24,4 +24,7 @@ if __name__ == "__main__" :
         if X :
             print(pow(x1, power_towers(X, eulerList[M], x_size - 1), M))
         else : print(x1 % M)
+            
+            # x >  ϕ(m) : a^x ≡ a^((x mod ϕ(m)) + ϕ(m)) mod m
+            # x <= ϕ(m) : ??? 
         
