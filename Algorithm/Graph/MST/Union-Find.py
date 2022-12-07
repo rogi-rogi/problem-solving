@@ -9,18 +9,15 @@ union(v1, v2) : 정점 v1과 v2를 하나의 그래프로(부모노드를 동일
 '''
 
 class Disjoint-Set :
-  def __init__(self, V) :
-    self.parents = [*range(V + 1)]
-    
-  def find(self, v) :
-    if self.parents[v] == v : return v
-    self.parents[v] = self.find(self.parents[v])
-    return self.parents[v]
+  def find(self, v, parents) :
+    if parents[v] == v : return v
+    parents[v] = self.find(parents[v], parents)
+    return parents[v]
   
-  def union(self, v1, v2) :
-    v1 = self.find(v1)
-    v2 = self.find(v2)
+  def union(self, v1, v2, parents) :
+    v1 = self.find(v1, parents)
+    v2 = self.find(v2, parents)
     if v1 != v2 :
-      self.parents[max(v1, v2)] = min(v1, v2)
+      parents[max(v1, v2)] = min(v1, v2)
       return True
     return False
