@@ -1,9 +1,15 @@
+'''
+stack <= (height, 좌우로 자신과 쌍을 이룰 수 있는 사람의 수)
+left : 자신보다 키가 작거나 같은 사람의 수
+right : 자신의 바로 오른쪽 한 명
+'''
+
 from sys import stdin
 input = stdin.readline
 
 if __name__ == "__main__" :
     N = int(input())
-    stack = []
+    stack = [] 
     cnt = 0
     for h in [int(input()) for _ in range(N)] :
         while stack and stack[-1][0] < h :
