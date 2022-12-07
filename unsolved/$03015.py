@@ -15,7 +15,7 @@ if __name__ == "__main__" :
             if stack : cnt += 1
             stack.append((h, sub_cnt + 1))
             cnt += sub_cnt
-        else :
+        else :      # stack[-1][0] > h
             stack.append((h, 1))
             cnt += 1
     print(cnt)
