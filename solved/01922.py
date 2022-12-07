@@ -20,7 +20,7 @@ def Kruskal(V) :
     MST_weight = 0
     connected_edge = 0
     graph = DisjointSet()
-    for w, v1, v2 in edges :
+    for v1, v2, w in edges :
         if graph.union(v1, v2, parents) :
             MST_weight += w
             connected_edge += 1
