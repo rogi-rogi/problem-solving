@@ -19,7 +19,8 @@ def Dijkstra(start, end) :
     return dist[end]
 
 if __name__ == "__main__" :
-    V, E = map(int, input().split())
+    V = int(input())
+    E = int(input())
     edges = [dict() for _ in range(V + 1)]
     path = [0] * (V + 1)
     for _ in range(E) :
