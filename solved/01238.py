@@ -26,7 +26,4 @@ if __name__ == "__main__" :
     for _ in range(E) :
         v1, v2, w = map(int, input().split())
         edges[v1][v2] = w
-    res = 0
-    for v in range(1, V + 1) :
-        res = max(res, Dijkstra(v, X) + Dijkstra(X, v))
-    print(res)
+    print(max([Dijkstra(v, X) + Dijkstra(X, v) for v in range(1, V + 1)]))
