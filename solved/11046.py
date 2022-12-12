@@ -18,7 +18,7 @@ def Manacher(s) :
 '''
 
 def Manacher(S) :
-    s = [0] * (len(S) * 2 + 1)
+    s = ['#'] * (len(S) * 2 + 1)
     s[1::2] = S
     SIZE = len(s)
     R = [0] * SIZE
