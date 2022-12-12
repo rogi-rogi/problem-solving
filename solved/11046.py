@@ -17,9 +17,6 @@ def Manacher(s) :
     return R
 '''
 
-from sys import stdin
-input = stdin.readline
-
 def Manacher(S) :
     s = [0] * (len(S) * 2 + 1)
     s[1::2] = S
