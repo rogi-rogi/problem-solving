@@ -35,7 +35,7 @@ def Manacher(S) :
 if __name__ == "__main__" :
     input()
     S = input().split()
-    Manacher(S)
+    R = Manacher(S)
     for _ in range(int(input())) :
         S, E = map(int, input().split())
         print(0 + (R[S + E - 1] >= E - S + 1))
