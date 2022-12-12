@@ -1,3 +1,7 @@
+from sys import stdin
+input = stdin.readline
+
+'''
 def Manacher(s) :
     s = '#' + '#'.join(s) + '#'
     SIZE = len(s)
@@ -11,12 +15,30 @@ def Manacher(s) :
             r = i + R[i]
             c = i
     return R
-    
+'''
+
+from sys import stdin
+input = stdin.readline
+
+def Manacher(S) :
+    s = [0] * (len(S) * 2 + 1)
+    s[1::2] = S
+    SIZE = len(s)
+    R = [0] * SIZE
+    r, c = 0, 0
+    for i in range(SIZE - 1) :
+        if i <= r : R[i] = min(r - i, R[c + c - i])
+        while (0 <= i - R[i] - 1 and i + R[i] + 1 < SIZE) and s[i - R[i] - 1] == s[i + R[i] + 1] :
+            R[i] += 1
+        if r < i + R[i] :
+            r = i + R[i]
+            c = i
+    return R
+
 if __name__ == "__main__" :
     input()
-    R = Manacher(''.join([*input().split()]))
+    S = input().split()
+    Manacher(S)
     for _ in range(int(input())) :
         S, E = map(int, input().split())
-        S, E = min(S, E), max(S, E)
-        mid = ((S * 2 - 1) + (E * 2 - 1)) // 2
-        print([0, 1][R[mid] >= E - S + 1])
+        print(0 + (R[S + E - 1] >= E - S + 1))
