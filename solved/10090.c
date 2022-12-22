@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define SIZE 500000
+#define SIZE 1000000
 
 int arr[SIZE], buff[(SIZE>>1) + 1];
 long long res = 0;
