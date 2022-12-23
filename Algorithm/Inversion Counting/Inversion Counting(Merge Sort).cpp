@@ -3,6 +3,8 @@
 
 #define SIZE 500000
 
+using namespace std;
+
 int arr[SIZE], buff[(SIZE>>1) + 1];
 long long res = 0;
 
@@ -22,10 +24,12 @@ static void __mergeSort(int left, int right)
     int idx = mid + 1, sort_p = left;
     int buff_idx = 0, buff_p = mid - left + 1; 
     
-    while (buff_idx < buff_p && idx <= right) {
-      arr[sort_p++] = ((buff[buff_idx] <= arr[idx]) ? buff[buff_idx++] : arr[idx++]);
-      if (buff[buff_idx] > arr[idx]) res += (long long)(buff_p - buff_idx); // get gap
-    }
+    while (buff_idx < buff_p && idx <= right)
+      if (buff[buff_idx] <= arr[idx]) arr[sort_p++] = buff[buff_idx++];
+      else {
+        arr[sort_p++] = arr[idx++];
+        res += (long long)(buff_p - buff_idx);
+      }
     copy(&buff[buff_idx], &buff[buff_p], &arr[sort_p]); // while (buff_idx < buff_p) arr[sort_p++] = buff[buff_idx++];
   }
 }
@@ -34,9 +38,11 @@ void mergeSort(int size) { __mergeSort(0, size - 1); }
 
 int main()
 {
-    int N;
-    cin >> N;
-    for (int i = 0; i < N; ++i) cin >> arr[i];
-    mergeSort(N);
-    cout << res;
+  ios_base::sync_with_stdio(false);
+  cin.tie(nullptr);
+  int N;
+  cin >> N;
+  for (int i = 0; i < N; ++i) cin >> arr[i];
+  mergeSort(N);
+  cout << res;
 }
