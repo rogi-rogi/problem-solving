@@ -17,4 +17,4 @@ static void __MergeSort(int left, int right)
   }
 }
 
-void MergeSort(int size) { __mergeSort(0, size - 1); }
+void MergeSort(int size) { __MergeSort(0, size - 1); }
