@@ -52,14 +52,16 @@ int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
-    int N;
-    cin >> N;
-    leaf.resize(N + 1);
-    for (int i = 1; i <= N; ++i) cin >> leaf[i];
-    int h = (int)ceil(log2(N));
-    int size = (1 << (h + 1));
-    tree.resize(size + 1);
-    init(1, N, 1);
+    {
+        int N;
+        cin >> N;
+        leaf.resize(N + 1);
+        for (int i = 1; i <= N; ++i) cin >> leaf[i];
+        int h = (int)ceil(log2(N));
+        int size = (1 << (h + 1));
+        tree.resize(size + 1);
+        init(1, N, 1);
+    }
     int M;
     cin >> M;
     while (M--) {
