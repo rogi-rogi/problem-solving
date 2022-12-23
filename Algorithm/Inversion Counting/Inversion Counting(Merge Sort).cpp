@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <iostream>
 
 #define SIZE 500000
@@ -11,18 +12,21 @@ static void __mergeSort(int left, int right)
     int mid = (left + right) / 2;
     __mergeSort(left, mid);
     __mergeSort(mid + 1, right);
+    /*
     int idx = left, buff_p = 0;
     while (idx <= mid) buff[buff_p++] = arr[idx++];
     int sort_p = left, buff_idx = 0;
-    while (buff_idx < buff_p && idx <= right)
-      if (buff[buff_idx] <= arr[idx])
-        arr[sort_p++] = buff[buff_idx++];
-      else {
-        arr[sort_p++] = arr[idx++];
-        res += (long long)(buff_p - buff_idx);
-      }
-    while (buff_idx < buff_p)
-      arr[sort_p++] = buff[buff_idx++];
+    */
+    
+    copy(&arr[left], &arr[mid + 1], buff);
+    int idx = mid + 1, sort_p = left;
+    int buff_idx = 0, buff_p = mid - left + 1; 
+    
+    while (buff_idx < buff_p && idx <= right) {
+      arr[sort_p++] = ((buff[buff_idx] <= arr[idx]) ? buff[buff_idx++] : arr[idx++]);
+      if (buff[buff_idx] > arr[idx]) res += (long long)(buff_p - buff_idx); // get gap
+    }
+    copy(&buff[buff_idx], &buff[buff_p], &arr[sort_p]); // while (buff_idx < buff_p) arr[sort_p++] = buff[buff_idx++];
   }
 }
 
