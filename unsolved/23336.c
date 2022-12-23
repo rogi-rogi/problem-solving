@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
 #define SIZE 200000
 
 int arr[SIZE], buff[(SIZE>>1) + 1];
