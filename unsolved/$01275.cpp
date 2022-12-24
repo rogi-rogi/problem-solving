@@ -1,8 +1,8 @@
 #include <cmath>
 #include <iostream>
 #include <vector>
-#define ll unsigned long long
 using namespace std;
+typedef long long ll;
 
 vector<ll> tree, leaf;
 
@@ -20,7 +20,7 @@ void init(int start, int end, int node = 1)
 void update(int start, int end, int idx, int val, int node = 1)
 {
     if (start <= idx && idx <= end) {
-        if (start == end) tree[node] = leaf[idx] = val;
+        if (start == end) tree[node] = (leaf[idx] = val);
         else {
             int mid = (start + end) / 2;
             update(start, mid, idx, val, node * 2);
@@ -36,7 +36,7 @@ ll query(int start, int end, int i, int j, int node = 1)
     if (i <= start && end <= j) return tree[node];
     else {
         int mid = (start + end) / 2;
-        return (query(start, mid, i, j, node * 2) + query(mid + 1, end, i, j, node * 2 + 1));
+        return query(start, mid, i, j, node * 2) + query(mid + 1, end, i, j, node * 2 + 1);
     }
 }
 
