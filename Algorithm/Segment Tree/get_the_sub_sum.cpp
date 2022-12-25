@@ -19,7 +19,7 @@ void init(int left, int right, int node = 1) // node = 1 is root node
 
 void update(int left, int right, int idx, ll val, int node = 1)
 {
-    if (right < idx || idx < left) return;
+    if (right < idx || idx < left) return; // (arr[L1] ~ arr[R1]) < (arr[i] ~ arr[j]) < (arr[L2] ~ arr[R2])
     if (left == right) tree[node] = (leaf[idx] = val);
     else {
         int mid = (left + right)/2;
