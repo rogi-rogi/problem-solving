@@ -50,14 +50,16 @@ int main()
         tree.resize(size);
         init(1, N);
     }
-    int type, idx, i, j;
-    ll val;
+    int type;
     while (Q--) {
         cin >> type;
         if (type == 1) {           // Update segment tree & leaf node : "arr[idx] = val"
+            int idx;
+            ll val;
             cin >> idx >> val;
             update(1, N, idx, val);
         } else { // type == 2,        Query to get the sub sum of arr[i] ~ arr[j]
+            int i, j;
             cin >> i >> j;
             cout << "sub sum of arr[i] ~ arr[j] is : " << query(1, N, i, j)<< '\n';
         }
