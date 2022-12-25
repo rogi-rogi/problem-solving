@@ -5,26 +5,27 @@
 #define SIZE 2001
 
 using namespace std;
+typedef long long ll;
 
 vector<int> tree, arr[SIZE];
 
-void update(int start, int end, int idx, int node = 1)
+void update(int left, int right, int idx, int node = 1)
 {
-    if (start == end) ++tree[node];
+    if (left == right) ++tree[node];
     else {
-        int mid = (start + end) / 2;
-        if (idx <= mid) update(start, mid, idx, node * 2);
-        else            update(mid + 1, end, idx, node * 2 + 1);
-        tree[node] = tree[node * 2] + tree[node * 2 + 1];
+        int mid = (left + right)/2;
+        if (idx <= mid) update(left, mid, idx, node*2);
+        else            update(mid +1, right, idx, node*2 +1);
+        tree[node] = tree[node*2] + tree[node*2 +1];
     }
 }
 
-long long query(int start, int end, int i, int j, int node = 1)
+ll query(int left, int right, int i, int j, int node = 1)
 {
-    if (end < i || j < start) return 0;
-    if (i <= start && end <= j) return tree[node];
-    int mid = (start + end) / 2;
-    return query(start, mid, i, j, node * 2) + query(mid + 1, end, i, j, node * 2 + 1);
+    if (right < i || j < left) return 0;
+    if (i <= left && right <= j) return tree[node];
+    int mid = (left + right)/2;
+    return query(left, mid, i, j, node*2) + query(mid +1, right, i, j, node*2 +1);
 }
 
 int main()
@@ -43,7 +44,7 @@ int main()
     }
     long long res = 0;
     for (int i = 1, j; i <= N; ++i) {
-        for (j = 0; j < arr[i].size(); ++j) res += query(1, N, arr[i][j] + 1, N);
+        for (j = 0; j < arr[i].size(); ++j) res += query(1, N, arr[i][j] +1, N);
         for (j = 0; j < arr[i].size(); ++j) update(1, N, arr[i][j]);
     }
     cout << res;
