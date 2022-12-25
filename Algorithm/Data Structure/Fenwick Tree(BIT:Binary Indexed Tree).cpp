@@ -10,7 +10,7 @@ ll query(int i)
 {
     ll res = 0;
     while (i) {
-        res += tree[i];
+        res += tree[i]; 
         i -= (i & -i);
     }
     return res;
@@ -23,6 +23,12 @@ void update(int i, ll diff)
         i += (i & -i);
     }
 }
+
+/*
+'prefix_sum(arr[i])' is mean get the prefix sum of arr[1] ~ arr[i]
+prefix_sum(arr[i]) = tree[i] + prefix_sum(tree[i - L[i]])
+L[i] = i & -i, i를 2진수로 나타낼 때, bit중 가장 마지막에 1이 위치한 곳의 순서.
+*/
 
 int main()
 {
@@ -41,14 +47,14 @@ int main()
     int type;
     while (Q--) {
         cin >> type;
-        if (type == 1) {
+        if (type == 1) {           // Update Fenwick Tree & arr
             int idx;
             ll val;
             cin >> idx >> val;
             ll diff = val - arr[idx];
             arr[idx] = val;
             update(idx, diff);
-        } else {        // Query to get the prefix sum of arr[1] ~ arr[i] 
+        } else { // type == 2,        Query to get the prefix sum of arr[1] ~ arr[i]
             int i, j;
             cin >> i >> j;
             cout << query(j) - query(i - 1) << '\n'; // arr[i] ~ arr[j] = arr[j] - arr[i - 1]
