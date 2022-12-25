@@ -47,7 +47,7 @@ int main()
         leaf.resize(N + 1);
         for (int i = 1; i <= N; ++i) cin >> leaf[i];
         int size = (1 << ((int)ceil(log2(N)) + 1));
-        tree.resize(size + 1);
+        tree.resize(size);
         init(1, N);
     }
     int type, idx, i, j;
