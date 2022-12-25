@@ -9,19 +9,25 @@ vector<ll> tree, arr;
 ll query(int i)
 {
     ll res = 0;
+    /*
     while (i) {
         res += tree[i]; 
         i -= (i & -i);
     }
+    */
+    for (; i; i -= (i & -i)) res += tree[i];
     return res;
 }
 
 void update(int i, ll diff)
 {
+    /*
     while (i < tree.size()) {
         tree[i] += diff;
         i += (i & -i);
     }
+    */
+    for (; i < tree.size(); i += (i & -i)) tree[i] += diff;
 }
 
 /*
