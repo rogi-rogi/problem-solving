@@ -6,6 +6,7 @@ def FloydWarshall() :
     for t in range(1, V + 1) :
         for v1 in range(1, V + 1) :
             for v2 in range(1, V + 1) :
+                if v1 == v2 : edges[v1][v2] = 0 
                 w = edges[v1][t] + edges[t][v2]
                 if edges[v1][v2] > w :
                     edges[v1][v2] = w
