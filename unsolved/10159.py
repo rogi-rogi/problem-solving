@@ -6,8 +6,8 @@ def FloydWarshall() :
     for t in range(V + 1) :
         for v1 in range(V + 1) :
             for v2 in range(V + 1) :
-                if edges[v1][t] + edges[t][v2] != inf :
-                    edges[v1][v2] = 1
+                w = edges[v1][t] + edges[t][v2]
+                if edges[v1][v2] > w : edges[v1][v2] = w
 
 if __name__ == "__main__" :
     V = int(input())
