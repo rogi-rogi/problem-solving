@@ -1,16 +1,15 @@
+#include <algorithm>
 #include <cmath>
 #include <iostream>
 #include <vector>
-
-#define SIZE 2001
-
 using namespace std;
 typedef long long ll;
 
-vector<int> tree, arr[SIZE];
+vector<int> tree;
 
 void update(int left, int right, int idx, int node = 1)
 {
+    if (idx < left || right < idx) return;
     if (left == right) ++tree[node];
     else {
         int mid = (left + right)/2;
@@ -33,19 +32,22 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
     int N, M;
+    vector<pair<int, int>> arr;
     {
         cin >> N >> M;
-        for (int i = 0, to, from; i < M; ++i) {
-            cin >> to >> from;
-            arr[to].push_back(from);
+        arr.resize(M);
+        for (int i = 0, v1, v2; i < M; ++i) {
+            cin >> v1 >> v2;
+            arr[i] = {v1, v2};
         }
         int size = (1 << ((int)ceil(log2(N)) + 1));
         tree.resize(size + 1);
     }
     long long res = 0;
-    for (int i = 1, j; i <= N; ++i) {
-        for (j = 0; j < arr[i].size(); ++j) res += query(1, N, arr[i][j] +1, N);
-        for (j = 0; j < arr[i].size(); ++j) update(1, N, arr[i][j]);
+    sort(arr.begin(), arr.end());
+    for (int i = 0; i < M; ++i) {
+        res += query(1, N, arr[i].second + 1, N);
+        update(1, N, arr[i].second);
     }
     cout << res;
 }
