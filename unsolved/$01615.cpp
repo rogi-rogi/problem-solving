@@ -7,7 +7,7 @@ typedef long long ll;
 
 vector<int> tree;
 
-void update(int i) { for (; i < tree.size(); i += (i & -i)) tree[i] += 1; }
+void update(int i) { for (; i < tree.size(); i += (i & -i)) ++tree[i]; }
 
 ll query(int i)
 {
