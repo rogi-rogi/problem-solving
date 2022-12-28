@@ -7,7 +7,7 @@ typedef long long ll;
 
 vector<int> tree;
 
-void update(int i) { for (; i < tree.size(); i += (i & -i)) ++tree[i]; }
+void update(int i) { for (; i < tree.size(); i += (i & -i)) tree[i] += 1; }
 
 ll query(int i)
 {
@@ -34,7 +34,7 @@ int main()
     ll res = 0;
     sort(arr.begin(), arr.end());
     for (int i = 0; i < E; ++i) {
-        res += (arr[i].second - 1) - query(arr[i].second);
+        res += query(N) - query(arr[i].second);
         update(arr[i].second);
     }
     cout << res;
