@@ -11,17 +11,17 @@ long long res = 0;
 static void __mergeSort(int left, int right)
 {
     if (left < right) {
-        int mid = (left + right) / 2;
+        int mid = (left + right)/2;
         __mergeSort(left, mid);
-        __mergeSort(mid + 1, right);
+        __mergeSort(mid +1, right);
         /*
         int idx = left, buff_p = 0;
         while (idx <= mid) buff[buff_p++] = arr[idx++];
         int sort_p = left, buff_idx = 0;
         */
 
-        copy(&arr[left], &arr[mid + 1], buff);
-        int idx = mid + 1, sort_p = left;
+        copy(&arr[left], &arr[mid +1], buff);
+        int idx = mid +1, sort_p = left;
         int buff_idx = 0, buff_p = mid - left + 1; 
 
         while (buff_idx < buff_p && idx <= right)
