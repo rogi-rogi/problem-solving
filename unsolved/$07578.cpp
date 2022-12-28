@@ -38,7 +38,7 @@ int main()
     }
     ll res = 0;
     for (int i = 1; i <= N; ++i) {
-        res += query(N) - query(arr[i]);
+        res += (arr[i] - 1) - query(arr[i]);
         update(arr[i]);
     }
     cout << res;
