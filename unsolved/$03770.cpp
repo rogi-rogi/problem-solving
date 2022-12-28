@@ -6,10 +6,11 @@
 
 using namespace std;
 
-vector<int> tree, arr[SIZE];
+vector<int> tree;
 
 void update(int start, int end, int idx, int node = 1)
 {
+    if (idx < start || end < idx) return;
     if (start == end) ++tree[node];
     else {
         int mid = (start + end) / 2;
@@ -35,23 +36,33 @@ int main()
     cin >> T;
     for (int t = 1; t <= T; ++t) {
         int N, M, K;
+        // vector<int> arr[SIZE];
+        vector<pair<int, int>> arr;
         {
             cin >> N >> M >> K;
             N = max(N, M);
-            for (int i = 0, to, from; i < K; ++i) {
-                cin >> to >> from;
-                arr[to].push_back(from);
+            arr.resize(K);
+            for (int i = 0, v1, v2; i < K; ++i) {
+                cin >> v1 >> v2;
+                //arr[v1].push_back(v2); 
+                arr[i] = {v1, v2}; // Coordinate Compression ver.
             }
             int size = (1 << ((int)ceil(log2(N)) + 1));
             tree.resize(size + 1);
         }
         long long res = 0;
+        /*
         for (int i = 1, j; i <= N; ++i) {
             for (j = 0; j < arr[i].size(); ++j) res += query(1, N, arr[i][j] + 1, N);
             for (j = 0; j < arr[i].size(); ++j) update(1, N, arr[i][j]);
         }
+        */
+        sort(arr.begin(), arr.end());
+        for (int i = 0; i < K; ++i) {
+            res += query(1, N, arr[i].second + 1, N);
+            update(1, N, arr[i].second);
+        }
         cout << "Test case " << t << ": " << res << '\n';
         vector<int>().swap(tree);
-        for (int i = 0; i < SIZE; ++i) vector<int>().swap(arr[i]);
     }
 }
