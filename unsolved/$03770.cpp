@@ -1,9 +1,7 @@
+#include <algorithm>
 #include <cmath>
 #include <iostream>
 #include <vector>
-
-#define SIZE 2001
-
 using namespace std;
 
 vector<int> tree;
@@ -12,7 +10,7 @@ void update(int start, int end, int idx, int node = 1)
 {
     if (idx < start || end < idx) return;
     if (start == end) ++tree[node];
-    else {
+    else {  // start != end && start <= idx <= end
         int mid = (start + end) / 2;
         if (idx <= mid) update(start, mid, idx, node * 2);
         else            update(mid + 1, end, idx, node * 2 + 1);
