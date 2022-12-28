@@ -35,7 +35,6 @@ int main()
     sort(arr.begin(), arr.end());
     for (int i = 0; i < E; ++i) {
         res += query(N) - query(arr[i].second);
-        
         update(arr[i].second);
     }
     cout << res;
