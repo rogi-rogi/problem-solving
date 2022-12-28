@@ -34,7 +34,7 @@ int main()
     ll res = 0;
     sort(arr.begin(), arr.end());
     for (int i = 0; i < E; ++i) {
-        res += (arr[i] - 1) - query(arr[i].second);
+        res += query(N) - query(arr[i].second); // if "form : arr[v1] = v2", res += (arr[i] - 1) - query(arr[i]);
         update(arr[i].second);
     }
     cout << res;
