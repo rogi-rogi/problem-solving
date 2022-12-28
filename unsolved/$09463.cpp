@@ -24,15 +24,15 @@ int main()
     cin >> T;
     while (T--) {
         int N;
-        map<int, int> edges;
-        vector<ll> arr;//, edges;
+        // map<int, int> edges;
+        vector<ll> arr, edges;
         {
             cin >> N;
             arr.resize(N + 1);
-            //edges.resize(N + 1);
+            edges.resize(N + 1);
             for (int i = 1, v1; i <= N; ++i) {
                 cin >> v1;
-                edges.insert({v1, i});
+                edges[v1] = i; // edges.insert({v1, i});
             }
             for (int i = 1, v2; i <= N; ++i) {
                 cin >> v2;
