@@ -64,7 +64,3 @@ int main()
         vector<int>().swap(tree);
     }
 }
-
-SPDX-FileCopyrightText: © {$year_of_file_creation} {$name_of_copyright_holder} <{$contact}>
-
-SPDX-License-Identifier: {$SPDX_license_name}
