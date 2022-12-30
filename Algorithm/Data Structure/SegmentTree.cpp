@@ -4,37 +4,35 @@
 using namespace std;
 typedef long long ll;
 
-vector<ll> tree, leaf;
-
-void init(int left, int right, int node = 1) // node = 1 is root node
+void init(int start, int end, int node = 1) // node = 1 is root node
 {
-    if (left == right) tree[node] = leaf[left]; // or leaf[right]
+    if (start == end) tree[node] = leaf[start]; // or leaf[end]
     else {
-        int mid = (left + right)/2;
-        init(left, mid, node*2);
-        init(mid+1, right, node*2 +1);
+        int mid = (start + end)/2;
+        init(start, mid, node*2);
+        init(mid+1, end, node*2 +1);
         tree[node] = tree[node*2] + tree[node*2 +1];
     }
 }
 
-void update(int left, int right, int idx, ll val, int node = 1)
+void update(int start, int end, int idx, ll val, int node = 1)
 {
-    if (right < idx || idx < left) return; // (arr[L1] ~ arr[R1]) < (arr[i] ~ arr[j]) < (arr[L2] ~ arr[R2])
-    if (left == right) tree[node] = (leaf[idx] = val);
+    if (end < idx || idx < start) return; // (arr[L1] ~ arr[R1]) < (arr[i] ~ arr[j]) < (arr[L2] ~ arr[R2])
+    if (start == end) tree[node] = (leaf[idx] = val);
     else {
-        int mid = (left + right)/2;
-        update(left, mid, idx, val, node*2);
-        update(mid+1, right, idx, val, node*2 +1);
+        int mid = (start + end)/2;
+        update(start, mid, idx, val, node*2);
+        update(mid+1, end, idx, val, node*2 +1);
         tree[node] = tree[node*2] + tree[node*2 +1];
     }
 }
 
-ll query(int left, int right, int i, int j, int node = 1)
+ll query(int start, int end, int i, int j, int node = 1)
 {
-    if (j < left || right < i) return 0;
-    if (i <= left && right <= j) return tree[node];
-    int mid = (left + right)/2;
-    return query(left, mid, i, j, node*2) + query(mid+1, right, i, j, node*2 +1);
+    if (j < start || end < i) return 0;
+    if (i <= start && end <= j) return tree[node];
+    int mid = (start + end)/2;
+    return query(start, mid, i, j, node*2) + query(mid+1, end, i, j, node*2 +1);
 }
 
 int main()
