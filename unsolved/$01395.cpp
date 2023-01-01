@@ -7,7 +7,7 @@ typedef long long ll;
 
 vector<ll> tree, lazy_tree;
 
-void update_lazy_tree(int start, int end, int node, ll diff)
+void update_lazy_tree_child(int start, int end, int node, ll diff)
 {
     if (start != end) {
         lazy_tree[node*2] += diff;
@@ -19,7 +19,7 @@ void lazy_update(int start, int end, int node)
 {
     if (lazy_tree[node] % 2) {
         tree[node] = (end-start+1) - tree[node];
-        update_lazy_tree(start, end, node, lazy_tree[node]);
+        update_lazy_tree_child(start, end, node, lazy_tree[node]);
         lazy_tree[node] = 0;
     }
 }
@@ -30,7 +30,7 @@ void update(int start, int end, int i, int j, int node = 1)
     if (j < start || end < i) return;
     if (i <= start && end <= j) {
         tree[node] = (end-start+1) - tree[node];
-        update_lazy_tree(start, end, node, 1);
+        update_lazy_tree_child(start, end, node, 1);
     } else {
         int mid = (start + end)/2;
         update(start, mid, i, j, node*2);
