@@ -16,7 +16,7 @@ void init(int start, int end, int node = 1)
         tree[node] = tree[node*2] + tree[node*2 +1];
     }
 }
-void update_lazy_tree(int start, int end, int node, ll diff)
+void update_lazy_tree_child(int start, int end, int node, ll diff)
 {
     if (start != end) {
         lazy_tree[node*2] += diff;
@@ -28,7 +28,7 @@ void lazy_update(int start, int end, int node)
 {
     if (lazy_tree[node] != 0) {
         tree[node] += (end-start+1)*lazy_tree[node];
-        update_lazy_tree(start, end, node, lazy_tree[node]);
+        update_lazy_tree_child(start, end, node, lazy_tree[node]);
         lazy_tree[node] = 0;
     }
 }
@@ -39,7 +39,7 @@ void update(int start, int end, int i, int j, ll diff, int node = 1)
     if (j < start || end < i) return;
     if (i <= start && end <= j) {
         tree[node] += (end-start+1)*diff;
-        update_lazy_tree(start, end, node, diff);
+        update_lazy_tree_child(start, end, node, diff);
     } else {
         int mid = (start + end)/2;
         update(start, mid, i, j, diff, node*2);
