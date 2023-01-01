@@ -82,7 +82,7 @@ int main()
         } else {
             int i, j;
             cin >> i >> j;
-            cout << query(1, N, i, j)<< '\n';
+            cout << query(1, N, i, j) << '\n';
         }
     }
 }
