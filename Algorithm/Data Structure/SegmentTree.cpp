@@ -1,8 +1,11 @@
 #include <cmath>
 #include <iostream>
 #include <vector>
+
 using namespace std;
 typedef long long ll;
+
+vector<ll> tree, leaf;
 
 void init(int start, int end, int node = 1) // node = 1 is root node
 {
