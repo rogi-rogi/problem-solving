@@ -23,9 +23,7 @@ ll query(int start, int end, int idx, int node = 1)
     if (end < idx || idx < start) return 0;
     if (start == end) return lazy_tree[node];
     int mid = (start + end)/2; 
-    ll left = query(start, mid, idx, node*2);
-    ll right = query(mid+1, end, idx, node*2 +1);
-    return left ^ right ^ lazy_tree[node];
+    return (query(start, mid, idx, node*2) ^ query(mid+1, end, idx, node*2 +1) ^ lazy_tree[node]);
 }
 
 int main()
