@@ -31,7 +31,7 @@ int manacher(const string& s, int N)
         if (R[i] == N) return 0;
         /*
         전처리된 문자열의 끝 요소(왼쪽 또는 오른쪽)가 palindrome인 경우가 없다면,
-        palindrome을 만들기 위해 N - 1개의 문자를 추가해야 한다.
+        palindrome을 만들기 위해 최소 N - 1개의 문자를 추가해야 한다.(최악의 경우)
         따라서, 끝 요소까지 palindrome인 경우가 존재하고, 만약 R[i]의 값이 최대라면
         그때의 요소를 중점으로 부족한 문자개수(N - ((len - 1) - idx)만큼 추가하면 된다.
         */
