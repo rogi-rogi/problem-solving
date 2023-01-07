@@ -28,7 +28,7 @@ int manacher(const string& s, int N)
     }
     int max_r = 0, idx = 0;
     for (int i = 0; i < len; ++i) {
-        if (R[i] == N) return 0;
+        if (R[i] == N) return N;
         if (max_r < R[i] && (len - 1 - i == R[i])) max_r = R[(idx = i)];
     }
     return N - ((len - 1) - idx) + N;
