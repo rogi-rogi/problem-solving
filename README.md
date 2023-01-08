@@ -19,6 +19,11 @@ int main()
 { // 으로 시작하면 노력을 첨가한 코드입니다.
 ```
 여기 있는 모든 코드는 상업목적 이외의 목적으로만 사용 가능합니다 :)
+
+### License
+All code should not be used for commercial purposes.
+모든 코드의 상업목적의 사용을 금지합니다.
+
 ***
 ### Profile
 
