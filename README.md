@@ -20,12 +20,6 @@ int main()
 ```
 
 ***
-### License
-All code should not be used for commercial purposes.
-
-모든 코드의 상업목적의 사용을 금지합니다.
-
-***
 ### Profile
 
 + [[BOJ]](https://www.acmicpc.net/user/polygon)
@@ -38,6 +32,14 @@ All code should not be used for commercial purposes.
 + [[Algorithm]](https://github.com/rogi-rogi/BOJ/tree/main/Algorithm)`  : 기억력이 나빠져 공부한 알고리즘을 저장하기 시작했습니다.`
 + [[solved]](https://github.com/rogi-rogi/BOJ/tree/main/solved)`     : 채점 결과 "맞았습니다!!" 를 받은 코드들이 있습니다.`
 + [[unsolved]](https://github.com/rogi-rogi/BOJ/tree/main/unsolved)`   : 채점 결과는 모르지만, 주어진 테스트 케이스를 통과한 코드들 입니다.`
+
+
+
+***
+### License
+All code should not be used for commercial purposes.
+
+모든 코드의 상업목적의 사용을 금지합니다.
 
 
 
