@@ -3,6 +3,22 @@
 
 많이는 풀었지만 잘하지는 못합니다!
 
+필요할 때 변한다는 말이 있지요.
+
+어느 순간 이전에 만든 코드를 다시 읽기가  ~~오직 코딩의 신만 읽을수 있을정도로~~ 어려워 가독성에 노력 3방울 정도 첨가했습니다.
+
+Q : 어느 순간이 언제인지 어떻게 알죠?
+
+A : 제가 군대 가기 전 까지 입니다.
+
+```C
+int main(){ // 으로 시작하면 대충 작성한 코드입니다.
+```
+```C
+int main()
+{ // 으로 시작하면 노력을 첨가한 코드입니다.
+```
+여기 있는 모든 코드는 상업목적 이외의 목적으로만 사용 가능합니다 :)
 ***
 ### Profile
 
@@ -12,15 +28,10 @@
 
 ***
 ### 구성
-<ul>
 
-  <li><a href = "https://github.com/rogi-rogi/BOJ/tree/main/Algorithm">Algorithm</a><pre> : 기억력이 나빠져 공부한 알고리즘을 저장하기 시작했습니다.</pre></li>
-  <li><a href = "https://github.com/rogi-rogi/BOJ/tree/main/solved">solved</a><pre>       : 채점 결과 "맞았습니다!!" 를 받은 코드들이 있습니다.</pre></li>
-  <li><pre></pre></li>
-  </pre>
-  
-</ul>
-+ <p>Algorithm : </p>
-+ <p>solved    : 채점 결과 "맞았습니다!!" 를 받은 코드들이 있습니다.</p>
-+ <p>unsolved  : 채점 결과는 모르지만, 주어진 테스트 케이스를 통과한 코드들 입니다. </p>
++ [[Algorithm]](https://github.com/rogi-rogi/BOJ/tree/main/Algorithm)`  : 기억력이 나빠져 공부한 알고리즘을 저장하기 시작했습니다.`
++ [[solved]](https://github.com/rogi-rogi/BOJ/tree/main/solved)`     : 채점 결과 "맞았습니다!!" 를 받은 코드들이 있습니다.`
++ [[unsolved]](https://github.com/rogi-rogi/BOJ/tree/main/unsolved)`   : 채점 결과는 모르지만, 주어진 테스트 케이스를 통과한 코드들 입니다.`
+
+
 
