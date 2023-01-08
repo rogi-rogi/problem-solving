@@ -16,6 +16,7 @@ void init(int start, int end, int node = 1)
         tree[node] = tree[node*2] + tree[node*2 +1];
     }
 }
+
 void update_lazy_tree_child(int start, int end, int node, ll diff)
 {
     if (start != end) {
