@@ -21,9 +21,9 @@ A : 제가 군대 가기 전 까지 입니다.
 ***
 ### 구성
 
-+ [[Algorithm]](https://github.com/rogi-rogi/BOJ/tree/main/Algorithm)`  : 기억력이 나빠져 공부한 알고리즘을 저장하기 시작했습니다.`
-+ [[solved]](https://github.com/rogi-rogi/BOJ/tree/main/solved)`     : 채점 결과 "맞았습니다!!" 를 받은 코드들이 있습니다.`
-+ [[unsolved]](https://github.com/rogi-rogi/BOJ/tree/main/unsolved)`   : 채점 결과는 모르지만, 주어진 테스트 케이스를 통과한 코드들 입니다.`
++ [[Algorithm]](https://github.com/rogi-rogi/BOJ/tree/main/Algorithm) : 기억력이 나빠져 공부한 알고리즘을 저장하기 시작했습니다.
++ [[solved]](https://github.com/rogi-rogi/BOJ/tree/main/solved) : 채점 결과 "맞았습니다!!" 를 받은 코드들이 있습니다.
++ [[unsolved]](https://github.com/rogi-rogi/BOJ/tree/main/unsolved) : 채점 결과는 모르지만, 주어진 테스트 케이스를 통과한 코드들 입니다.
 
 
 ***
