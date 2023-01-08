@@ -28,9 +28,13 @@ A : 제가 군대 가기 전 까지 입니다.
 
 ***
 ### License
-All code should not be used for commercial purposes.
+All codes should not be used for commercial purposes.
+
+All codes are allowed to be used only for educational purposes only.
 
 모든 코드의 상업목적의 사용을 금지합니다.
+
+모든 코드는 교육 목적으로만 사용할 수 있습니다.
 
 
 
