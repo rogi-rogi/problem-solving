@@ -37,9 +37,8 @@ int main()
     int A, B, C;
     while (N--) {
         cin >> A >> B;
-        if (A == 1) {
-            cout << query(1, SIZE, B) << '\n';
-        } else {
+        if (A == 1) cout << query(1, SIZE, B) << '\n';
+        else {
             cin >> C;
             update(1, SIZE, B, C);
         }
