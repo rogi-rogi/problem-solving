@@ -5,7 +5,7 @@ from sys import stdin
 input = stdin.readline
 
 def Dijkstra(v) :
-    dists = [[inf] * K for _ in range(V + 1)]
+    dists = [[inf] * K for _ in range(V + 1)]   # V(1~V)개의 노드에 대해 K(1~K)번째의 최단거리를 저장
     dists[v][0] = 0
     pq = [(0, v)]
     while pq :
