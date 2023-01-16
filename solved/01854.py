@@ -10,10 +10,10 @@ def Dijkstra(v) :
     pq = [(0, v)]
     while pq :
         w, v = heappop(pq)
-        if dists[v][-1] < w : continue
+        if dists[v][-1] < w : continue          # w(k) -> w(k+1)이고, w(k+1) -> w(k+2)이므로, w(k+1)이상은 불필요.
         for nv, nw in edges[v] :
             nw += w
-            if nw < dists[nv][-1] :
+            if nw < dists[nv][-1] :             # w(k) (= K번째 최단거리)보다 작은 최단거리 nw 존재, w(k) -> w(k+1)
                 dists[nv][-1] = nw
                 dists[nv].sort()
                 heappush(pq, (nw, nv))
