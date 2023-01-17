@@ -6,7 +6,7 @@
 
 using namespace std;
 
-vector<int> tree((1 << ((int)ceil(log2(SIZE)) + 1))), diff(SIZE +1), res(SIZE +1);
+vector<int> tree, diff, res;
 
 void init(int start, int end, int node = 1)
 {
@@ -37,6 +37,7 @@ int main()
         cin >> N;
         diff.resize(N + 1);
         res.resize(N + 1);
+        tree.resize(1 << ((int)ceil(log2(SIZE)) + 1));
         init(1, N);
         for (int i = 1; i <= N; ++i) cin >> diff[i];
     }
