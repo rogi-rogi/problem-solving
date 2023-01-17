@@ -40,6 +40,11 @@ int main()
         init(1, N);
         for (int i = 1; i <= N; ++i) cin >> diff[i];
     }
+    /*
+        i 앞에 있는 수 들 중, i보다 큰 수들의 개수가 A[i]이다.
+        원래 수열을 구하기 위해서는 i보다 큰 수가 A[i]개 만큼 자신보다 앞 공간에 들어가야 한다.
+        (= 남은 공간 중 A[i] + 1 번째의 위치를 찾아서 i를 저장해주면 된다)
+    */
     for (int i = 1; i <= N; ++i) res[query(1, N, diff[i])] = i;
     for (int i = 1; i <= N; ++i) cout << res[i] << '\n';
     
