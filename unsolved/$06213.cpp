@@ -5,7 +5,11 @@
 
 using namespace std;
 
-vector<pair<int, int>> tree; // <max, min>
+typedef struct __Info {
+    int max, min;    
+}Info;
+
+vector<Info> tree; // <max, min>
 vector<int> leaf;
 
 void init(int start, int end, int node = 1)
@@ -15,18 +19,18 @@ void init(int start, int end, int node = 1)
         int mid = ((start + end) >> 1);
         init(start, mid, node*2);
         init(mid+1, end, node*2 +1);
-        tree[node] = {max(tree[node*2].first, tree[node*2 +1].first), min(tree[node*2].second, tree[node*2 +1].second)};
+        tree[node] = {max(tree[node*2].max, tree[node*2 +1].max), min(tree[node*2].min, tree[node*2 +1].min)};
     }
 }
 
-pair<int, int> query(int start, int end, int i, int j, int node = 1)
+Info query(int start, int end, int i, int j, int node = 1)
 {
     if (j < start || end < i) return {0, 1000000};
     if (i <= start && end <= j) return tree[node];
     int mid = ((start + end) >> 1);
-    pair<int, int> left = query(start, mid, i, j, node*2);
-    pair<int, int> right = query(mid+1, end, i, j, node*2 +1);
-    return {max(left.first, right.first), min(left.second, right.second)};
+    Info left = query(start, mid, i, j, node*2);
+    Info right = query(mid+1, end, i, j, node*2 +1);
+    return {max(left.max, right.max), min(left.min, right.min)};
 }
 
 int main()
@@ -44,7 +48,7 @@ int main()
     while (Q--) {
         int i, j;
         cin >> i >> j;
-        pair<int, int> info = query(1, N, i, j);
-        cout << info.first - info.second << '\n';
+        Info info = query(1, N, i, j);
+        cout << info.max - info.min << '\n';
     }
 }
