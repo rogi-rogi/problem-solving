@@ -1,7 +1,6 @@
 from sys import stdin
 input = stdin.readline
 
-'''
 class DisjointSet :
     def find(self, v, parents) :
         if parents[v] == v : return v
@@ -15,7 +14,7 @@ class DisjointSet :
             parents[max(v1, v2)] = min(v1, v2)
             return True
         return False
-
+        
 def Kruskal(V, divide = 1) :
     parents = [*range(V + 1)]
     MST_weight = 0
@@ -26,31 +25,6 @@ def Kruskal(V, divide = 1) :
             MST_weight += w
             connected_edge += 1
             if connected_edge >= V - divide : break
-    return MST_weight
-''' # slow...
-
-def find(parents, v) :
-    if parents[v] == v : return v
-    parents[v] = find(parents, parents[v])
-    return parents[v]
-    
-def union(parents, v1, v2) :
-    v1 = find(parents, v1)
-    v2 = find(parents, v2)
-    if v1 != v2 :
-        parents[max(v1, v2)] = min(v1, v2)
-        return True
-    return False
-
-def Kruskal(V) :
-    parents = [*range(V + 1)]
-    MST_weight = 0
-    connected_edge = 0
-    for w, v1, v2 in edges :
-        if union(parents, v1, v2) :
-            MST_weight += w
-            connected_edge += 1
-            if connected_edge >= V - 1 : break
     return MST_weight
     
 if __name__ == "__main__" :
