@@ -3,7 +3,7 @@ from math import inf
 from sys import stdin
 input = stdin.readline
 
-def BFS01(vx, vy, MX, MY) :
+def BFS_01(vx, vy, MX, MY) :
     dist = [[-1] * MY for _ in range(MX)]
     dist[vx][vy] = 0
     dq = deque([(vx, vy)])
@@ -23,5 +23,5 @@ def BFS01(vx, vy, MX, MY) :
 if __name__ == "__main__" : 
     M, N = map(int, input().split())
     graph = [[*map(int, input().rstrip())] for _ in range(N)]
-    dist = BFS01(0, 0, N, M)
+    dist = BFS_01(0, 0, N, M)
     print(dist[N-1][M-1])
