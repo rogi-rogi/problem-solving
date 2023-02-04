@@ -4,14 +4,14 @@ from sys import stdin
 input = stdin.readline
 
 def BFS_01(vx, vy, MX, MY) :
-    dist = [[-1] * MY for _ in range(MX)]
+    dist = [[inf] * MY for _ in range(MX)]
     dist[vx][vy] = 0
     dq = deque([(vx, vy)])
     while dq :
         x, y = dq.popleft()
         for nx, ny in [(x+1, y), (x-1, y), (x, y+1), (x, y-1)] :
             if 0 <= nx < MX and 0 <= ny < MY :
-                if dist[nx][ny] == -1 :
+                if dist[nx][ny] == inf :
                     if not graph[nx][ny] :
                         dist[nx][ny] = dist[x][y]
                         dq.appendleft((nx, ny))
