@@ -19,12 +19,13 @@ def BFS01(vx, vy, MX, MY) :
                     else :
                         dist[nx][ny] = dist[x][y] + 1
                         dq.append((nx, ny))
+            else : return dist[x][y] 
+            
             '''
             유효성 : 시작점(vx, vy)과 dq로부터 범위내의 영역(x, y)을 받으므로 유효함.
             종료 조건 : 아무 바깥 태두리로 닿는다. 
             '''
-            else : return dist[x][y] 
-    
+            
 if __name__ == "__main__" :
     
     N, tx, ty = map(int, input().split())
