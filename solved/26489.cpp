@@ -7,8 +7,6 @@ int main()
     cin.tie(nullptr);
     string temp;
     int cnt = 0;
-    while (getline(cin, temp)) {
-        ++cnt;
-    }
+    while (getline(cin, temp)) ++cnt;
     cout << cnt;
 }
