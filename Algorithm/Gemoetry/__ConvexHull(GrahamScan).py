@@ -24,14 +24,14 @@ class ConvexHull :
     def orderCCW(self, P1, P2) :
         DIR = CCW(self.std_point, P1, P2)
         if DIR == 0 : return self.orderASC_YX(P1, P2)
-        return [0, 1][DIR == 1]
+        return [1, -1][DIR == 1]
         
     def GrahamScan(self, P, N) :
         P.sort(key = cmp_to_key(self.orderASC_YX)) # P.sort(key = lambda p : (p.y, p.x))
         self.std_point = P[0]
         P1 = P[0]
         del P[0]
-        P.sort(key = cmp_to_key(self.orderCCW)) # something wrong...
+        P.sort(key = cmp_to_key(self.orderCCW))
         P2 = P[0]
         del P[0]
         
