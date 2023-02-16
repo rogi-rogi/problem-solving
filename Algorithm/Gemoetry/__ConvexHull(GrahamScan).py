@@ -29,22 +29,14 @@ class ConvexHull :
     def GrahamScan(self, P, N) :
         P.sort(key = lambda p : (p.y, p.x))
         self.std_point = P[0]
-        P1 = P[0]
         del P[0]
         P.sort(key = cmp_to_key(self.orderCCW))
-        P2 = P[0]
+        stack = [self.std_point, P[0]]
         del P[0]
-        
-        stack = [P1, P2]
         for p in P : 
-            P3 = p
-            while len(stack) > 1 :
-                P2 = stack[-1]
+            while len(stack) > 1 and CCW(stack[-2], stack[-1], p) <= 0 :
                 stack.pop()
-                if (CCW(stack[-1], P2, P3) == 1) :
-                    stack.append(P2)
-                    break
-            stack.append(P3)
+            stack.append(p)
         return len(stack)
 
 if __name__ == "__main__" :
