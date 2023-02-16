@@ -14,7 +14,7 @@ def CCW(std, A, B) :
     
 class ConvexHull :
     def __init__ (self) :
-        self.std_point = None
+        self.ref_point = None
     
     # order asc y asc x
     def orderASC_YX(self, P1, P2) : 
@@ -22,19 +22,19 @@ class ConvexHull :
         return [-1, 1][P1.x > P2.x]
     
     def orderCCW(self, P1, P2) :
-        DIR = CCW(self.std_point, P1, P2)
+        DIR = CCW(self.ref_point, P1, P2)
         if DIR == 0 : return self.orderASC_YX(P1, P2)
         return [1, -1][DIR == 1]    # P1 !== P2
         
     def GrahamScan(self, P, N) :
         P.sort(key = lambda p : (p.y, p.x))
-        self.std_point = P[0]
-        del P[0]
+        self.ref_point = P[0]
+        del P[0]        # remove reference point 
         P.sort(key = cmp_to_key(self.orderCCW))
-        stack = [self.std_point, P[0]]
-        del P[0]
-        for p in P : 
-            while len(stack) > 1 and CCW(stack[-2], stack[-1], p) <= 0 :
+        stack = [self.ref_point, P[0]]
+        del P[0]        # remove point on a line
+        for p in P :
+            while len(stack) > 1 and CCW(stack[-2], stack[-1], p) <= 0 :    # CCW(stack_next_top, stack_top, target)
                 stack.pop()
             stack.append(p)
         return len(stack)
