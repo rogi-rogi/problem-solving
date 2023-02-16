@@ -1,7 +1,8 @@
 #include <algorithm>
-#include <stack>
 #include <vector>
-
+#include <iostream>
+ 
+using namespace std;
 typedef long long ll; 
 
 typedef struct __point{
@@ -9,7 +10,7 @@ typedef struct __point{
 } Point;
 
 vector<Point> P;
-Point std_p;
+Point ref_p;
 
 int CCW(const Point& A, const Point& B, const Point& C)
 {
@@ -26,32 +27,39 @@ bool order_asc_yx(const Point& A, const Point& B)
 
 bool order_ccw(const Point& A, const Point& B)
 {
-    int dir = CCW(std_p, A, B);
+    int dir = CCW(ref_p, A, B);
     if (dir == 0) return order_asc_yx(A, B);
     else return dir == 1;
 }
 
-int GrahamScan(int N) {
+int GrahamScan()
+{
     sort(P.begin(), P.end(), order_asc_yx);
-    std_p = P[0];
+    ref_p = P[0];
     sort(P.begin() + 1, P.end(), order_ccw);
     
-    Point P1 = std_p, P2 = P[1], P3;
-    stack<Point> s;
-    s.push(P1);
-    s.push(P2);
-    for (int i = 2; i < N; ++i) {
-        P3 = P[i];
-        while (s.size() > 1) {
-            P2 = s.top();
-            s.pop();
-            P1 = s.top();
-            if (CCW(P1, P2, P3) == 1) {
-                s.push(P2);
-                break;
-            }
+    vector<Point> stack = { ref_p, P[1] };
+    int SIZE = P.size();
+    for (int i = 2; i < SIZE; ++i) {
+        int top_idx = stack.size() -1;
+        while (stack.size() > 1 && CCW(stack[top_idx -1], stack[top_idx], P[i]) <= 0) {
+            stack.pop_back();
+            --top_idx;
         }
-        s.push(P3);
+        stack.push_back(P[i]);
     }
-    return s.size();
+    return stack.size();
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int N;
+    cin >> N;
+    for (int i = 0, x, y; i < N; ++i) {
+        cin >> x >> y;
+        P.push_back({x, y});
+    }
+    cout << GrahamScan();
 }
