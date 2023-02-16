@@ -32,15 +32,14 @@ bool order_ccw(const Point& A, const Point& B)
     else return dir == 1;
 }
 
-int GrahamScan()
+int GrahamScan(int N)
 {
     sort(P.begin(), P.end(), order_asc_yx);
     ref_p = P[0];
     sort(P.begin() + 1, P.end(), order_ccw);
     
     vector<Point> stack = { ref_p, P[1] };
-    int SIZE = P.size();
-    for (int i = 2; i < SIZE; ++i) {
+    for (int i = 2; i < N; ++i) {
         int top_idx = stack.size() -1;
         while (stack.size() > 1 && CCW(stack[top_idx -1], stack[top_idx], P[i]) <= 0) {
             stack.pop_back();
@@ -61,5 +60,5 @@ int main()
         cin >> x >> y;
         P.push_back({x, y});
     }
-    cout << GrahamScan();
+    cout << GrahamScan(P.size());
 }
