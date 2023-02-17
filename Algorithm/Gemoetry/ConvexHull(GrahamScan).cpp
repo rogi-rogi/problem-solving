@@ -21,15 +21,15 @@ int CCW(const Point& A, const Point& B, const Point& C)
 
 bool order_asc_yx(const Point& A, const Point& B)
 {
-    if (A.y != B.y) return A.y < B.y;
-    else return A.x < B.x;
+    if (A.y != B.y) return A.y < B.y;        // y가 asc이면 swap하지 않음(=true)
+    else return A.x < B.x;                   // y가 동일할 때 x가 asc이면 swap하지 않음(=true)
 }
 
 bool order_ccw(const Point& A, const Point& B)
 {
     int dir = CCW(ref_p, A, B);
-    if (dir == 0) return order_asc_yx(A, B);
-    else return dir == 1;
+    if (dir == 0) return order_asc_yx(A, B); // 직선상에 위치하면 asc y, asc x를 기준으로 정렬
+    else return dir == 1;                    // CCW이면 swap을 하지 않음(=true), CW이면 swap (=false)
 }
 
 int GrahamScan(int N)
