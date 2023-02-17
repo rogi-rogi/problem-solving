@@ -21,20 +21,20 @@ int MonotoneChain(int N)
     sort(P.begin(), P.end());
     vector<pair<ll, ll>> top_hull, bottom_hull;
     for (int i = 0; i < N; ++i) {
-        int top_idx = top_hull.size() - 1;
-        while (top_hull.size() > 1 && CCW(top_hull[top_idx -1], top_hull[top_idx], P[i]) <= 0) {
-            top_hull.pop_back();
-            --top_idx;
-        }
-        top_hull.push_back(P[i]);
-    }
-    for (int i = N - 1; i >= 0; --i) {
         int top_idx = bottom_hull.size() - 1;
         while (bottom_hull.size() > 1 && CCW(bottom_hull[top_idx -1], bottom_hull[top_idx], P[i]) <= 0) {
             bottom_hull.pop_back();
             --top_idx;
         }
         bottom_hull.push_back(P[i]);
+    }
+    for (int i = N - 1; i >= 0; --i) {
+        int top_idx = top_hull.size() - 1;
+        while (top_hull.size() > 1 && CCW(top_hull[top_idx -1], top_hull[top_idx], P[i]) <= 0) {
+            top_hull.pop_back();
+            --top_idx;
+        }
+        top_hull.push_back(P[i]);
     }
     return top_hull.size() + bottom_hull.size() - 2;
 }
