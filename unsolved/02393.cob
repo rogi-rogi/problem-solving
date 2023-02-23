@@ -1,5 +1,5 @@
        IDENTIFICATION DIVISION.
-        PROGRAM-ID. printRock.
+        PROGRAM-ID. printRook.
         PROCEDURE DIVISION.
             DISPLAY '  ___  ___  ___'
             DISPLAY '  | |__| |__| |'
