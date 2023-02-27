@@ -5,12 +5,14 @@ typedef long long ll;
 
 int main()
 {
-    ll koong[SIZE] = {0, 1, 1, 2, 4,};
+    ll koong[SIZE] = {1, 1, 2, 4, 8, };
     { // preprocessing
-        for (int i = 4; i < SIZE; ++i)
-            koong[i] = 
-            // koong[i] = koong[i - 1] + koong[i - 2] + koong[i - 3] + koong[i - 4];
-            // koong(n) = Σ koong(i), { i : [n-4, n-1] }
+        for (int i = 5; i < SIZE; ++i)
+            koong[i] = 2*koong[i - 1] - koong[i - 5];
+            /*
+            koong[i] = koong[i - 1] + (koong[i - 2] + koong[i - 3] + koong[i - 4]);
+            koong[i] = koong[i - 1] + (koong[i - 1] - koong[i - 5]);
+            */
     }
     int t;
     scanf("%d", &t);
