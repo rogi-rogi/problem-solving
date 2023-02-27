@@ -1,11 +1,9 @@
 #include <stdio.h>
 #define SIZE 68
 
-typedef long long ll;
-
 int main()
 {
-    ll koong[SIZE] = {1, 1, 2, 4, 8, };
+    long long koong[SIZE] = {1, 1, 2, 4, 8, };
     { // preprocessing
         for (int i = 5; i < SIZE; ++i)
             koong[i] = 2*koong[i - 1] - koong[i - 5];
