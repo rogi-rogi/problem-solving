@@ -23,7 +23,6 @@ def BipartiteMatching() :
             if DFS(i) : maximum_flow += 1
     return maximum_flow
 
-
 if __name__ == "__main__" :
     X, Y = map(int, input().split())
     edges = [[] for _ in range(X + 1)]
