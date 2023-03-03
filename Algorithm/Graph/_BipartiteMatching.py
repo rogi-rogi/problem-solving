@@ -5,8 +5,6 @@ X, Y : other group
 '''
   
 def BipartiteMatching(Y) :
-    maximum_flow = 0
-    connected = None
     def DFS(v1) :
         for v2 in edges[v1] :
             if connected[v2] : continue
@@ -15,9 +13,12 @@ def BipartiteMatching(Y) :
                 path[v2] = v1
                 return True
         return False
-        
-    for i in range(1, Y + 1) :
-        connected = [False] * Y
+    
+    maximum_flow = 0
+    connected = None
+    path = [0] * (Y + 1)
+    for i in range(1, X + 1) :
+        connected = [False] * (Y + 1)
         if DFS(i) : maximum_flow += 1
     return maximum_flow
 
@@ -28,5 +29,5 @@ if __name__ == "__main__" :
     for _ in range(E) :
         v1, v2 = map(int, input().split())
         edges[v1].append(v2)
-    maximum_flow = BipartiteMatching(Y)
+    maximum_flow = BipartiteMatching()
     print(maximum_flow)
