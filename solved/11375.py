@@ -1,3 +1,5 @@
+#pypy3
+
 from sys import setrecursionlimit, stdin
 setrecursionlimit(1002)
 input = stdin.readline
