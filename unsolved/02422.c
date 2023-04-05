@@ -8,7 +8,6 @@ int main()
     int N, M;
     scanf("%d %d", &N, &M);
     for (int i = 0, n1, n2; i < M; ++i) {
-        int n1, n2;
         scanf("%d %d", &n1, &n2);
         ban_list[n1][n2] = ban_list[n2][n1] = 1;
     }
