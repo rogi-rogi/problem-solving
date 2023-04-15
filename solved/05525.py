@@ -13,7 +13,7 @@ while idx < M - 1:
                 break
         else :
             cnt += 1
-            while (idx + SIZE + 1 < M) and (S[idx + SIZE] == 'O' and S[idx + SIZE +1] == 'I') :
+            while (idx + SIZE <= M) and (S[idx + SIZE] == 'O' and S[idx + SIZE +1] == 'I') :
                 cnt += 1
                 idx += 2
             idx += SIZE
