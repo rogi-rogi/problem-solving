@@ -18,7 +18,7 @@ int main()
             for (int k = j + 1; k < N; ++k) {
                 int sum = cards[i] + cards[j] + cards[k];
                 if (sum <= M && sum > max) max = sum;
-            }        
+            }
     }
     printf("%d\n", max);
 }
