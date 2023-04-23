@@ -7,17 +7,19 @@ union(v1, v2) : 정점 v1과 v2를 하나의 그래프로(부모노드를 동일
   - root node를 번호가 작은 순으로 하기 때문에 v1, v2 중 큰 번호를 가진 노드를 병합시킨다. 
 
 '''
-
-class Disjoint-Set :
-  def find(self, v, parents) :
-    if parents[v] == v : return v
-    parents[v] = self.find(parents[v], parents)
-    return parents[v]
-  
-  def union(self, v1, v2, parents) :
-    v1 = self.find(v1, parents)
-    v2 = self.find(v2, parents)
-    if v1 != v2 :
-      parents[max(v1, v2)] = min(v1, v2)
-      return True
-    return False
+class DisjointSet :
+    def __init__(self, V) :
+        self.parents = [*range(V + 1)]
+    
+    def find(self, v) :
+        if self.parents[v] == v : return v
+        self.parents[v] = self.find(self.parents[v])
+        return self.parents[v]
+        
+    def union(self, v1, v2) :
+        v1 = self.find(v1)
+        v2 = self.find(v2)
+        if v1 != v2 :
+            self.parents[max(v1, v2)] = min(v1, v2)
+            return True
+        return False
