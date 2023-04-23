@@ -15,9 +15,6 @@ class DisjointSet :
         v2 = self.find(v2)
         if v1 != v2 :
             self.parents[max(v1, v2)] = min(v1, v2)
-            return True
-        return False
-
 
 if __name__ == "__main__" :
     N, M = map(int, input().split())
