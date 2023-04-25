@@ -12,12 +12,14 @@ def BFS(start, flag = 0) :
             if visited[v2] == -1 :
                 visited[v2] = visited[v1] + w
                 queue.append(v2)
-    idx, dist = 0, 0
-    for i in range(1, V + 1) :
-        if dist < visited[i] :
-            dist = visited[i]
-            idx = i
-    return [dist, idx][flag == 0]
+    if flag == 0 :
+        idx, dist = 0, 0
+        for i in range(1, V + 1) :
+            if dist < visited[i] :
+                dist = visited[i]
+                idx = i
+        return idx
+    else : return max(visited)
 
 if __name__ == "__main__" :
     V = int(input())
