@@ -33,7 +33,20 @@ void update(int i, ll diff)
 /*
 'prefix_sum(arr[i])' is mean get the prefix sum of arr[1] ~ arr[i]
 prefix_sum(arr[i]) = tree[i] + prefix_sum(tree[i - L[i]])
-L[i] = i & -i, i를 2진수로 나타낼 때, bit중 가장 마지막에 1이 위치한 곳의 순서.
+L[i] = i & -i, i를 2진수로 나타낼 때, bit중 가장 마지막에 1만 남은 값
+
+ex)
+prefix_sum(arr[13]) = sum(arr[1] ~ arr[13])
+
+13 = 1101, L[13] = 0001 = 1
+prefix_sum(arr[13]) = tree[13] + prefix_sum(tree[13 - 1])
+
+12 = 1100, L[12] = 0100 = 4
+prefix_sum(arr[12]) = tree[12] + prefix_sum(tree[12 - 4])
+
+8 = 1000, L[8] = 1000 = 0
+prefix_sum(arr[8]) = tree[8]
+
 */
 
 int main()
