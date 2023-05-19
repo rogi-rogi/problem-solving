@@ -1,0 +1,6 @@
+M, S, G = map(float, input().split())
+A, B = map(float, input().split())
+L, R = map(float, input().split())
+L_time = (L / A) + (M / G)
+R_time = (R / B) + (M / S)
+print(["latmask", "friskus"][L_time < R_time])
