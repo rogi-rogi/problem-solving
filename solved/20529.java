@@ -3,7 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class BOJ20529 {
+public class Main {
     private static int calcDistance(String p1, String p2, String p3) {
         int distance = 0;
         for (int i = 0; i < 4; ++i) {
@@ -22,13 +22,14 @@ public class BOJ20529 {
             // input
             final int N = Integer.parseInt(bfr.readLine());
             StringTokenizer st = new StringTokenizer(bfr.readLine());
-            String[] person = new String[N];
-            for (int i = 0; i < N; ++i) person[i] = st.nextToken();
+            int gugu = N > 32 ? 33 : N;
+            String[] person = new String[gugu];
+            for (int i = 0; i < gugu; ++i) person[i] = st.nextToken();
             // solution
             int minDistance = 12;
-outerLoop : for (int i = 0; i < N; ++i) {
-                for (int j = i + 1; j < N; ++j) {
-                    for (int k = j + 1; k < N; ++k) {
+outerLoop : for (int i = 0; i < gugu; ++i) {
+                for (int j = i + 1; j < gugu; ++j) {
+                    for (int k = j + 1; k < gugu; ++k) {
                         minDistance = Math.min(minDistance, calcDistance(person[i], person[j], person[k]));
                         if (minDistance == 0) {
                             // pass
