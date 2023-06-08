@@ -25,7 +25,7 @@ def BipartiteMatching() :
     visited = None
     connected = [0] * (M + 1)
     for i in range(1, N + 1) :
-        visited = [False] * (+ 1)
+        visited = [False] * (M + 1)
         if DFS(i) :
             maximum_flow += 1
             if maximum_flow == M : break
