@@ -4,22 +4,21 @@ input = stdin.readline
 
 def BipartiteMatching() :
     def DFS(v1) :
+#         for v2 in edges[v1] :
+#             if visited[v2] : continue
+#             visited[v2] = True
+#             if not connected[v2] or DFS(connected[v2]) :
+#                 connected[v2] = v1
+#                 return True
+        visited[v1] = True
         for v2 in edges[v1] :
-            if visited[v2] : continue
-            visited[v2] = True
-            if not connected[v2] or DFS(connected[v2]) :
+            if not connected[v2] :
                 connected[v2] = v1
                 return True
-        return False
-#         visited[v1] = True
-#         for v2 in edges[v1] :
-#             if not connected[v2] :
-#                 connected[v2] = v1
-#                 return True
-#         for v2 in edges[v1] :
-#             if not visited[connected[v2]] and DFS(connected[v2]) :
-#                 connected[v2] = v1
-#                 return True
+        for v2 in edges[v1] :
+            if not visited[connected[v2]] and DFS(connected[v2]) :
+                connected[v2] = v1
+                return True
         return False
     
     maximum_flow = 0
