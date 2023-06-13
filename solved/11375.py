@@ -7,10 +7,21 @@ def bipartite_matching() :
     visited = None
     
     def dfs(v1) :
+#         for v2 in edges[v1] :
+#             if not visited[v2] : 
+#                 visited[v2] = True
+#                 if not match[v2] or dfs(match[v2]) :
+#                     match[v2] = v1
+#                     return True
+#         return False
         for v2 in edges[v1] :
-            if not visited[v2] : 
-                visited[v2] = True
-                if not match[v2] or dfs(match[v2]) :
+            if not match[v2] :
+                match[v2] = v1
+                return True
+        for v2 in edges[v1] :
+            if not visited[match[v2]] :
+                visited[match[v2]] = True
+                if dfs(match[v2]) :
                     match[v2] = v1
                     return True
         return False
