@@ -12,6 +12,17 @@ E    : 그룹 N, M을 연결하는 간선의 수
 
 만약 N, M의 최댓값(SIZE)이 동일하다면 처음부터 match, visited의 크기를 SIZE로 해도 된다.
 '''
+
+'''
+# dfs 다른 버전 (전체 매칭 후 재탐색)
+def dfs(v1) :
+    visited[v1] = True
+    for v2 in graph[v1] :
+        if not match[v2] or not visited[match[v2]] and dfs(match[v2]) :
+            match[v2] = v1
+            return True
+    return False
+'''
 def bipartite_matching(N, M) :
     if N > M : M = N        # N <= M 으로 필요한 만큼 증가
     match = [0] * (M + 1)   # 그룹 M의 i번째 정점에 대해 매칭된 그룹 N의 요소
