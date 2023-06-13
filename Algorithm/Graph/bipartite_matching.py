@@ -26,9 +26,9 @@ def bipartite_matching() :
     visited = None
     
     def dfs(v1) :
-        visited[v1] = True
         for v2 in graph[v1] :
             if not visited[v2] : 
+                visited[v2] = True
                 if not match[v2] or dfs(match[v2]) :
                     match[v2] = v1
                     return True
