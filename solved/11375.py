@@ -7,18 +7,18 @@ def bipartite_matching() :
     visited = None
     
     def dfs(v1) :
-#         for v2 in edges[v1] :
+#         for v2 in graph[v1] :
 #             if not visited[v2] : 
 #                 visited[v2] = True
 #                 if not match[v2] or dfs(match[v2]) :
 #                     match[v2] = v1
 #                     return True
 #         return False
-        for v2 in edges[v1] :
+        for v2 in graph[v1] :
             if not match[v2] :
                 match[v2] = v1
                 return True
-        for v2 in edges[v1] :
+        for v2 in graph[v1] :
             if not visited[match[v2]] :
                 visited[match[v2]] = True
                 if dfs(match[v2]) :
@@ -37,8 +37,8 @@ def bipartite_matching() :
 if __name__ == "__main__" :
     N, M = map(int, input().split())
     SIZE = 1001
-    edges = [[] for _ in range(N + 1)]
+    graph = [[] for _ in range(N + 1)]
     for v1 in range(1, N + 1) :
         _, *m = map(int, input().split())
-        edges[v1] = m
+        graph[v1] = m
     print(bipartite_matching())
