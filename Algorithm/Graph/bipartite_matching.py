@@ -9,6 +9,8 @@ E    : 그룹 N, M을 연결하는 간선의 수
 기본적으로 N <= M 일 때 성립한다.
 때문에, N > M  일 때는 IndexError이 발생할 수 있으니 match, visited의 크기를 N과 M 그룹 중 더 큰 수를 기준으로 하자.
 배열의 크기를 늘리는 방법 이외에 탐색과정에서 N과 M의 대소비교에 따른 전처리를 통해서 IndexError가 발생하지 않게 할 수 있다.
+
+만약 N, M의 최댓값(SIZE)이 동일하다면 처음부터 match, visited의 크기를 SIZE로 해도 된다.
 '''
 def bipartite_matching(N, M) :
     if N > M : M = N # N <= M 으로 필요한 만큼 증가
