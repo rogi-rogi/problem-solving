@@ -16,6 +16,7 @@ def E(message) :
         return message[((message_size + 1)//2):] + message[message_size//2] + message[:(message_size // 2)]
     else :
         return message[message_size//2:] + message[:message_size//2]
+    
 def A(message) :
     return message[::-1]
     
