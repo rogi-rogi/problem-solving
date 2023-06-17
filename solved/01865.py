@@ -1,6 +1,6 @@
 from sys import stdin
 input = stdin.readline
-
+'''
 def adhoc_bellman_ford() :
     dist = [0] * (N + 1)
     for cycle in range(N) :
@@ -59,4 +59,4 @@ if __name__ == "__main__" :
                 print("YES")
                 break
         else : print("NO")
-'''
+
