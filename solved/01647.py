@@ -16,6 +16,7 @@ class DisjointSet :
         return False
 
 def Kruskal(V, divide = 1) :
+    if V == 2 : return 0
     parents = [*range(V + 1)]
     MST_weight = 0
     connected_edge = 0
@@ -29,5 +30,6 @@ def Kruskal(V, divide = 1) :
     
 if __name__ == "__main__" :
     V, E = map(int, input().split())
-    edges = sorted([tuple(map(int, input().split())) for _ in range(E)], key = lambda x : x[2])
+    edges = [tuple(map(int, input().split())) for _ in range(E)]
+    edges.sort(key = lambda x : x[2])
     print(Kruskal(V, 2))
