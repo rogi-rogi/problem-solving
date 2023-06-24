@@ -1,3 +1,5 @@
+# pypy3
+
 from math import inf
 from sys import stdin
 input = stdin.readline
