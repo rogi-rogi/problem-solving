@@ -14,7 +14,7 @@ int main()
         
         double avg = sum / N;
         for (int i = 0; i < N; ++i)
-            if (avg < grade[i]) cnt++;
+            if (avg < grade[i]) ++cnt;
         double res = cnt * 100 / N;
         double round45 = ((res*1000 - (int)(res*1000)) >= 0.5 ? 0.0001 : 0);
         printf("%.3f%%\n", res + round45);
