@@ -1,6 +1,3 @@
-# pypy3
-
-from math import inf
 from sys import stdin
 input = stdin.readline
 
@@ -9,12 +6,13 @@ def floyd_warshall() :
         for u in range(1, N + 1) :
             for v in range(1, N + 1) :
                 if u == v : continue
-                if graph[u][t] + graph[t][v] != inf :
+                if graph[u][t] != INF and graph[t][v] != INF :
                     graph[u][v] = 1
 
 if __name__ == "__main__" :
     N, M = map(int, input().split())
-    graph = [[inf] * (N + 1) for _ in range(N + 1)]
+    INF = 222
+    graph = [[INF] * (N + 1) for _ in range(N + 1)]
     
     for u in range(1, N + 1) :
         graph[u][u] = 0
@@ -28,6 +26,6 @@ if __name__ == "__main__" :
     cnt = 0
     for u in range(1, N + 1) :
         for v in range(1, N + 1) :
-            if u != v and graph[u][v] == inf and graph[v][u] == inf : break
+            if u != v and graph[u][v] == INF and graph[v][u] == INF : break
         else : cnt += 1
     print(cnt)
