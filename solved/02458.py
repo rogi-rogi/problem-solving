@@ -2,30 +2,30 @@ from math import inf
 from sys import stdin
 input = stdin.readline
 
-def FloydWarshall() :
-    for v1 in range(V + 1) :
-        for v2 in range(V + 1) :
-            if edges[v1][v2] != inf : continue 
-            for t in range(V + 1) :
-                if edges[v1][t] == edges[t][v2] and edges[t][v2] != inf :
-                    edges[v1][v2] = edges[v1][t]
-                    edges[v2][v1] = -edges[v1][t]
-                    # finds a new edge connected between two unconnected vertices.
-                    break
+def floyd_warshall() :
+    for t in range(1, N + 1) :
+        for u in range(1, N + 1) :
+            for v in range(1, N + 1) :
+                if u == v : continue
+                if graph[u][t] + graph[t][v] != inf :
+                    graph[u][v] = 1
 
 if __name__ == "__main__" :
-    V, E = map(int, input().split())
-    edges = [[inf] * (V + 1) for _ in range(V + 1)]
-    for _ in range(E) :
-        v1, v2 = map(int, input().split())
-        edges[v1][v2] = 1
-        edges[v2][v1] = -1
-    for v in range(1, V + 1) :
-        edges[v][v] = 0
-    FloydWarshall()
+    N, M = map(int, input().split())
+    graph = [[inf] * (N + 1) for _ in range(N + 1)]
+    
+    for u in range(1, N + 1) :
+        graph[u][u] = 0
+        
+    for _ in range(M) :
+        a, b = map(int, input().split())
+        graph[a][b] = 1
+        
+    floyd_warshall()
+    
     cnt = 0
-    for v1 in range(1, V + 1) :
-        for v2 in range(1, V + 1) :
-            if edges[v1][v2] == inf : break
+    for u in range(1, N + 1) :
+        for v in range(1, N + 1) :
+            if u != v and graph[u][v] == inf and graph[v][u] == inf : break
         else : cnt += 1
     print(cnt)
