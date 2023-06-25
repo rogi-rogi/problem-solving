@@ -1,15 +1,14 @@
-N = int(input())
-HEART = [
-    " @@@   @@@ ",
-    "@   @ @   @",
-    "@    @    @",
-    "@         @",
-    " @       @ ",
-    "  @     @  ",
-    "   @   @   ",
-    "    @ @    ",
-    "     @     "
+heart = [
+    " @@@   @@@  ",
+    "@   @ @   @ ",
+    "@    @    @ ",
+    "@         @ ",
+    " @       @  ",
+    "  @     @   ",
+    "   @   @    ",
+    "    @ @     ",
+    "     @      "
 ]
-
-for line in HEART :
-    print((line + ' ') * N)
+N = int(input())
+for heart_line in heart :
+    print(heart_line * N)
