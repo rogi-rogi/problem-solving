@@ -6,9 +6,9 @@ import java.util.StringTokenizer;
 
 public class Main
 {
-    private static class DisjoinSet {
+    private static class DisjointSet {
         private final int[] parents;
-        DisjoinSet(int size) {
+        DisjointSet(int size) {
             this.parents = new int[size];
             Arrays.setAll(this.parents, i -> i);
         }
@@ -26,22 +26,22 @@ public class Main
             return false;
         }
     }
-    
+
     public static void main(String[] args) throws IOException {
         // init
         BufferedReader bfr = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
-	    
+
         // input & solution
         int N = Integer.parseInt(bfr.readLine());
-        DisjoinSet set = new DisjoinSet(N + 1);
+        DisjointSet set = new DisjointSet(N + 1);
         for (int i = 0; i < N - 2; ++i) {
             st = new StringTokenizer(bfr.readLine());
             int a = Integer.parseInt(st.nextToken());
             int b = Integer.parseInt(st.nextToken());
             set.union(a, b);
         }
-    
+
         // output
         for (int i = 1; i < N; ++i) {
             if (set.find(i) != set.find(i + 1)) {
