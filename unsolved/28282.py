@@ -1,6 +1,6 @@
 X, K = map(int, input().split())
 A = [*map(int, input().split())]
-matching = [False] * 10000
+matching = [False] * 10001
 half_size = len(A) >> 1
 res = 0
 for l in range(half_size) :
