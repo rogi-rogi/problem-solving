@@ -1,0 +1,5 @@
+k = float(input())
+tugriks = 25.0 + (k*0.01)
+if tugriks <= 100 : print("100.00")
+elif tugriks >= 2000 : print("2000.00")
+else : print("%.2f" % tugriks)
