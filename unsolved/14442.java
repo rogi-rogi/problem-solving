@@ -37,11 +37,11 @@ public class Main {
                 int ny = y + dy[i];
                 if (0 <= nx && nx < N && 0 <= ny && ny < M && !visited[smash][nx][ny]) {
                     if (board[nx][ny]) {
-                        queue.offer(new Point(nx, ny, dist + 1, smash));
                         visited[smash][nx][ny] = true;
+                        queue.offer(new Point(nx, ny, dist + 1, smash));
                     } else if (smash + 1 <= K && !visited[smash + 1][nx][ny]){ // && board[nx][ny] == 1
-                        queue.offer(new Point(nx, ny, dist + 1, smash + 1));
                         visited[smash + 1][nx][ny] = true;
+                        queue.offer(new Point(nx, ny, dist + 1, smash + 1));
                     }
                 }
             }
