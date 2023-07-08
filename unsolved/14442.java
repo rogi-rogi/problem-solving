@@ -32,9 +32,9 @@ public class Main {
             int dist = p.dist;
             int smash = p.smash;
             if (x == N - 1 && y == M - 1) return dist;
-            for (int i = 0; i < 4; ++i) {
-                int nx = x + dx[i];
-                int ny = y + dy[i];
+            for (int d = 0; d < 4; ++d) {
+                int nx = x + dx[d];
+                int ny = y + dy[d];
                 if (0 <= nx && nx < N && 0 <= ny && ny < M && !visited[smash][nx][ny]) {
                     if (board[nx][ny]) {
                         visited[smash][nx][ny] = true;
