@@ -62,7 +62,7 @@ public class Main {
         for (int i = 0; i < N; ++i) {
             String line = bfr.readLine();
             for (int j = 0; j < M; ++j)
-                board[i][j] = line.charAt(j) - '0' == 0;
+                board[i][j] = (line.charAt(j) == '0');
         }
 
         // solution output
