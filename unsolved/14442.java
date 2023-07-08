@@ -24,7 +24,7 @@ public class Main {
     private static int bfs() {
         visited[0][0][0] = true;
         Deque<Point> queue = new ArrayDeque<Point>();
-        queue.add(new Point(0, 0, 1, 0));
+        queue.offer(new Point(0, 0, 1, 0));
         while (!queue.isEmpty()) {
             Point p = queue.poll();
             int x = p.x;
