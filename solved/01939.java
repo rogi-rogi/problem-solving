@@ -7,7 +7,7 @@ import java.util.StringTokenizer;
 
 public class Main {
     private static class Edge {
-        public int u, v, w;
+        private int u, v, w;
         Edge(int u, int v, int w) {
             this.u = u;
             this.v = v;
@@ -15,20 +15,27 @@ public class Main {
         }
     }
     private static class DisjointSet {
-        private final int[] parents;
+        private final int[] parent, rank;
         DisjointSet(int size) {
-            this.parents = new int[size];
-            Arrays.setAll(this.parents, i -> i);
+            this.parent = new int[size + 1];
+            this.rank = new int[size + 1];
+            Arrays.setAll(this.parent, i -> i);
+            Arrays.fill(this.rank, 0);
         }
         private int find(int v) {
-            if (this.parents[v] == v) return v;
-            return (this.parents[v] = this.find(this.parents[v]));
+            if (this.parent[v] == v) return v;
+            return (this.parent[v] = this.find(this.parent[v]));
         }
-        private boolean union(int u, int v) {
-            u = this.find(u);
-            v = this.find(v);
-            if (u != v) {
-                this.parents[Math.max(u, v)] = Math.min(u, v);
+        private boolean union(int x, int y) {
+            x = this.find(x);
+            y = this.find(y);
+            if (x != y) {
+                if (this.rank[x] < this.rank[y]) this.parent[x] = y;
+                else if (this.rank[x] > this.rank[y]) this.parent[y] = x;
+                else {
+                    this.parent[y] = x;
+                    ++this.rank[x];
+                }
                 return true;
             }
             return false;
