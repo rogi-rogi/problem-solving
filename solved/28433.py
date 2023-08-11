@@ -15,7 +15,7 @@ if __name__ == "__main__" :
         A = [*map(int, input().split())]
         cnt, area = 0, 0
         for a in A :
-            if (a > 0) + (area > 0)  + (a + area <= 0) >= 2 :
+            if (a > 0) + (area > 0) + (a + area <= 0) >= 2 :
                 divide()
             # if a > 0 :
             #     if area > 0 :
