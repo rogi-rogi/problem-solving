@@ -9,7 +9,7 @@ public class DisjointSet {
         this.rank = new int[n];
         this.size = new int[n];
         Arrays.setAll(this.parent, i -> i);
-        Arrays.fill(this.parent, 0);
+        Arrays.fill(this.rank, 0);
         Arrays.fill(this.size, 1);
     }
     public int findPathCompression(int x) {
