@@ -1,13 +1,18 @@
 X, K = map(int, input().split())
 A = [*map(int, input().split())]
-matching = [False] * 10001
-half_size = len(A) >> 1
+L = [0] * 10001
+R = [0] * 10001
+
+for l in range(X) :
+    L[A[l]] += 1
+    
+for r in range(X, 2*X) :
+    R[A[r]] += 1
+        
 res = 0
-for l in range(half_size) :
-    if not matching[A[l]] :
-        for r in range(half_size, len(A)) :
-            if A[l] != A[r] :
-                matching[A[l]] += 1
-        res += matching[A[l]]
-    else : res += matching[A[l]]
+for l in range(1, K + 1) :
+    if L[l] > 0 :
+        for r in range(1, K + 1) :
+            if l == r : continue
+            res += L[l] * R[r]
 print(res)
