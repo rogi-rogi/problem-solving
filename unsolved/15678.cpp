@@ -41,8 +41,12 @@ int main()
         tree.resize(size);
     }
     for (int i = 1; i <= N; ++i) {
-        leaf[i] = max(leaf[i], query(1, N, max(1, i - D), i - 1) + leaf[i]);
+        ll val = query(1, N, max(1, i - D), i - 1);
+        if (val > 0) leaf[i] += val;
         update(1, N, i);
+    }
+    for (auto val : leaf) {
+        cout << val << '\n';
     }
     cout << *max_element(leaf.begin() + 1, leaf.end());
 }
