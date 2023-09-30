@@ -45,8 +45,5 @@ int main()
         if (val > 0) leaf[i] += val;
         update(1, N, i);
     }
-    for (auto val : leaf) {
-        cout << val << '\n';
-    }
     cout << *max_element(leaf.begin() + 1, leaf.end());
 }
