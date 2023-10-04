@@ -29,9 +29,9 @@ public class Main
     	    }
     	    
     	    sb.append(numerator).append('/').append(denominator);
-	    }
+        }
 	    
-	    // output
-	    System.out.println(sb.toString());
-	}
+        // output
+        System.out.println(sb.toString());
+    }
 }
