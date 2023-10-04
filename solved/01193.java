@@ -3,16 +3,16 @@ import java.util.*;
 
 public class Main
 {
-	public static void main(String[] args) throws IOException{
+    public static void main(String[] args) throws IOException{
 		// init
-	    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	    StringBuilder sb = new StringBuilder();
-	    
-	    // input
-	    int N = Integer.parseInt(br.readLine());
-	    
-	    // solve
-	    {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringBuilder sb = new StringBuilder();
+		
+		// input
+		int N = Integer.parseInt(br.readLine());
+		
+		// solve
+		{
 	        int depth = 1;
     	    while (N > depth) {
     	        N -= depth;
