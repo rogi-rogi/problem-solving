@@ -11,22 +11,27 @@ public class Main
         String str = br.readLine();
         
         // solve
+        String res = "z".repeat(50);
         final int SIZE = str.length();
-        List<String> strList = new ArrayList<>();
+        
         for (int e = 2; e < SIZE; ++e) {
             for (int s = 1; s < e; ++s) {
-                String firstPart = str.substring(0, s);
-                String middlePart = str.substring(s, e);
-                String lastPart = str.substring(e);
-                strList.add(reverse(firstPart) + reverse(middlePart) + reverse(lastPart));
+                StringBuilder newStr = new StringBuilder();
+                String[] subStr = new String[] {
+                    str.substring(0, s),
+                    str.substring(s, e),
+                    str.substring(e)
+                };
+                for (int i = 0; i < 3; ++i)
+                    newStr.append(new StringBuilder(subStr[i]).reverse());
+                    
+                if (newStr.toString().compareTo(res) < 0) {
+                    res = newStr.toString();
+                }
             }
         }
-        Collections.sort(strList);
         
         // output
-        System.out.println(strList.get(0));
-    }
-    private static String reverse(String str) {
-        return (new StringBuilder(str)).reverse().toString();
+        System.out.println(res);
     }
 }
