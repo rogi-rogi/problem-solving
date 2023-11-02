@@ -6,8 +6,9 @@ Daily Problem Solving Challenges
 
 ### 🧑‍💻 Profile
 
-+ [Baekjoon Online Judge](https://www.acmicpc.net/user/polygon)
-+ [Solved.ac](https://solved.ac/profile/polygon)
+> [Baekjoon Online Judge](https://www.acmicpc.net/user/polygon)
+>
+>  [Solved.ac](https://solved.ac/profile/polygon)
 
 <br><hr/>
 
