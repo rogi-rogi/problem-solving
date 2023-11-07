@@ -3,7 +3,7 @@ import java.util.*;
 
 public class Main {
     private static int[] tree, leaf;
-    
+
     private static void init(int node, int start, int end) {
         if (start == end) tree[node] = leaf[start];
         else {
@@ -27,10 +27,10 @@ public class Main {
     }
 
     private static int query(int target, int end) {
-        int node = 1, start = 1;
+        int node = 1, start = 1, mid, child;
         while (start < end) {
-            int mid = (start + end) >> 1;
-            int child = node << 1;
+            mid = (start + end) >> 1;
+            child = node << 1;
             if (target <= tree[child]) {
                 end = mid;
                 node = child;
@@ -46,21 +46,21 @@ public class Main {
     public static void main(String[] args) throws IOException {
         // Init
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
         StringTokenizer st;
-        
+
         // Input
         int N = Integer.parseInt(br.readLine());
         {
             leaf = new int[N + 1];
             st = new StringTokenizer(br.readLine());
-            for (int i = 1; i <= N; i++)
+            for (int i = 1; i <= N; ++i)
                 leaf[i] = Integer.parseInt(st.nextToken());
             tree = new int[4 * N];
             init(1, 1, N);
         }
-        
+
         // Solve
-        StringBuilder sb = new StringBuilder();
         int M = Integer.parseInt(br.readLine());
         while (M-- > 0) {
             st = new StringTokenizer(br.readLine());
