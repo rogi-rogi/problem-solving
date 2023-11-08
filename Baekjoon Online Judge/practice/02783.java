@@ -3,16 +3,16 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        // init
+        // Init
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        // input
+        // Input
         StringTokenizer st = new StringTokenizer(br.readLine());
         final int X = Integer.parseInt(st.nextToken());
         final int Y = Integer.parseInt(st.nextToken());
         final int N = Integer.parseInt(br.readLine());
 
-        // solve
+        // Solve
         double minPricePerGram = (double) X / Y;
         for (int i = 0; i < N; ++i) {
             st = new StringTokenizer(br.readLine());
@@ -24,7 +24,7 @@ public class Main {
             }
         }
 
-        // output
+        // Output
         System.out.println(minPricePerGram * 1000);
     }
 }
