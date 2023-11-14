@@ -7,8 +7,6 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
 
-        // Input
-
         // Input & Solve
         int maxSum = 0, idx = 0;
         for (int i = 1; i <= 5; ++i) {
