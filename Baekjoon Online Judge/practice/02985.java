@@ -15,10 +15,10 @@ public class Main {
 
         // Solve
         sb.append(A);
-        if (A == C - B) sb.append("+").append(B).append("=").append(C);
-//        else if (A == C + B) sb.append("-").append(B).append("=").append(C);
+        if (A + B == C) sb.append("+").append(B).append("=").append(C);
+//        else if (A - B = C) sb.append("-").append(B).append("=").append(C);
         else if (A * B == C) sb.append("*").append(B).append("=").append(C);
-//        else if (A == C * B) sb.append("/").append(B).append("=").append(C);
+//        else if (A / B == C) sb.append("/").append(B).append("=").append(C);
         else {
             sb.append("=").append(B);
             if (A == B + C) sb.append("+").append(C);
