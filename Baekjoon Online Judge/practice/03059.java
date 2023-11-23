@@ -8,7 +8,7 @@ public class Main {
 
         // Input
         int T = Integer.parseInt(br.readLine());
-        
+
         while (T-- > 0) {
             String str = br.readLine();
 
@@ -19,7 +19,7 @@ public class Main {
                 check[str.charAt(i) - 65] = true;
             int sum = 0;
             for (int i = 0; i < 26; ++i)
-                if (!check[i]) sum += (65+i);
+                if (!check[i]) sum += (65 + i);
             sb.append(sum).append("\n");
         }
 
