@@ -13,18 +13,18 @@ public class Main {
 
         // Solve
         int areaOfBedroom = 0;
-        double areaOFBalcony = 0;
+        double areaOfBalcony = 0;
         int total = 0;
         while (N-- > 0) {
             st = new StringTokenizer(br.readLine());
             int area = Integer.parseInt(st.nextToken());
             String type = st.nextToken();
-            if (type.equals("balcony"))  areaOFBalcony += area;
+            if (type.equals("balcony"))  areaOfBalcony += area;
             if (type.equals("bedroom")) areaOfBedroom += area;
             total += area;
         }
 
         // Output
-        System.out.println(total+"\n"+areaOfBedroom+"\n"+(total-areaOFBalcony/2)*C);
+        System.out.println(total+"\n"+areaOfBedroom+"\n"+(total-areaOfBalcony/2)*C);
     }
 }
