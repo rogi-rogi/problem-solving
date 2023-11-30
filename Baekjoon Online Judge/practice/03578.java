@@ -10,7 +10,6 @@ public class Main {
         final int H = Integer.parseInt(br.readLine());
 
         // Solve
-        String res = "";
         if (H == 0) sb.append("1");
         else if (H == 1) sb.append("0");
         else {
