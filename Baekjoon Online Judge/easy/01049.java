@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -7,17 +6,17 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         // input
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        final int N = Integer.parseInt(st.nextToken());
-        final int M = Integer.parseInt(st.nextToken());
+        String[] line = (br.readLine()).split(" ");
+        final int N = Integer.parseInt(line[0]);
+        final int M = Integer.parseInt(line[1]);
 
         // solve
         int minPriceOfPackage = 1000;
         int minPriceOfSingle = 1000;
         for (int i = 0; i < M; ++i) {
-            st = new StringTokenizer(br.readLine());
-            int priceOfPackage = Integer.parseInt(st.nextToken());
-            int priceOfSingle = Integer.parseInt(st.nextToken());
+            line = (br.readLine()).split(" ");
+            int priceOfPackage = Integer.parseInt(line[0]);
+            int priceOfSingle = Integer.parseInt(line[1]);
             if (priceOfPackage < minPriceOfPackage) minPriceOfPackage = priceOfPackage;
             if (priceOfSingle < minPriceOfSingle) minPriceOfSingle = priceOfSingle;
         }
