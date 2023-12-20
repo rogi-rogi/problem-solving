@@ -29,6 +29,8 @@ Daily Problem Solving Challenges
     > (unranked / minor PL) 
 + HackerRank
   + 🛢 SQL
++ SW Expert Academy
+  + D1 ~ D8
 
 <br><hr/>
 
