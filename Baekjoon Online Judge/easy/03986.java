@@ -13,9 +13,8 @@ public class Main {
         int cnt = 0;
         while (N-- > 0) {
             input = br.readLine();
-            final int SIZE = input.length();
+            
             // Solve
-            /*
             for (char word : input.toCharArray()) {
                 if (!stack.isEmpty() && stack.peek().equals(word)) {
                     stack.pop();
@@ -23,7 +22,8 @@ public class Main {
                     stack.push(word);
                 }
             }
-            */
+            /*
+            final int SIZE = input.length();
             for (int i = 0; i < SIZE; ++i) {
                 if (!stack.isEmpty() && stack.peek().equals(input.charAt(i))) {
                     stack.pop();
@@ -31,8 +31,9 @@ public class Main {
                     stack.push(input.charAt(i));
                 }
             }
+            */
             if (stack.isEmpty()) ++cnt;
-            stack.clear();
+            else stack.clear();
         }
 
         // Output
