@@ -10,7 +10,6 @@ public class Main {
 
         // Input
         int N = Integer.parseInt(br.readLine());
-        boolean[] isQueue = new boolean[N];
         String type = br.readLine();
         String[] init = br.readLine().split(" ");
         for (int i = 0; i < N; ++i) {
