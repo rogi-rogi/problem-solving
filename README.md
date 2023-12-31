@@ -1,4 +1,4 @@
-# 📆 Problem_Solving
+# 📆 Problem Solving
 
 Daily Problem Solving Challenges
 
@@ -8,7 +8,7 @@ Daily Problem Solving Challenges
 
 > [Baekjoon Online Judge](https://www.acmicpc.net/user/polygon)
 >
->  [Solved.ac](https://solved.ac/profile/polygon)
+> [Solved.ac](https://solved.ac/profile/polygon)
 
 <br><hr/>
 
