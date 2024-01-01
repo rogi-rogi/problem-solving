@@ -4,13 +4,13 @@
 
 using namespace std;
 
-int main(int argc, char** argv) 
+int main(int argc, char** argv)
 {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
-    
+
     // freopen("sample_input.txt", "r", stdin);
-    
+
     int T;
     cin >> T;
     for (int TC = 1; TC <= T; ++TC) {
@@ -21,7 +21,7 @@ int main(int argc, char** argv)
         vector<long> P(P_SIZE), res(N);
         for (int i = 0; i < P_SIZE; ++i)
             cin >> P[i];
-        
+
         // Solve
         for (int i = 0, idx = -1; i < P_SIZE; ++i) {
             if (P[i] == -1) continue;
@@ -34,7 +34,7 @@ int main(int argc, char** argv)
             }
             P[i] = -1;
         }
-        
+
         // Output
         cout << '#' << TC;
         for (int i = 0; i < N; ++i)
