@@ -26,8 +26,7 @@ public class Main {
             while (!stack.isEmpty()) {
                 L = stack.pop();
                 R = stack.pop();
-                if (L == '{') ++cnt;
-                else cnt += (R == '{' ? 2 : 1);
+                cnt += (L == '}' && R == '{') ? 2 : 1;
             }
             sb.append(i).append(". ").append(cnt).append("\n");
         }
