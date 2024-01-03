@@ -6,6 +6,41 @@ public class Main {
         // Init
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String[] S;
+
+        // Input
+        S = br.readLine().split("");
+
+        // Solve & Output
+        System.out.println(Recursive(S, 0));
+    }
+    private static int Recursive(String[] s, int idx) {
+        int len = 0, K = 0;
+        for (int i = idx; i < s.length; ++i) {
+            if (s[i].equals("(")) {
+                s[i] = "_";
+                --len;
+                len += K * Recursive(s, i + 1);
+            } else if (s[i].equals(")")) {
+                s[i] = "_";
+                return len;
+            } else if (!s[i].equals("_")){
+                ++len;
+                K = Integer.parseInt(s[i]);
+                s[i] = "_";
+            }
+        }
+        return len;
+    }
+}
+/*
+import java.io.*;
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        // Init
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String[] S;
         Deque<String> stack = new ArrayDeque<>();
 
         // Input
@@ -41,3 +76,4 @@ public class Main {
         System.out.println(res);
     }
 }
+*/
