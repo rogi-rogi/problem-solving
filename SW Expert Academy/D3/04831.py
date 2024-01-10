@@ -1,7 +1,3 @@
-'''
-[파이썬 S/W 문제해결 기본] 1일차 - 전기버스
-https://swexpertacademy.com/main/learn/course/lectureProblemViewer.do#none
-'''
 for TC in range(1, int(input()) + 1):
     K, N, M = map(int, input().split())
     charging_station = [False] * N
