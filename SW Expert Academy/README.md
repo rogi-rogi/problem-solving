@@ -5,4 +5,4 @@
     + [min max](https://github.com/rogi-rogi/problem-solving/blob/main/SW%20Expert%20Academy/D2/04828.py)
     + [전기버스](https://github.com/rogi-rogi/problem-solving/blob/main/SW%20Expert%20Academy/D3/04831.py)
     + [숫자 카드](https://github.com/rogi-rogi/problem-solving/blob/main/SW%20Expert%20Academy/D2/04834.py)
-    + [구간합]()
+    + [구간합](https://github.com/rogi-rogi/problem-solving/blob/main/SW%20Expert%20Academy/D2/04835.py)
