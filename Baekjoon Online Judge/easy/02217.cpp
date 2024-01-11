@@ -5,7 +5,7 @@ typedef long long ll;
 using namespace std;
 
 const int SIZE = 1e5;
-ll lope[SIZE];
+ll rope[SIZE];
 
 bool compare(const int &a, const int &b)
 {
@@ -21,14 +21,14 @@ int main()
     int N;
     cin >> N;
     for (int i = 0; i < N; ++i)
-        cin >> lope[i];
+        cin >> rope[i];
 
     // Solve
-    sort(lope, lope + N, compare);
+    sort(rope, rope + N, compare);
     ll maxW = 0, curW;
     for (int i = 0; i < N; ++i)
     {
-        curW = lope[i] * (i + 1);
+        curW = rope[i] * (i + 1);
         if (curW > maxW)
             maxW = curW;
     }
