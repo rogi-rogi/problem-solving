@@ -1,7 +1,5 @@
 #include <iostream>
 
-typedef long long ll;
-
 using namespace std;
 
 int main()
@@ -10,17 +8,14 @@ int main()
     cin.tie(nullptr);
 
     // Input
-    ll S;
+    unsigned int S;
     cin >> S;
 
     // Solve
-    int cnt = 0;
-    for (int num = 1; S >= num; ++num)
-    {
+    int num;
+    for (num = 1; S >= num; ++num)
         S -= num;
-        ++cnt;
-    }
 
     // Output
-    cout << cnt;
+    cout << num - 1;
 }
