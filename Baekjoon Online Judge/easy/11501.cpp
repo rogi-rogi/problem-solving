@@ -21,7 +21,7 @@ int main()
             cin >> stock_price[i];
 
         // Solve
-        int max_price = stock_price[N - 1], cnt = 0;
+        int max_price = stock_price[N - 1];
         ll res = 0;
         for (int i = N - 2; i >= 0; --i)
         {
