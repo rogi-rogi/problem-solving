@@ -26,20 +26,9 @@ int main()
         for (int i = N - 2; i >= 0; --i)
         {
             if (stock_price[i] >= max_price)
-            {
-                for (int cell = i + 1; cell < i + 1 + cnt; ++cell)
-                    res += (max_price - stock_price[cell]);
                 max_price = stock_price[i];
-                cnt = 0;
-            }
             else
-                ++cnt;
-        }
-
-        if (cnt > 0)
-        {
-            for (int cell = 0; cell < cnt; ++cell)
-                res += (max_price - stock_price[cell]);
+                res += (max_price - stock_price[i]);
         }
 
         // Output
