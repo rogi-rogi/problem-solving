@@ -26,7 +26,9 @@ Daily Problem Solving Challenges
   + 😡 try-try
     > 증명하지 못하거나 풀지 못한 문제, 재미로 푸는 문제
     > 
-    > (unranked / minor PL) 
+    > (unranked / minor PL)
++ Programmers
+  + SQL high score kit
 + HackerRank
   + 🛢 SQL
 + SW Expert Academy
