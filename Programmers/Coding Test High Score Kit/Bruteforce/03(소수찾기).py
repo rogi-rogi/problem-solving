@@ -16,9 +16,7 @@ def solution(numbers):
     nums = set()
     for i in range(1, N + 1):
         for perm in permutations(numbers, i):
-            num = int(''.join(perm))
-            nums.add(num)
+            nums.add(int(''.join(perm)))
     
     primes = [num for num in nums if is_prime(num)]
-    answer = len(primes)
-    return answer
+    return len(primes)
