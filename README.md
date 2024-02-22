@@ -28,6 +28,7 @@ Daily Problem Solving Challenges
     > 
     > (unranked / minor PL)
 + Programmers
+  + Coding Test High Score Kit
   + SQL high score kit
 + HackerRank
   + 🛢 SQL
