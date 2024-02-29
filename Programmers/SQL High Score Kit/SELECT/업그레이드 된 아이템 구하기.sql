@@ -1,0 +1,11 @@
+-- 업그레이드 된 아이템 구하기.sql
+-- https://school.programmers.co.kr/learn/courses/30/lessons/273711
+
+SELECT I.ITEM_ID, I.ITEM_NAME, I.RARITY
+FROM ITEM_INFO I INNER JOIN ITEM_TREE T ON I.ITEM_ID = T.ITEM_ID
+WHERE T.PARENT_ITEM_ID IN (
+    SELECT ITEM_ID 
+    FROM ITEM_INFO 
+    WHERE RARITY = 'RARE'
+)
+ORDER BY ITEM_ID DESC;
