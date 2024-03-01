@@ -1,4 +1,4 @@
-# 출력.py
+# 01 출력.py
 # https://school.programmers.co.kr/learn/courses/19274/lessons/240596
 
 string_msg = 'Spring is beginning'
