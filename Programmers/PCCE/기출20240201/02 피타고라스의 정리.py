@@ -1,4 +1,4 @@
-# 피타고라스의 정리.py
+# 02 피타고라스의 정리.py
 # https://school.programmers.co.kr/learn/courses/19274/lessons/240597
 
 a = int(input())
