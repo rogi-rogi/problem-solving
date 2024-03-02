@@ -1,5 +1,6 @@
-# 01(최소직사각형).py
+# 최소직사각형.py
 # https://school.programmers.co.kr/learn/courses/30/parts/12230
+
 def solution(sizes):
     max_w, max_h = 0, 0
     for w, h in sizes :
