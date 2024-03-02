@@ -1,5 +1,6 @@
-# 03(소수찾기).py
+# 소수찾기.py
 # https://school.programmers.co.kr/learn/courses/30/lessons/42839
+
 import math
 from itertools import permutations
 
