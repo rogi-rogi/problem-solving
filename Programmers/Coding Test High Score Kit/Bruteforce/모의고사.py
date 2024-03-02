@@ -1,5 +1,6 @@
-# 02(모의고사).py
+# 모의고사.py
 # https://school.programmers.co.kr/learn/courses/30/lessons/42840
+
 def solution(answers):
     select = [
         [1, 2, 3, 4, 5], 
