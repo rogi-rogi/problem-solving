@@ -1,5 +1,3 @@
-from itertools import combinations
-
 if __name__ == '__main__':
     N = int(input())
     nums = sorted([*map(int, input().split())])
