@@ -1,6 +1,5 @@
 /*
 https://algospot.com/judge/problem/read/BOARDCOVER
-159 ~ 164
 */
 
 #include <iostream>
