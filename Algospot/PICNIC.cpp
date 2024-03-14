@@ -1,3 +1,7 @@
+/*
+https://algospot.com/judge/problem/read/PICNIC
+*/
+
 #include <iostream>
 
 using namespace std;
