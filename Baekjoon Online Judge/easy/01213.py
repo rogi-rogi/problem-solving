@@ -11,7 +11,6 @@ if __name__ == '__main__':
         res = "I'm Sorry Hansoo"
     else:
         alpha_idx = 0
-        idx = 0
         for i in range(len(S) // 2):
             while alpha[alpha_idx] < 2:
                 alpha_idx += 1
