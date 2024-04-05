@@ -7,11 +7,10 @@ public class Main {
         StringBuilder sb = new StringBuilder();
 
         // Input
-        int T = Integer.parseInt(br.readLine()), N;
+        int T = Integer.parseInt(br.readLine());
         while (T-- > 0) {
             // Solve
-            N = Integer.parseInt(br.readLine());
-            sb.append((int)Math.sqrt(N)).append('\n');
+            sb.append((int)Math.sqrt(Integer.parseInt(br.readLine()))).append('\n');
         }
 
         // Output
