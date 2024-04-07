@@ -16,7 +16,6 @@ public class Main {
     public static void main(String[] args) throws IOException {
         // Init
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
 
         // Input
         String[] input = br.readLine().split(" ");
