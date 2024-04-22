@@ -22,7 +22,7 @@ public class Main {
         x(i) = y(i) + y(i - 1)
 
         y(i + 1) = 2y(i) + y(i - 1)
-        dp[i] = 2dp[i - 1] + dp[i - 2]
+        dp[i] = 2*dp[i - 1] + dp[i - 2]
         */
         dp[0] = 1;
         dp[1] = 3;
