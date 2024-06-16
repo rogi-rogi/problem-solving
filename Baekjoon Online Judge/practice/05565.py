@@ -1,2 +1,3 @@
-price = [*map(int, input().split()]
-print(price[0] - sum(price[1:]))
+first = int(input())
+other = [int(input()) for _ in range(9)]
+print(first - sum(other))
