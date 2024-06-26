@@ -6,7 +6,7 @@ if __name__ == '__main__':
     M = int(input())
     res = M
     for _ in range(N):
-        _in, _out = [*map(int, input().split())]
+        _in, _out = map(int, input().split())
         _in -= _out
         if M + _in < 0:
             res = 0
