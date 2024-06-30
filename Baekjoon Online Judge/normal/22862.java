@@ -23,8 +23,8 @@ public class Main {
                     ++cnt;
                 }
                 ++end;
-                res = Math.max(res, end - start - cnt);
             }
+            res = Math.max(res, end - start - cnt);
             if (arr[start] % 2 == 1) --cnt;
         }
 
