@@ -20,7 +20,7 @@ Daily Problem Solving Challenges
   + 😎 easy
     > 간단한 이론 또는 테크닉이 적용된 문제 (silver 4 ~ silver 1)
   + 🙄 normal
-    > 그래프와 dp급 이상의 문제 (gold 5 ~ gold 2)
+    > 심화 그래프와 dp, 30분 이상의 문제 (gold 5 ~ gold 2)
   + 🤔 hard
     > 코테 올패스 또는 코딩 대회 수준의 문제 (gold 1 ~ )
   + 😡 try-try
