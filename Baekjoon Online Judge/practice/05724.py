@@ -6,7 +6,4 @@ if __name__ == '__main__':
         N = int(input())
         if N == 0:
             break
-        dp = 1
-        for i in range(N - 1):
-            dp += (N - i) ** 2
-        print(dp)
+        print(int(N*(N+1)*(2*N+1)/6))
