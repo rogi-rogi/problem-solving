@@ -8,4 +8,4 @@ if __name__ == '__main__':
             break
         X = [[*map(int, input().split())] for _ in range(D)]
         res = [int(all(x)) for x in zip(*X)]
-        print(["no", "yes"][sum(res) > 0])
+        print(["no", "yes"][any(res)])
