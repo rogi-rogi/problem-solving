@@ -8,4 +8,4 @@
 
 ### 👻 minor PL or Unranked Problem
 
-> *[filename].[extension]
+> @[filename].[extension]
