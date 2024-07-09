@@ -17,10 +17,9 @@ if __name__ == '__main__':
             res *= K
         else:
             res += K
-            res *= K ** (i + 1)
-            flag = False
+            res *= K ** i
             break
-    res //= K
-    if flag:
+    else:
+        res //= K
         res += 1
     print(res)
