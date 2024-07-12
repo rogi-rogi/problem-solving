@@ -1,5 +1,5 @@
 from collections import defaultdict
-NO_CHILD = int(1e12)
+NO_CHILD = int(1e10)
 
 def dfs(cur, parent):
     diff = NO_CHILD
