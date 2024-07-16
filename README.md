@@ -45,4 +45,6 @@ Daily Problem Solving Challenges
 
 ### ⚙️ etc...
 
-Updating Directory
+기존에 푼 문제는 [solved]()에 있으며, 분류 중 입니다.
+풀이는 [블로그](https://kyr-db.tistory.com/)를 통해 확인하실 수 있습니다.
+
