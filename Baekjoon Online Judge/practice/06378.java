@@ -10,11 +10,14 @@ public class Main {
         while (true) {
             String N = br.readLine();
             if (N.equals("0")) break;
+
+            // Solve
             int num = 0;
             int SIZE = N.length();
             for (int i = 0; i < SIZE; ++i) {
                 num += N.charAt(i) - '0';
             }
+            
             // Output
             System.out.println(getDigitalRoot(num));
         }
