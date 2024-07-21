@@ -10,7 +10,7 @@ public class Main {
 
         // Input
         final int N = Integer.parseInt(br.readLine());
-        dp = new int[N + 1];
+        dp = new int[N + 2];
 
         // Solve
         dp[1] = 1;
