@@ -9,7 +9,7 @@ if __name__ == '__main__':
     N = int(input())
     arr = defaultdict(list)
     for i in range(1, N + 1):
-        arr[i] = [0, *map(int, input().split()), 0]
+        arr[i] = [0, *map(int, input().split())]
 
     # Solve
     dp = [[0] * (i + 2) for i in range(N + 1)]
