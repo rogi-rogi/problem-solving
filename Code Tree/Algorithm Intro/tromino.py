@@ -23,15 +23,18 @@ if __name__ == '__main__':
     res = 0
     for i in range(N):
         for j in range(M):
-            if j + 2 < M:
-                res = max(res, board[i][j] + board[i][j + 1] + board[i][j + 2])
-            if j + 1 < M and i + 1 < N:
-                res = max(res, board[i][j] + board[i][j + 1] + max(board[i + 1][j], board[i + 1][j + 1]))
-            if i + 2 < N:
-                res = max(res, board[i][j] + board[i + 1][j] + board[i + 2][j])
+            if j + 1 < M:
+                temp = board[i][j] + board[i][j + 1]
+                if j + 2 < M:
+                    res = max(res, temp + board[i][j + 2])
+                if i + 1 < N:
+                    res = max(res, temp + max(board[i + 1][j], board[i + 1][j + 1]))
             if i + 1 < N:
+                temp = board[i][j] + board[i + 1][j]
+                if i + 2 < N:
+                    res = max(res, temp + board[i + 2][j])
                 if j - 1 >= 0:
-                    res = max(res, board[i][j] + board[i + 1][j] + board[i + 1][j - 1])
+                    res = max(res, temp + board[i + 1][j - 1])
                 if j + 1 < M:
-                    res = max(res, board[i][j] + board[i + 1][j] + board[i + 1][j + 1])
+                    res = max(res, temp + board[i + 1][j + 1])
     print(res)
