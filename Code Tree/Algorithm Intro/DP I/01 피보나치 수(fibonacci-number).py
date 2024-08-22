@@ -1,5 +1,15 @@
+# Init
+SIZE = 1001
+
+# Input
 N = int(input())
-dp = [1] * (N + 1)
-for i in range(3, N + 1):
+
+# Solve
+dp = [1] * SIZE
+dp[1] = 1
+dp[2] = 1
+for i in range(3, SIZE):
     dp[i] = dp[i - 1] + dp[i - 2]
+
+# Output
 print(dp[N])
