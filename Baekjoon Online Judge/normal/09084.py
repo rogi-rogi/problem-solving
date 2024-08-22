@@ -12,9 +12,8 @@ if __name__ == '__main__':
         dp = [0] * (M+1)
         dp[0] = 1
         for i in range(1, N + 1):
-            for m in range(1, M + 1):
-                if m >= coins[i]:
-                    dp[m] += dp[m - coins[i]]
-                    
+            for m in range(coins[i], M + 1):
+                dp[m] += dp[m - coins[i]]
+
         # Output
         print(dp[M])
