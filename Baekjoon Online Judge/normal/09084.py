@@ -11,9 +11,9 @@ if __name__ == '__main__':
         # Solve
         dp = [0] * (M+1)
         dp[0] = 1
-        for i in range(1, N + 1):
-            for m in range(coins[i], M + 1):
-                dp[m] += dp[m - coins[i]]
+        for coin in coins:
+            for m in range(coin, M + 1):
+                dp[m] += dp[m - coin]
 
         # Output
         print(dp[M])
