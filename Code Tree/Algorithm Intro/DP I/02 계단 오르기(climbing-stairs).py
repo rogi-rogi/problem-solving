@@ -1,7 +1,8 @@
-# Input
+# Init
 SIZE = 1001
 MOD = int(1e4) + 7
 
+# Input
 N = int(input())
 
 # Solve
