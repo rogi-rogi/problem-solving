@@ -4,7 +4,6 @@ https://www.codetree.ai/missions/2/problems/maximin-path-in-square?&utm_source=c
 
 # Init
 SIZE = 101
-INF = int(1e10)
 
 # Input
 N = int(input())
