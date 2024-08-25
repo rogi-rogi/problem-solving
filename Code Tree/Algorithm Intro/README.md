@@ -20,7 +20,11 @@
 
 <br/>
 
-> Simulation
+> [Simulation](https://github.com/rogi-rogi/problem-solving/tree/main/Code%20Tree/Algorithm%20Intro/Simulation)
+> > `☑️` 격자 안에서 완전 탐색 : 01 ~ 07 </br>
+> > 격자 안에서 밀고 당기기 </br>
+> > 격자 안에서 단일 객체를 이동 </br>
+> > 격자 안에서 여러 객체를 이동 </br>
 > 
 > Backtracking
 > 
@@ -29,9 +33,9 @@
 > BFS
 > 
 > [DP I](https://github.com/rogi-rogi/problem-solving/tree/main/Code%20Tree/Algorithm%20Intro/DP%20I)
-  >> `✅` subproblem을 그대로 합치면 되는 DP : 01 ~ 06 </br>
-  >> 격자 안에서 한 칸씩 전진하는 DP </br>
-  >> 조건에 맞게 선택적으로 전진하는 DP </br>
-  >> 아이템을 적절히 고르는 문제 </br>
+> > `✅` subproblem을 그대로 합치면 되는 DP : 01 ~ 06 </br>
+> > 격자 안에서 한 칸씩 전진하는 DP </br>
+> > 조건에 맞게 선택적으로 전진하는 DP </br>
+> > 아이템을 적절히 고르는 문제 </br>
 >
 > DP II </br>
