@@ -1,3 +1,7 @@
+'''
+https://www.codetree.ai/missions/2/problems/rectangle-fill-3/description
+'''
+
 # Init
 SIZE = 1001
 MOD = int(1e9) + 7
