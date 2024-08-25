@@ -34,7 +34,7 @@
 > 
 > [DP I](https://github.com/rogi-rogi/problem-solving/tree/main/Code%20Tree/Algorithm%20Intro/DP%20I)
 > > `✅` subproblem을 그대로 합치면 되는 DP : 01 ~ 06 </br>
-> > 격자 안에서 한 칸씩 전진하는 DP </br>
+> > `☑️` 격자 안에서 한 칸씩 전진하는 DP : 07 ~ 12 </br>
 > > 조건에 맞게 선택적으로 전진하는 DP </br>
 > > 아이템을 적절히 고르는 문제 </br>
 >
