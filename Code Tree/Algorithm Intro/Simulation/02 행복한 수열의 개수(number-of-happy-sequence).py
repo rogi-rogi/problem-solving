@@ -1,3 +1,7 @@
+'''
+https://www.codetree.ai/missions/2/problems/number-of-happy-sequence?&utm_source=clipboard&utm_medium=text
+'''
+
 from sys import stdin
 input = stdin.readline
 
