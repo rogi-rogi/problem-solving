@@ -1,4 +1,9 @@
+'''
+https://www.codetree.ai/missions/2/problems/tromino?&utm_source=clipboard&utm_medium=text
+'''
+
 if __name__ == '__main__':
+    # Input
     N, M = map(int, input().split())
     board = [[*map(int, input().split())] for _ in range(N)]
     '''
@@ -20,6 +25,8 @@ if __name__ == '__main__':
     1
   1 1
     '''
+
+    # Solve
     res = 0
     for i in range(N):
         for j in range(M):
@@ -37,4 +44,6 @@ if __name__ == '__main__':
                     res = max(res, temp + board[i + 1][j - 1])
                 if j + 1 < M:
                     res = max(res, temp + board[i + 1][j + 1])
+
+    # Output
     print(res)
