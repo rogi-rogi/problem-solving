@@ -14,9 +14,9 @@ def get_prefix_sum(arr):
 if __name__ == '__main__':
     # Input
     T = int(input())
-    N = int(input())
+    input()
     A = [*map(int, input().split())]
-    M = int(input())
+    input()
     B = [*map(int, input().split())]
 
     # Solve
