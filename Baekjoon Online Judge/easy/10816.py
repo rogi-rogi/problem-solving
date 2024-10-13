@@ -25,8 +25,6 @@ def upper_bound(arr, target):
 '''
 
 if __name__ == '__main__':
-    res = []
-
     # Input
     input()
     arr = [*map(int, input().split())]
