@@ -14,7 +14,7 @@ public class Main {
             int N = Integer.parseInt(br.readLine());
             int res = S;
             int[] input;
-            for (int i = 0, P, Q; i < N; ++i) {
+            for (int i = 0; i < N; ++i) {
                 input = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
 
                 // Solve
