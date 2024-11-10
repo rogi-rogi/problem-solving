@@ -10,17 +10,17 @@ public class Main {
         char[] S = br.readLine().toCharArray();
 
         // Solve
-        for (int i = 0; i < S.length; ++i) {
-            if ('A' <= S[i] && S[i] <= 'Z') {
-                sb.append(S[i] - 'A' + 27);
-            } else if ('a' <= S[i] && S[i] <= 'i') {
-                sb.append('0').append(S[i] - 'a' + 1);
-            } else if ('j' <= S[i] && S[i] <= 'z') {
-                sb.append(S[i] - 'a' + 1);
-            } else if ('0' <= S[i] && S[i] <= '9' ) {
-                sb.append('#').append(S[i]);
+        for (char c : S) {
+            if ('A' <= c && c <= 'Z') {
+                sb.append(c - 'A' + 27);
+            } else if ('a' <= c && c <= 'i') {
+                sb.append('0').append(c - 'a' + 1);
+            } else if ('j' <= c && c <= 'z') {
+                sb.append(c - 'a' + 1);
+            } else if ('0' <= c && c <= '9') {
+                sb.append('#').append(c);
             } else {
-                sb.append(S[i]);
+                sb.append(c);
             }
         }
 
