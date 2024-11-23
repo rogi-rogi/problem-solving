@@ -22,24 +22,22 @@ public class Main {
         int mid = (left + right) >> 1;
         mergeSort(arr, left, mid);
         mergeSort(arr, mid + 1, right);
-        merge(arr,
-                Arrays.copyOfRange(arr, left, mid + 1),
-                Arrays.copyOfRange(arr, mid + 1, right + 1),
-                left);
+        merge(arr, left, mid, right);
     }
-    private static void merge(int[] arr, int[] left, int[] right, int k) {
-        int l = 0, r = 0;
-        while (l < left.length && r < right.length) {
-            arr[k++] = (left[l] <= right[r]) ? left[l++] : right[r++];
-            if (++cnt == K) res = arr[k - 1];
+    private static void merge(int[] arr, int left, int mid, int right) {
+        int l = left, r = mid + 1;
+        int[] temp = new int[right - left + 1];
+        int k = 0;
+        while (l <= mid && r <= right) {
+            temp[k++] = (arr[l] <= arr[r]) ? arr[l++] : arr[r++];
         }
-        while (l < left.length) {
-            arr[k++] = left[l++];
-            if (++cnt == K) res = arr[k - 1];
-        }
-        while (r < right.length) {
-            arr[k++] = right[r++];
-            if (++cnt == K) res = arr[k - 1];
+        while (l <= mid)    temp[k++] = arr[l++];
+        while (r <= right)  temp[k++] = arr[r++];
+        
+        // System.arraycopy(temp, 0, arr, left, temp.length);
+        for (int i = left; i <= right; ++i) {
+            arr[i] = temp[i - left];
+            if (++cnt == K) res = arr[i];
         }
     }
 }
