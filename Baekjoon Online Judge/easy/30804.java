@@ -13,10 +13,8 @@ public class Main {
 
         // Solve
         int res = 0;
-        if (N == 1) {
-            res = 1;
-        } else if (N == 2) {
-            res = S[0] == S[1] ? 2 : 1;
+        if (N <= 2) {
+            res = N;
         } else {
             int left = 0, right = 0;
             int distinct = 0;
@@ -26,10 +24,11 @@ public class Main {
                     ++distinct;
                 }
                 while (distinct > 2) {
-                    --count[S[left++]];
+                    --count[S[left]];
                     if (count[S[left]] == 0) {
                         --distinct;
                     }
+                    ++left;
                 }
                 res = Math.max(res, right - left + 1);
                 ++right;
