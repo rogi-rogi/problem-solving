@@ -13,26 +13,22 @@ public class Main {
 
         // Solve
         int res = 0;
-        if (N <= 2) {
-            res = N;
-        } else {
-            int left = 0, right = 0;
-            int distinct = 0;
-            while (left < N && right < N) {
-                ++count[S[right]];
-                if (count[S[right]] == 1) {
-                    ++distinct;
-                }
-                while (distinct > 2) {
-                    --count[S[left]];
-                    if (count[S[left]] == 0) {
-                        --distinct;
-                    }
-                    ++left;
-                }
-                res = Math.max(res, right - left + 1);
-                ++right;
+        int left = 0, right = 0;
+        int distinct = 0;
+        while (left < N && right < N) {
+            ++count[S[right]];
+            if (count[S[right]] == 1) {
+                ++distinct;
             }
+            while (distinct > 2) {
+                --count[S[left]];
+                if (count[S[left]] == 0) {
+                    --distinct;
+                }
+                ++left;
+            }
+            res = Math.max(res, right - left + 1);
+            ++right;
         }
 
         // Output
