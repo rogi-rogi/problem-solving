@@ -17,8 +17,6 @@ public class Main {
                 // Solve
                 res += score[0] - score[1];
             }
-
-            // Output
             if (res == 0) {
                 sb.append("Draw\n");
             } else {
