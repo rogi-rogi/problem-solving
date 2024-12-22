@@ -18,14 +18,12 @@ public class Main {
         dp[0] = 1;
         dp[1] = 1;
         for (int i = 2; i <= N.length; ++i) {
-            {
-                if (N[i - 1] != '0'){
-                    dp[i] = dp[i - 1];
-                }
-                final int num = (N[i - 2] - '0') * 10 + (N[i - 1] - '0');
-                if (10 <= num && num <= 26) {
-                    dp[i] = (dp[i] + dp[i - 2]) % MOD;
-                }
+            if (N[i - 1] != '0'){
+                dp[i] = dp[i - 1];
+            }
+            final int num = (N[i - 2] - '0') * 10 + (N[i - 1] - '0');
+            if (10 <= num && num <= 26) {
+                dp[i] = (dp[i] + dp[i - 2]) % MOD;
             }
         }
 
