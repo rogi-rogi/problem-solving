@@ -1,7 +1,6 @@
 import java.io.*;
 
 public class Main {
-    static long[][] dp;
     public static void main(String[] args) throws IOException {
         // Init
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -10,7 +9,7 @@ public class Main {
         // Input
         final int N = Integer.parseInt(br.readLine());
         final int K = Integer.parseInt(br.readLine());
-        dp = new long[N + 1][N + 1];
+        long[][] dp = new long[N + 1][N + 1];
 
         // Solve
         for (int i = 1; i <= N; ++i) {
