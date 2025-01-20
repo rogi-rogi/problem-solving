@@ -5,19 +5,21 @@ public class Main {
     static List<List<Integer>> tree;
     static int[] parent, depth;
 
-    private static void initTree(int node, int parentNode) {
+    private static void dfs(int node, int parentNode) {
         parent[node] = parentNode;
         depth[node] = depth[parentNode] + 1;
         for (int child : tree.get(node)) {
             if (child != parentNode) {
-                initTree(child, node);
+                dfs(child, node);
             }
         }
     }
 
     private static int LCA(int u, int v) {
-        while (depth[u] > depth[v]) {
-            u = parent[u];
+        if (depth[u] > depth[v]) {
+            int temp = u;
+            u = v;
+            v = temp;
         }
         while (depth[v] > depth[u]) {
             v = parent[v];
@@ -52,7 +54,7 @@ public class Main {
 
         parent = new int[N + 1];
         depth = new int[N + 1];
-        initTree(1, 0);
+        dfs(1, 0);
 
         int M = Integer.parseInt(br.readLine());
         while (M-- > 0) {
