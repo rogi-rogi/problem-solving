@@ -2,20 +2,21 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static List<List<Integer>> tree;
-    static int[] depth;
+    static List<List<int[]>> tree;
+    static int[] depth, distance;
     static int[][] parent;
     static int maxDepth;
 
-    private static void dfs(int cur, int _parent) {
-        depth[cur] = depth[_parent] + 1;
-        parent[cur][0] = _parent;
+    private static void dfs(int[] cur, int _parent) {
+        depth[cur[0]] = depth[_parent] + 1;
+        parent[cur[0]][0] = _parent;
+        distance[cur[0]] = distance[_parent] + cur[1];
         for (int k = 1; k <= maxDepth; ++k) {
-            parent[cur][k] = parent[parent[cur][k - 1]][k - 1];
+            parent[cur[0]][k] = parent[parent[cur[0]][k - 1]][k - 1];
         }
-        for (int child : tree.get(cur)) {
-            if (child != _parent) {
-                dfs(child, cur);
+        for (int[] child : tree.get(cur[0])) {
+            if (child[0] != _parent) {
+                dfs(child, cur[0]);
             }
         }
     }
@@ -57,14 +58,16 @@ public class Main {
             st = new StringTokenizer(br.readLine());
             final int u = Integer.parseInt(st.nextToken());
             final int v = Integer.parseInt(st.nextToken());
-            tree.get(u).add(v);
-            tree.get(v).add(u);
+            final int w = Integer.parseInt(st.nextToken());
+            tree.get(u).add(new int[]{v, w});
+            tree.get(v).add(new int[]{u, w});
         }
 
         maxDepth = (int) Math.ceil(Math.log(N) / Math.log(2));
         parent = new int[N + 1][maxDepth + 1];
         depth = new int[N + 1];
-        dfs(1, 0);
+        distance = new int[N + 1];
+        dfs(new int[] {1, 0}, 0);
 
         int M = Integer.parseInt(br.readLine());
         while (M-- > 0) {
@@ -73,7 +76,7 @@ public class Main {
             final int v = Integer.parseInt(st.nextToken());
 
             // Solve
-            sb.append(LCA(u, v)).append('\n');
+            sb.append(distance[u] + distance[v] - 2 * distance[LCA(u, v)]).append('\n');
         }
 
         // Output
