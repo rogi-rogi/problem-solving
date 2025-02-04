@@ -42,7 +42,7 @@ public class Main {
         Arrays.sort(A);
         long cnt = 0;
         for (int a = 0; a < N - 2; ++a) {
-            for (int b = a + 1; b < N; ++b) {
+            for (int b = a + 1; b < N - 1; ++b) {
                 long sumAB = A[a] + A[b];
                 cnt += upperBound(b + 1, -sumAB) - lowerBound(b + 1, -sumAB);
             }
