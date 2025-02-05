@@ -13,7 +13,7 @@ public class Main {
         // Solve
         Arrays.sort(A);
         int left = 0, right = N - 1;
-        int min = (int) 2e8, B = 0;
+        int min = Integer.MAX_VALUE, B = 0;
         while (left < right) {
             int sumAB = A[left] + A[right];
             if (Math.abs(sumAB) < min) {
