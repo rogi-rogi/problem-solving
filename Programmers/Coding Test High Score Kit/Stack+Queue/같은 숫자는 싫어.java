@@ -5,15 +5,15 @@ import java.util.*;
 
 public class Solution {
     public int[] solution(int []arr) {
-        Deque<Integer> stack = new ArrayDeque<>(List.of(arr[0]));
+        Deque<Integer> queue = new ArrayDeque<>(List.of(arr[0]));
         for (int i = 1; i < arr.length; ++i) {
-            if (stack.peek() != arr[i]) {
-                stack.push(arr[i]);
+            if (queue.peekLast() != arr[i]) {
+                queue.addLast(arr[i]);
             }
         }
-        int[] res = new int[stack.size()];
-        for (int i = res.length - 1; i >= 0; --i) {
-            res[i] = stack.pop();
+        int[] res = new int[queue.size()];
+        for (int i = 0; i < res.length; ++i) {
+            res[i] = queue.pollFirst();
         }
         return res;
     }
