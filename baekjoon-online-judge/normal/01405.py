@@ -19,10 +19,11 @@ def is_valid(x, y):
     return 0 <= x < 29 and 0 <= y < 29 and not visited[x][y]
 
 if __name__ == '__main__':
+    visited = [[False] * 29 for _ in range(29)]
+    
     # Input
     N, *D = map(int, input().split())
     D = [(*point, d * 0.01) for point, d in zip([(0, 1), (0, -1), (1, 0), (-1, 0)], D)]
-
-    # Solve
-    visited = [[False] * 29 for _ in range(29)]
+    
+    # Solve & Output
     print(dfs(14, 14, 0, 1))
