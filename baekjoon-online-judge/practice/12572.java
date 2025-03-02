@@ -27,7 +27,7 @@ public class Main {
                     }
                 }
             }
-            sb.append("Case #").append(t).append(": ").append(cnt).append("\n");
+            sb.append(String.format("Case #%d: %d\n", t, cnt));
         }
 
         // Output
