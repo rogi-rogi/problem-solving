@@ -5,9 +5,9 @@ public class Main {
     static int N, K, X, Y, S;
     static int[][] A;
     static int[] dx = {1, -1, 0, 0}, dy = {0, 0, 1, -1};
-    private static int bfs() {
+    private static void bfs() {
         if (A[X - 1][Y - 1] != 0)
-            return A[X - 1][Y - 1];
+            return;
         List<int[]> list = new ArrayList<>();
         for (int i = 0; i < N; ++i) {
             for (int j = 0; j < N; ++j) {
@@ -36,14 +36,12 @@ public class Main {
                 }
             }
         }
-        return A[X - 1][Y - 1];
     }
     private static boolean isValid(int x, int y) {
         return x >= 0 && x < N && y >= 0 && y < N;
     }
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
 
         // Input
         int[] input = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
@@ -58,7 +56,10 @@ public class Main {
         X = input[1];
         Y = input[2];
 
-        // Solve & Output
-        System.out.println(bfs());
+        // Solve
+        bfs();
+
+        // Output
+        System.out.println(A[X - 1][Y - 1]);
     }
 }
