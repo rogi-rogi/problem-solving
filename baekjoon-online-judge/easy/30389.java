@@ -2,9 +2,9 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    private static Set<String> getSuffixes(String s) {
+    private static List<String> getSuffixes(String s) {
         StringBuilder sb = new StringBuilder();
-        Set<String> suffixes = new HashSet<>();
+        List<String> suffixes = new ArrayList<>();
         for (int i = s.length() -1; i >= 0; --i) {
             sb.append(s.charAt(i));
             suffixes.add(sb.toString());
