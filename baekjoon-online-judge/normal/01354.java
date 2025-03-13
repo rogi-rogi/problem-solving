@@ -27,7 +27,6 @@ public class Main {
 
         // Solve
         A = new HashMap<>();
-        A.put(0L, 1L);
 
         // Output
         System.out.println(getA(N));
