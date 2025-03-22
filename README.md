@@ -49,3 +49,34 @@ Daily Problem Solving Challenges
 
 풀이는 [블로그](https://kyr-db.tistory.com/)를 통해 확인하실 수 있습니다.
 
+
+
+# solved.ac 프로필 값 표시
+
+아래 값은 [solved.ac](https://solved.ac/profile/polygon) 페이지에서 가져온 값입니다:
+
+<div id="solvedValue">로딩 중...</div>
+
+<script>
+// 즉시 실행하는 비동기 함수
+(async () => {
+  try {
+    // solved.ac 프로필 페이지를 fetch합니다.
+    const response = await fetch('https://solved.ac/profile/polygon');
+    // HTML 텍스트로 변환
+    const text = await response.text();
+    // DOMParser를 사용해 HTML 문서로 변환
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(text, 'text/html');
+    // 지정한 CSS 선택자로 요소 찾기
+    const element = doc.querySelector("#__next > div.css-xi5qma > div > div:nth-child(4) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div > div > b");
+    const value = element ? element.textContent.trim() : "값을 가져올 수 없음";
+    // 가져온 값을 페이지에 표시
+    document.getElementById('solvedValue').innerText = value;
+  } catch (error) {
+    console.error("오류 발생:", error);
+    document.getElementById('solvedValue').innerText = "오류 발생";
+  }
+})();
+</script>
+
