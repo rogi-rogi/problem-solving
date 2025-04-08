@@ -23,7 +23,7 @@ public class Main {
         // Solve
         int GAP = nums.length % 2 == 0 ? nums.length : nums.length - 1;
         while (GAP > 0) {
-            for (int i = 0; i + GAP <= nums.length; i++) {
+            for (int i = 0; i + GAP <= nums.length; ++i) {
                 if (check(i, i + GAP)) {
 
                     // Output
