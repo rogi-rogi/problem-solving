@@ -19,7 +19,7 @@ public class Main {
         }
         long cur = 0;
         int idx = N - 1;
-        while (cur * 2 <= sum) {
+        while (cur * 2 < sum) {
             cur += V[idx--];
         }
 
