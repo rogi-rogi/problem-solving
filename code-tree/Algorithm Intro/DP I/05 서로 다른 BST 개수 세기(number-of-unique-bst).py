@@ -1,22 +1,22 @@
 '''
-https://www.codetree.ai/missions/2/problems/number-of-unique-bst?&utm_source=clipboard&utm_medium=text
+https://www.codetree.ai/ko/trails/complete/curated-cards/challenge-number-of-unique-bst/description
 '''
 
-# Init
-SIZE = 20
+n = int(input())
 
-# Input
-N = int(input())
+# Please write your code here.
 
-# Solve
-dp = [0] * SIZE
-dp[0] = 1
-dp[1] = 1
-dp[2] = 2
-dp[3] = 5
-for i in range(4, N + 1):
-    for j in range(0, i):
-        dp[i] += dp[j] * dp[i - 1 - j]
+def solve(N):
+    if N <= 2:
+        return [1, 2][N - 1]
 
-# Output
-print(dp[N])
+    dp = [0] * (N + 1)
+    dp[0] = 1
+    dp[1] = 1
+    dp[2] = 2
+    for i in range(3, N + 1):
+        for j in range(0, i):
+            dp[i] += dp[j] * dp[i - 1 - j]
+    return dp[N]
+
+print(solve(n))
