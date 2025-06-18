@@ -1,6 +1,5 @@
 '''
 https://www.codetree.ai/ko/trails/complete/curated-cards/challenge-number-of-unique-bst/description
-
 '''
 
 n = int(input())

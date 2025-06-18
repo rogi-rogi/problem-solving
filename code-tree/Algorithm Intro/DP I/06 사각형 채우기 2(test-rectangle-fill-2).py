@@ -1,5 +1,5 @@
 '''
-https://www.codetree.ai/missions/2/problems/rectangle-fill-2?&utm_source=clipboard&utm_medium=text
+https://www.codetree.ai/ko/trails/complete/curated-cards/test-rectangle-fill-2/description
 '''
 
 # Init
