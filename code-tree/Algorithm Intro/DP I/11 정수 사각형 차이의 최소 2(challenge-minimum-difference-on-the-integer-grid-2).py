@@ -16,11 +16,10 @@ for i in range(1, N + 1):
         for k in range(1, 101):
             min_k = min(k, grid[i][j])
             dp[i][j][min_k] = min(dp[i][j][min_k],
-                                max(grid[i][j],
-                                    min(dp[i - 1][j][k], dp[i][j - 1][k])))
+                                max(grid[i][j], min(dp[i - 1][j][k], dp[i][j - 1][k])))
 
 res = INF
 for k in range(1, 101):
-    if dp[N][N][k] != INF and dp[N][N][k] - k < res:
-        res = dp[N][N][k] - k
+    if dp[N][N][k] != INF:
+        res = min(res, dp[N][N][k] - k)
 print(res)
