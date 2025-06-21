@@ -15,6 +15,7 @@ p = [job[2] for job in jobs]
 dp = [0] * n
 dp[0] = p[0]
 for i in range(n):
+    dp[i] = p[i]
     for j in range(i):
         if e[j] < s[i]:
             dp[i] = max(dp[i], dp[j] + p[i])
