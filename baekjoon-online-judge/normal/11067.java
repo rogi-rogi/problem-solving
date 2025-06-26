@@ -18,7 +18,7 @@ public class Main {
         int T = Integer.parseInt(br.readLine());
         while (T-- > 0) {
             int N = Integer.parseInt(br.readLine());
-            Map<Integer, List<Integer>> cafe = new HashMap<>();
+            Map<Integer, List<Integer>> cafe = new TreeMap<>();
 
             for (int i = 0; i < N; i++) {
                 st = new StringTokenizer(br.readLine());
@@ -32,19 +32,17 @@ public class Main {
                 Collections.sort(yList);
             }
 
-            List<Integer> sortedX = new ArrayList<>(cafe.keySet());
-            Collections.sort(sortedX);
-
-            List<Point> result = new ArrayList<>();
+            List<Point> res = new ArrayList<>();
             int prevY = 0;
 
-            for (int curX : sortedX) {
-                List<Integer> yList = cafe.get(curX);
+            for (Map.Entry<Integer, List<Integer>> entry : cafe.entrySet()) {
+                int x = entry.getKey();
+                List<Integer> yList = entry.getValue();
                 if (yList.get(0) != prevY) {
                     Collections.reverse(yList);
                 }
                 for (int y : yList) {
-                    result.add(new Point(curX, y));
+                    res.add(new Point(x, y));
                 }
                 prevY = yList.get(yList.size() - 1);
             }
@@ -53,8 +51,8 @@ public class Main {
             st = new StringTokenizer(br.readLine());
             int M = Integer.parseInt(st.nextToken());
             for (int i = 0; i < M; i++) {
-                int k = Integer.parseInt(st.nextToken()) - 1;
-                Point p = result.get(k);
+                int x = Integer.parseInt(st.nextToken()) - 1;
+                Point p = res.get(x);
                 sb.append(p.x).append(" ").append(p.y).append("\n");
             }
         }
