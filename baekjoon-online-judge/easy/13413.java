@@ -18,9 +18,19 @@ public class Main {
             for (int i = 0; i < N; ++i) {
                 if (A[i] == 'W') ++colorDiff;
                 if (B[i] == 'W') --colorDiff;
-                if (A[i] != B[i]) ++unMatched;
             }
-            sb.append(Math.abs(colorDiff) + (unMatched + 1) / 2).append("\n");
+            int colorDiffCopy = Math.abs(colorDiff);
+            for (int i = 0; i < N; ++i) {
+                if (A[i] != B[i]) {
+                    if (colorDiffCopy > 0) {
+                        --colorDiffCopy;
+                    } else {
+                        ++unMatched;
+                    }
+                }
+            }
+
+            sb.append(Math.abs(colorDiff) + unMatched / 2).append("\n");
         }
 
         // Output
