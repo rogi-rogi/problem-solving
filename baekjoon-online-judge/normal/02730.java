@@ -71,8 +71,6 @@ public class Main {
                 sb.append("OUT OF RANGE\n");
             }
         }
-
-        // Output
         System.out.println(sb);
     }
 }
