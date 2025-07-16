@@ -14,12 +14,8 @@ public class Main {
         A[0] = 0;
         Arrays.sort(A);
         int idx = 1;
-        while (idx < N) {
-            if (A[idx] < A1) {
-                A1 += A[idx++];
-            } else {
-                break;
-            }
+        while (idx < N && A[idx] < A1) {
+            A1 += A[idx++];
         }
 
         // Output
