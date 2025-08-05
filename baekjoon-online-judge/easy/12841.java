@@ -16,7 +16,7 @@ public class Main {
         long[] prefixSumR = new long[N];
         for (int i = 1; i < N; ++i) {
             prefixSumL[i] = prefixSumL[i - 1] + L[i - 1];
-            prefixSumR[i] = prefixSumR[i - 1] + R[N - i - 1];
+            prefixSumR[i] = prefixSumR[i - 1] + R[i - 1];
         }
 
         long res = Long.MAX_VALUE, idx = -1;
