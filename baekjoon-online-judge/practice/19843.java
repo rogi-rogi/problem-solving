@@ -29,7 +29,7 @@ public class Main {
 
         if (T > 48) {
             T = -1;
-        } else if (T < 0 && T > - 49) {
+        } else if (T < 0) {
             T = 0;
         }
 
