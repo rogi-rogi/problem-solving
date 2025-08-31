@@ -48,10 +48,12 @@ public class Main {
 
         // Solve
         visited = new boolean[N][M];
+        boolean hasStar = false;
         long cnt = 0;
         for (int i = 0; i < N; ++i) {
             for (int j = 0; j < M; ++j) {
                 if (board[i][j] == '*') {
+                    hasStar = true;
                     long size = isCross(i, j, 1);
                     if (size > 0) {
                         visited[i][j] = true;
@@ -61,6 +63,7 @@ public class Main {
             }
         }
 
+        // Output
         for (int i = 0; i < N; ++i) {
             for (int j = 0; j < M; ++j) {
                 if (board[i][j] == '*' && !visited[i][j]) {
@@ -69,9 +72,7 @@ public class Main {
                 }
             }
         }
-
-        // Output
-        System.out.println(cnt == 0 ? -1 : cnt);
+        System.out.println(cnt == 0 && hasStar ? -1 : cnt);
         System.out.println(sb);
     }
 }
