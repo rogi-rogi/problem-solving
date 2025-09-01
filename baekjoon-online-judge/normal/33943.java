@@ -9,7 +9,7 @@ public class Main {
     private static int bfs() {
         if (N == 0 && M != 0) return -1;
         Deque<int[]> queue = new ArrayDeque<>();
-        queue.add(new int[]{ 0, 0 });
+        queue.add(new int[] { 0, 0 });
         int[] visited = new int[20001];
         Arrays.fill(visited, (int) 2e4);
         visited[10000] = 0;
@@ -46,9 +46,9 @@ public class Main {
 
             // Solve
             Arrays.sort(P);
-
-            // Output
-            System.out.println(bfs());
         }
+
+        // Output
+        System.out.println(bfs());
     }
 }
