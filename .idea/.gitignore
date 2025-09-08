@@ -7,4 +7,4 @@
 /dataSources/
 /dataSources.local.xml
 
-Main.java
+../Main/**
