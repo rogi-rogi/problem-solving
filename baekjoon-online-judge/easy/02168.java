@@ -13,13 +13,8 @@ public class Main {
         final int X = Integer.parseInt(input[0]);
         final int Y = Integer.parseInt(input[1]);
 
-        // Solve
+        // Solve & Output
         final int gcd = GCD(X, Y);
-        if (gcd == 1) {
-            // Output
-            System.out.println(X + Y - 1);
-        } else {
-            System.out.println(X + Y - gcd);
-        }
+		System.out.println(X + Y - gcd);
     }
 }
