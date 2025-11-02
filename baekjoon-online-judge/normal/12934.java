@@ -10,15 +10,12 @@ public class Main {
 
 		long sum = 0L, cnt = 0L;
 		for (long i = N; i >= 1; --i) {
+			if (sum == X) return cnt;
 			if (sum + i <= X) {
 				sum += i;
 				++cnt;
-				if (sum == X) break;
 			} else {
-				long need = X - sum;
-				if (need >= 1 && i > need) {
-					i = need + 1;
-				}
+				return cnt + 1;
 			}
 		}
 		return cnt;
