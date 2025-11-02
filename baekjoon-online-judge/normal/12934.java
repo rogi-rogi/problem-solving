@@ -14,6 +14,11 @@ public class Main {
 				sum += i;
 				++cnt;
 				if (sum == X) break;
+			} else {
+				long need = X - sum;
+				if (need >= 1 && i > need) {
+					i = need + 1;
+				}
 			}
 		}
 		return cnt;
