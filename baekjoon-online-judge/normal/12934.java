@@ -10,13 +10,10 @@ public class Main {
 
 		long sum = 0L, cnt = 0L;
 		for (long i = N; i >= 1; --i) {
-			sum += i;
-			++cnt;
-			if (sum > X) {
-				sum -= i;
-				--cnt;
-			} else if (sum == X) {
-				break;
+			if (sum + i <= X) {
+				sum += i;
+				++cnt;
+				if (sum == X) break;
 			}
 		}
 		return cnt;
