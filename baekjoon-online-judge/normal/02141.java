@@ -7,29 +7,36 @@ public class Main {
 
 		// Input
 		final int N = Integer.parseInt(br.readLine());
-		int[][] villages = new int[N][2];
+		int[] X = new int[N];
+		int[] A = new int[N];
 
-		long total = 0;
+		int start = (int) 1e9, end = -start;
 		for (int i = 0; i < N; ++i) {
-			villages[i] = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
-			total += villages[i][1];
+			String[] in = br.readLine().split(" ");
+			X[i] = Integer.parseInt(in[0]);
+			A[i] = Integer.parseInt(in[1]);
+
+			start = Math.min(start, X[i]);
+			end =  Math.max(end, X[i]);
 		}
 
 		// Solve
-		Arrays.sort(villages, (a, b) -> {
-			return Integer.compare(a[0], b[0]);
-		});
+		while (start <= end) {
+			int mid = (start + end) >> 1;
+			long left = 0, right = 0;
+			for (int i = 0; i <= N; ++i) {
+				left += (long) A[i] * Math.abs(mid - X[i]);
+				right += (long) A[i] * Math.abs(mid + 1 - X[i]);
+			}
 
-		final long HALF = (total + 1) >> 1;
-		long sum = 0;
-		for (int[] village: villages) {
-			sum += village[1];
-			if (sum >= HALF) {
-
-				// Output
-				System.out.println(village[0]);
-				return;
+			if (left <= right) {
+				end = mid - 1;
+			} else {
+				start = mid + 1;
 			}
 		}
+
+		// Output
+		System.out.println(start);
 	}
 }
