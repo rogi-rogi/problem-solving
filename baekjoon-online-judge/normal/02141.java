@@ -24,7 +24,7 @@ public class Main {
 		while (start <= end) {
 			int mid = (start + end) >> 1;
 			long left = 0, right = 0;
-			for (int i = 0; i <= N; ++i) {
+			for (int i = 0; i < N; ++i) {
 				left += (long) A[i] * Math.abs(mid - X[i]);
 				right += (long) A[i] * Math.abs(mid + 1 - X[i]);
 			}
