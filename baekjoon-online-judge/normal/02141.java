@@ -23,17 +23,15 @@ public class Main {
 		// Solve
 		while (start <= end) {
 			int mid = (start + end) >> 1;
-			long left = 0, right = 0;
+
+			long diff = 0;
 			for (int i = 0; i < N; ++i) {
-				left += (long) A[i] * Math.abs(mid - X[i]);
-				right += (long) A[i] * Math.abs(mid + 1 - X[i]);
+				diff += (X[i] <= mid) ? A[i] : -A[i];
 			}
 
-			if (left <= right) {
-				end = mid - 1;
-			} else {
-				start = mid + 1;
-			}
+			if (diff >= 0) end = mid - 1;
+			else start = mid + 1;
+
 		}
 
 		// Output
