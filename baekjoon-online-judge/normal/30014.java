@@ -13,7 +13,7 @@ public class Main {
         // Solve
         Arrays.sort(P);
         Deque<Integer> deque = new ArrayDeque<>();
-        for (int i = N - 1; i >= 0; --i) {
+        for (int i = 0; i < N; ++i) {
             if (i % 2 == 0)
                 deque.addLast(P[i]);
             else
