@@ -32,6 +32,34 @@ public class Main {
         }
         return cnt;
     }
+    /*
+    private static int bfs(int x, int y) {
+        visited[x][y] = RED;
+        int cnt = RED;
+        Deque<int[]> queue = new ArrayDeque<>();
+        queue.add(new int[]{x, y});
+
+        while (!queue.isEmpty()) {
+            int[] cur = queue.poll();
+            for (int d = 0; d < 6; ++d) {
+                int nx = cur[0] + dx[d];
+                int ny = cur[1] + dy[d];
+                if (!isValid(nx, ny))
+                    continue;
+                if (board[nx][ny] == 'X' && visited[nx][ny] == NOT_VISITED) {
+                    visited[nx][ny] = visited[cur[0]][cur[1]] == RED ? GREEN : RED;
+                    queue.add(new int[]{nx, ny});
+                    cnt = GREEN;
+                }
+                if (visited[nx][ny] == visited[cur[0]][cur[1]]) {
+                    // visited[nx][ny] is BLUE
+                    return 3;
+                }
+            }
+        }
+        return cnt;
+    }
+     */
 
     private static int solve() {
         int result = 0;
