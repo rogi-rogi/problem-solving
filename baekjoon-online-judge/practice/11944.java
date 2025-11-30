@@ -11,12 +11,22 @@ public class Main {
 		final int M = Integer.parseInt(in[1]);
 
 		// Solve
-		String ori = in[0].repeat(N);
-		if (ori.length() > M) {
-			ori = ori.substring(0, M);
+		String result = in[0].repeat(N);
+		if (result.length() > M) {
+			result = ori.substring(0, M);
 		}
+		/*
+		final int len = in[0].length();
+		final int oriLen = in[0].length() * N;
+		if (oriLen > M) {
+			final int repeatNeed = (M + len) / len;
+			result = in[0].repeat(repeatNeed).substring(0, M);
+		} else {
+			result = in[0].repeat(N);
+		}
+		 */
 
 		// Output
-		System.out.println(ori);
+		System.out.println(result);
 	}
 }
