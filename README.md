@@ -1,77 +1,65 @@
 # 📆 Problem Solving
 
-Daily Algorithm Problem Solving Challenges
+다양한 알고리즘 문제 풀이 플랫폼(BOJ, Programmers 등)에서 해결한 문제의 해답 코드를 플랫폼/난이도별로 정리해 관리하는 아카이브입니다.
 
-이 레포지토리는 여러 알고리즘 트레이닝 사이트(예: [Baekjoon Online Judge](https://www.acmicpc.net/), [Programmers](https://programmers.co.kr/), [LeetCode](https://leetcode.com/) 등)에서 문제를 풀고 작성한 코드를 모아둔 공간입니다.
+꾸준한 문제 풀이 기록과 누구나 이해할 수 있는 클린 코드 작성을 목표로 합니다.
+
+
+---
+
+## 📝 Commit Convention
+
+본 아카이브에서는 아래 커밋 형식을 따릅니다.
+
+(플랫폼명) : (작업명) (문제 번호 또는 이름) [풀이 언어]
+
+### 예시
+- `boj: solve 1000 A+B [java]`
+- `programmers: solve 택배 상자 꺼내기 [python]`
+
+> 작업명 예시: `solve`, `refactor`, `rename`, `optimize`
 
 ---
 
 ## 🗂️ Repository Structure
 
-각 플랫폼별로 폴더를 나누어 풀이 코드를 관리합니다. 구조는 다음과 같습니다.
+플랫폼별로 디렉토리를 분리하여 관리합니다.
 
-- [algospot](https://github.com/rogi-rogi/problem-solving/tree/main/algospot)
-- [baekjoon-online-judge](https://github.com/rogi-rogi/problem-solving/tree/main/https://github.com/rogi-rogi/problem-solving/tree/main/baekjoon-online-judge)
-  - practice
-    - 01000.py
-    - ...
-  - easy
-  - normal
-  - hard
-  - try-try
-  - README.md
-- challenge
+- [algospot](/algospot)
+- [baekjoon-online-judge](/baekjoon-online-judge)
+    - practice / easy / normal / hard / try-try
 - code-tree
-  - codetree101
-    - ch01
-      - nl-pre-output-basics.py
-      - ...
-    - ch02
-      - ...
-  - novice-low
-  - novice-mid
-  - novice-high
-  - intermediate-low
-  - intermediate-mid
-  - intermediate-high
+    - codetree101
+    - novice / intermediate 단계별
 - programmers
-  - lv0 ~ lv 5
-  - algorithm-practice-kit
-  - sql-practice-kit
-- hackerRank
-  -  SQL
+    - lv0 ~ lv5
+    - algorithm-practice-kit
+    - sql-practice-kit
 - leetcode
-  - algorithm 
-    - easy
-    - medium
-    - hard
-  - sql
-- solved
+    - algorithm (easy / medium / hard)
+    - sql
+- hackerRank
+    - SQL
 - sw-expert-academy
-  - D1 ~ D8
+    - D1 ~ D8
+- solved (이미 해결한 문제 모음)
+
+각 디렉토리 내부에는 문제 번호 또는 문제명을 기준으로 풀이 코드가 정리되어 있습니다.
 
 ---
 
-## 사용 방법
+## 📖 풀이 및 해설
 
-1. **플랫폼 선택:**  
-   각 플랫폼별 폴더(baekjoon-online-judge, programmers, leetcode 등)로 이동합니다.
+- 일부 문제에 대한 **풀이 과정 및 해설**은 개인 블로그에 정리되어 있습니다.  
+  👉 https://kyr-db.tistory.com/
 
-2. **문제 선택:**  
-   폴더 내에서 문제 번호나 제목으로 문제를 찾고 해당 디렉토리로 들어갑니다.
-
-3. **코드 확인:**  
-   해당 문제 폴더 내에 하나 또는 다양한 언어로 작성된 솔루션 코드를 확인할 수 있습니다.
-
-4. **풀이 확인**  
-   문제의 풀이는 [블로그](https://kyr-db.tistory.com/)를 통해 확인할 수 있습니다.
-
-5. **풀이 요청**  
-   레포지토리에 풀이 코드가 없는 경우, 풀이 코드는 있지만 해설이 존재하지 않는 경우에는 [이슈](https://github.com/rogi-rogi/problem-solving/issues)를 남겨주시면 풀이를 제공합니다.  
+- 레포지토리에 풀이 코드가 없거나,  
+  코드만 있고 **해설이 없는 경우**, 아래를 통해 요청할 수 있습니다.
+    - GitHub Issue: https://github.com/rogi-rogi/problem-solving/issues
 
 ---
 
-## ⚖️ 라이선스
-모든 코드의 상업목적 사용을 금지하며, 교육 목적으로만 사용할 수 있습니다.
+## ⚖️ License
 
----
+본 레포지토리의 코드는 **교육 및 학습 목적**으로만 사용 가능합니다.  
+상업적 사용은 금지합니다.
