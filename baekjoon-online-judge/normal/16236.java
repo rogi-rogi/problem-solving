@@ -1,142 +1,116 @@
 import java.io.*;
 import java.util.*;
 
-
-class Point {
-    int x, y;
-    Point(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-    Point(Node node) {
-        this.x = node.x;
-        this.y = node.y;
-    }
-}
-
-class Node extends Point {
-    int dist;
-    Node(int x, int y, int dist) {
-        super(x, y);
-        this.dist = dist;
-    }
-}
-
-class Shark extends Point {
-    int size, eatFishCnt, dist;
-    Shark(int x, int y) {
-        super(x, y);
-        this.size = 2;
-        this.eatFishCnt = 0;
-        this.dist = 0;
-    }
-    void eatFish(int[][] board, Node node) {
-        dist += node.dist;
-        x = node.x;
-        y = node.y;
-        board[x][y] = 0;
-
-        if (++eatFishCnt == size) {
-            eatFishCnt = 0;
-            ++size;
-        }
-    }
-}
-
-
 public class Main {
-    static int N;
-    static int[] dx = new int[]{0, 0, 1, -1}, dy = new int[]{1, -1, 0, 0};
-    static int[][] board;
+	static int N;
+	static int EMPTY = 0;
+	static int[][] board;
+	static int[] dx = {-1, 0, 0, 1},
+		dy = {0, -1, 1, 0};
 
-    private static boolean canEat(int x, int y, int size) {
-        return 1 <= board[x][y] && board[x][y] <= size;
-    }
+	static class Shark {
+		int x, y;
+		int size = 2, eaten = 0, time = 0;
+		Shark(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
+		public void eat(Fish fish, int[][] board) {
+			this.time += fish.dist;
+			this.x = fish.x;
+			this.y = fish.y;
+			board[this.x][this.y] = EMPTY;
 
-    private static boolean isValid(Node next, boolean[][] visited, int size) {
-        return 0 <= next.x & next.x < N && 0 <= next.y && next.y < N &&
-                !visited[next.x][next.y] && board[next.x][next.y] <= size;
-    }
+			this.eaten++;
+			if (this.eaten == this.size) {
+				this.eaten = EMPTY;
+				++this.size;
+			}
+		}
+	}
 
-    private static Node getNextNode(List<Point> eatFishList, int minDist) {
-        if (eatFishList.isEmpty()) {
-            return null;
-        }
-        eatFishList.sort((a, b) -> {
-            if (a.x != b.x) return Integer.compare(a.x, b.x);
-            return Integer.compare(a.y, b.y);
-        });
-        Point first = eatFishList.get(0);
-        return new Node(first.x, first.y, minDist);
-    }
+	static class Fish {
+		int x, y, dist;
+		Fish(int x, int y, int dist) {
+			this.x = x;
+			this.y = y;
+			this.dist = dist;
+		}
+		void update(int x, int y, int dist) {
+			this.x = x;
+			this.y = y;
+			this.dist = dist;
+		}
+	}
 
-    private static Node bfs(Shark shark) {
-        Deque<Node> queue = new ArrayDeque<>();
-        queue.add(new Node(shark.x, shark.y, 0));
+	private static boolean isValid(int x, int y) {
+		return 0 <= x && x < N && 0 <= y && y < N;
+	}
 
-        boolean[][] visited = new boolean[N][N];
-        visited[shark.x][shark.y] = true;
-        int minDist = 400;
+	private static Fish bfs(Shark shark) {
+		boolean[][] visited = new boolean[N][N];
+		Deque<int[]> queue = new ArrayDeque<>();
+		queue.add(new int[]{shark.x, shark.y, 0});
+		visited[shark.x][shark.y] = true;
 
-        List<Point> eatFishList = new ArrayList<>();
-        while (!queue.isEmpty()) {
-            Node cur = queue.poll();
-            if (cur.dist > minDist) {
-                continue;
-            }
-            for (int d = 0; d < 4; ++d) {
-                Node next = new Node(cur.x + dx[d], cur.y + dy[d], cur.dist + 1);
-                if (isValid(next, visited, shark.size)) {
-                    visited[next.x][next.y] = true;
-                    if (canEat(next.x, next.y, shark.size - 1)) {
-                        if (next.dist < minDist) {
-                            minDist = next.dist;
-                            eatFishList.clear();
-                            eatFishList.add(new Point(next));
-                        } else if (next.dist == minDist) {
-                            eatFishList.add(new Point(next));
-                        }
-                    }
-                    queue.add(new Node(next.x, next.y, next.dist));
-                }
-            }
-        }
-        return getNextNode(eatFishList, minDist);
-    }
+		Fish result = new Fish(shark.x, shark.y, Integer.MAX_VALUE);
+		while (!queue.isEmpty()) {
+			int[] cur = queue.poll();
+			int x = cur[0], y = cur[1], dist = cur[2];
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+			if (dist > result.dist) break;
+			int fishSize = board[x][y];
+			if (fishSize > 0 && fishSize < shark.size) {
+				if (dist < result.dist ||
+					(dist == result.dist
+						&& (x < result.x || (x == result.x && y < result.y))
+					)
+				) {
+					result.update(x, y, dist);
+				}
+				continue;
+			}
+			for (int d = 0; d < 4; ++d) {
+				int nx = x + dx[d];
+				int ny = y + dy[d];
+				if (isValid(nx, ny) && !visited[nx][ny]) {
+					if (board[nx][ny] > shark.size) continue;
+					visited[nx][ny] = true;
+					queue.add(new int[]{nx, ny,  dist + 1});
+				}
+			}
+		}
+		if (result.dist == Integer.MAX_VALUE) {
+			return new Fish(-1, -1, -1);
+		}
+		return result;
+	}
 
-        // Input
-        N = Integer.parseInt(br.readLine());
-        board = new int[N][N];
-        for (int i = 0; i < N; ++i) {
-            board[i] = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
-        }
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        // Solve
-        int fishCnt = 0;
-        Shark shark = null;
-        for (int i = 0; i < N; ++i) {
-            for (int j = 0; j < N; ++j) {
-                if (canEat(i, j, 6)) {
-                    ++fishCnt;
-                } else if (board[i][j] == 9) {
-                    shark = new Shark(i, j);
-                    board[i][j] = 0;
-                }
-            }
-        }
+		// Input
+		N = Integer.parseInt(br.readLine());
+		Shark shark = null;
+		board = new int[N][N];
+		for (int i = 0; i < N; ++i) {
+			board[i] = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+			for (int j = 0; j < N; ++j) {
+				if (board[i][j] == 9) { // is shark
+					shark = new Shark(i, j);
+					board[i][j] = EMPTY;
+				}
+			}
+		}
 
-        while (fishCnt-- > 0) {
-            Node next = bfs(shark);
-            if (next == null) {
-                break;
-            }
-            shark.eatFish(board, next);
-        }
+		// Solve
+		while (true) {
+			Fish fish = bfs(shark);
+			if (fish.dist == -1) break;
+			shark.eat(fish, board);
+		}
 
-        // Output
-        System.out.println(shark.dist);
-    }
+		// Output
+		System.out.println(shark.time);
+	}
 }
