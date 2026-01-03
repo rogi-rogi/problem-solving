@@ -47,6 +47,12 @@ public class Main {
 		return 0 <= x && x < N && 0 <= y && y < N;
 	}
 
+	private static boolean canEat(int x, int y, int dist, Fish fish) {
+		return dist < fish.dist || (dist == fish.dist
+			&& (x < fish.x || (x == fish.x && y < fish.y))
+		);
+	}
+
 	private static Fish bfs(Shark shark) {
 		boolean[][] visited = new boolean[N][N];
 		Deque<int[]> queue = new ArrayDeque<>();
@@ -61,11 +67,7 @@ public class Main {
 			if (dist > result.dist) break;
 			int fishSize = board[x][y];
 			if (fishSize > 0 && fishSize < shark.size) {
-				if (dist < result.dist ||
-					(dist == result.dist
-						&& (x < result.x || (x == result.x && y < result.y))
-					)
-				) {
+				if (canEat(x, y, dist, result)) {
 					result.update(x, y, dist);
 				}
 				continue;
