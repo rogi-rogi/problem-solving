@@ -35,11 +35,6 @@ public class Main {
 	}
 
 	private static boolean solve(char[] A) {
-		Deque<Character> actions = new ArrayDeque<>();
-		for (char c : A) {
-			actions.add(c);
-		}
-
 		// find Zombie
 		List<User> zombies = new ArrayList<>();
 		for (int i = 0; i < N; ++i) {
@@ -51,6 +46,12 @@ public class Main {
 		}
 		if (zombies.isEmpty()) {
 			return true;
+		}
+
+
+		Deque<Character> actions = new ArrayDeque<>();
+		for (char c : A) {
+			actions.add(c);
 		}
 
 		User user = new User(0, 0);
