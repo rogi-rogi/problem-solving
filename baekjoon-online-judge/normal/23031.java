@@ -30,8 +30,7 @@ public class Main {
 
 	private static boolean faint(int x, int y, User user) {
 		return x == user.x && y == user.y
-			&& !light[x][y]
-			&& board[x][y] != SWITCH;
+			&& !light[x][y];
 	}
 
 	private static boolean solve(char[] A) {
