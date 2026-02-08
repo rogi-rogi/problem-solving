@@ -1,8 +1,8 @@
-name: Move BOJ solutions by solved.ac level (Issue title trigger)
+name: Move solved/* files to BOJ tier folders
 
 on:
   issues:
-    types: [opened, reopened, edited]
+    types: [opened, reopened]
   workflow_dispatch: {}
 
 permissions:
@@ -11,12 +11,14 @@ permissions:
 
 jobs:
   move-files:
-    # 이슈 제목이 정확히 일치할 때만 실행
-    if: github.event.issue.title == 'Move BOJ solutions by solved.ac level'
+    # 이슈 제목이 정확히 일치하거나, 수동 실행(workflow_dispatch)이면 실행
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      github.event.issue.title == 'Move BOJ solutions by solved.ac level'
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -26,37 +28,32 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y jq
 
-      - name: Move files by solved.ac level
+      - name: Move files from /solved to /baekjoon-online-judge/<tier>
         shell: bash
         run: |
           set -euo pipefail
 
-          ROOT="baekjoon-online-judge"
-          BRONZE="$ROOT/bronze"
-          SILVER="$ROOT/silver"
-          GOLD="$ROOT/gold"
-          PLATINUM="$ROOT/platinum"
+          SRC_ROOT="solved"
+          DEST_ROOT="baekjoon-online-judge"
 
-          for d in "$ROOT" "$BRONZE" "$SILVER" "$GOLD" "$PLATINUM"; do
+          BRONZE="$DEST_ROOT/bronze"
+          SILVER="$DEST_ROOT/silver"
+          GOLD="$DEST_ROOT/gold"
+          PLATINUM="$DEST_ROOT/platinum"
+
+          # 폴더 존재 확인
+          for d in "$SRC_ROOT" "$DEST_ROOT" "$BRONZE" "$SILVER" "$GOLD" "$PLATINUM"; do
             if [ ! -d "$d" ]; then
               echo "Missing directory: $d"
               exit 1
             fi
           done
 
-          mapfile -d '' files < <(
-            find "$ROOT" \
-              -type d \( \
-                -path "$BRONZE" -o \
-                -path "$SILVER" -o \
-                -path "$GOLD" -o \
-                -path "$PLATINUM" \
-              \) -prune -o \
-              -type f -print0
-          )
+          # /solved 아래 모든 파일 대상(재귀)
+          mapfile -d '' files < <(find "$SRC_ROOT" -type f -print0)
 
           if [ ${#files[@]} -eq 0 ]; then
-            echo "No candidate files found."
+            echo "No files found under $SRC_ROOT."
             exit 0
           fi
 
@@ -66,7 +63,7 @@ jobs:
           for f in "${files[@]}"; do
             base="$(basename "$f")"
 
-            # 00000.ext 형식만 대상
+            # 00000.ext 형식만 처리
             if [[ ! "$base" =~ ^([0-9]{5})\..+ ]]; then
               skipped=$((skipped+1))
               continue
@@ -74,45 +71,50 @@ jobs:
 
             pid="${BASH_REMATCH[1]}"
 
+            # solved.ac API 호출
             json="$(curl -fsSL "https://solved.ac/api/v3/search/suggestion?query=${pid}" || true)"
             if [ -z "$json" ]; then
-              echo "API failed for $pid ($f)"
+              echo "API failed for $pid (file: $f) -> skip"
               skipped=$((skipped+1))
               continue
             fi
 
             level="$(echo "$json" | jq -r '.problems[0].level // empty')"
-            if [ -z "$level" ]; then
-              echo "No level for $pid ($f)"
+            if [ -z "$level" ] || [ "$level" = "null" ]; then
+              echo "No level found for $pid (file: $f) -> skip"
               skipped=$((skipped+1))
               continue
             fi
 
+            # 티어 매핑
+            tier=""
             if   [ "$level" -ge 1 ]  && [ "$level" -le 5  ]; then tier="bronze"
             elif [ "$level" -ge 6 ]  && [ "$level" -le 10 ]; then tier="silver"
             elif [ "$level" -ge 11 ] && [ "$level" -le 15 ]; then tier="gold"
             elif [ "$level" -ge 16 ] && [ "$level" -le 20 ]; then tier="platinum"
             else
-              echo "Level $level for $pid -> hold"
+              echo "Level $level for $pid -> hold (skip)"
               skipped=$((skipped+1))
               continue
             fi
 
-            dest="$ROOT/$tier/$base"
+            dest="$DEST_ROOT/$tier/$base"
 
+            # 목적지에 같은 파일명 있으면 스킵
             if [ -e "$dest" ]; then
-              echo "Already exists: $dest"
+              echo "Destination exists: $dest -> skip"
               skipped=$((skipped+1))
               continue
             fi
 
-            echo "Move: $f -> $dest"
+            echo "Move: $f -> $dest (level=$level)"
             git mv "$f" "$dest"
             moved=$((moved+1))
           done
 
-          echo "Moved=$moved, Skipped=$skipped"
+          echo "Moved: $moved, Skipped: $skipped"
 
+          # 변경사항 없으면 종료
           if git diff --cached --quiet; then
             echo "No changes to commit."
             exit 0
@@ -120,5 +122,5 @@ jobs:
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git commit -m "chore: move BOJ solutions by solved.ac level"
+          git commit -m "chore: move solved/* to BOJ tier folders by solved.ac level"
           git push
