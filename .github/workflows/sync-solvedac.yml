@@ -1,0 +1,124 @@
+name: Move BOJ solutions by solved.ac level (Issue title trigger)
+
+on:
+  issues:
+    types: [opened, reopened, edited]
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  issues: read
+
+jobs:
+  move-files:
+    # 이슈 제목이 정확히 일치할 때만 실행
+    if: github.event.issue.title == 'Move BOJ solutions by solved.ac level'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install jq
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
+
+      - name: Move files by solved.ac level
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          ROOT="baekjoon-online-judge"
+          BRONZE="$ROOT/bronze"
+          SILVER="$ROOT/silver"
+          GOLD="$ROOT/gold"
+          PLATINUM="$ROOT/platinum"
+
+          for d in "$ROOT" "$BRONZE" "$SILVER" "$GOLD" "$PLATINUM"; do
+            if [ ! -d "$d" ]; then
+              echo "Missing directory: $d"
+              exit 1
+            fi
+          done
+
+          mapfile -d '' files < <(
+            find "$ROOT" \
+              -type d \( \
+                -path "$BRONZE" -o \
+                -path "$SILVER" -o \
+                -path "$GOLD" -o \
+                -path "$PLATINUM" \
+              \) -prune -o \
+              -type f -print0
+          )
+
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "No candidate files found."
+            exit 0
+          fi
+
+          moved=0
+          skipped=0
+
+          for f in "${files[@]}"; do
+            base="$(basename "$f")"
+
+            # 00000.ext 형식만 대상
+            if [[ ! "$base" =~ ^([0-9]{5})\..+ ]]; then
+              skipped=$((skipped+1))
+              continue
+            fi
+
+            pid="${BASH_REMATCH[1]}"
+
+            json="$(curl -fsSL "https://solved.ac/api/v3/search/suggestion?query=${pid}" || true)"
+            if [ -z "$json" ]; then
+              echo "API failed for $pid ($f)"
+              skipped=$((skipped+1))
+              continue
+            fi
+
+            level="$(echo "$json" | jq -r '.problems[0].level // empty')"
+            if [ -z "$level" ]; then
+              echo "No level for $pid ($f)"
+              skipped=$((skipped+1))
+              continue
+            fi
+
+            if   [ "$level" -ge 1 ]  && [ "$level" -le 5  ]; then tier="bronze"
+            elif [ "$level" -ge 6 ]  && [ "$level" -le 10 ]; then tier="silver"
+            elif [ "$level" -ge 11 ] && [ "$level" -le 15 ]; then tier="gold"
+            elif [ "$level" -ge 16 ] && [ "$level" -le 20 ]; then tier="platinum"
+            else
+              echo "Level $level for $pid -> hold"
+              skipped=$((skipped+1))
+              continue
+            fi
+
+            dest="$ROOT/$tier/$base"
+
+            if [ -e "$dest" ]; then
+              echo "Already exists: $dest"
+              skipped=$((skipped+1))
+              continue
+            fi
+
+            echo "Move: $f -> $dest"
+            git mv "$f" "$dest"
+            moved=$((moved+1))
+          done
+
+          echo "Moved=$moved, Skipped=$skipped"
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: move BOJ solutions by solved.ac level"
+          git push
