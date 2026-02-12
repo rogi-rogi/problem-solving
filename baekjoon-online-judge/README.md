@@ -8,7 +8,7 @@
 꾸준함을 통해 사고 패턴을 체계적으로 확장하고, 문제 해결 감각을 날카롭게 만드는 것을 목표로 합니다.
 
 
-<a href="https://solved.ac/profile/polygon" target="_blank" alt="클릭해서 이동해주세요.">
+<a href="https://solved.ac/profile/polygon">
 
 ![Baekjoon Online Judge Badge](http://mazassumnida.wtf/api/v2/generate_badge?boj=polygon)
 
@@ -18,7 +18,7 @@ Started: 2022.01.31
 Streak: [1,300+](https://solved.ac/profile/polygon)  
 Solve: 1,900+  
 
----
+<br/>
 
 ## Programming Language
 
@@ -30,7 +30,7 @@ Solve: 1,900+
 언어는 문제 해결을 위한 도구로서, 언어별 사고 방식의 차이를 이해하는 과정에 의미를 둡니다.  
 주력 언어인 Java는, 프로그래머스 컴파일 환경(OpenJDK 14.0.2)과의 호환성을 고려해 Java 11 LTS 버전을 사용합니다.
 
----
+<br/>
 
 ## Repository Structure
 
@@ -42,12 +42,14 @@ Solve: 1,900+
 - platinum 
 - try-try : 미해결 문제 또는 증명 과정이 필요한 문제
 
+<br/>
+
 ### solved.ac 문제 난이도 동기화
 > GitHub Actions를 활용하여 매월 1일 기준으로 solved.ac 난이도와 동기화합니다.  
 > - 난이도 변동 반영
 > - 자동화를 통한 폴더 구조 일관성 유지
 
----
+<br/>
 
 ## Useful Resources
 
@@ -59,7 +61,7 @@ Solve: 1,900+
   - [난이도 책정 가이드 라인 - v2](https://solved.ac/guideline)
   - [검색 쿼리 문법](https://solved.ac/search)
 
----
+<br/>
 
 ## Solving Request & Contribution
 
@@ -69,7 +71,7 @@ Solve: 1,900+
 - 더 나은 풀이 방식 제안 환영 
 - 코드 스타일 개선 제안 환영  
 
----
+<br/>
 
 ## History
 - 2022.01.31
@@ -80,6 +82,3 @@ Solve: 1,900+
 - 2026.02.09
   - 자체 난이도 체계 → solved.ac 기준으로 전환
   - solved.ac 난이도 기여 데이터가 충분히 축적되어 신뢰 가능한 기준이라 판단
-
-
-
