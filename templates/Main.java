@@ -6,7 +6,8 @@ public class Main {
     private static String solve() {
         StringBuilder sb = new StringBuilder();
 
-        return sb
+
+        return sb.toString();
     }
 
     public static void main(String[] args) throws Exception {
@@ -21,6 +22,6 @@ public class Main {
 
 
         // Output
-        System.out.print(sb);
+        System.out.print(solve());
     }
 }
