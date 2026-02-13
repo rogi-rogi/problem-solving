@@ -7,14 +7,13 @@
 
 ## 📝 Commit Convention
 
-본 아카이브에서는 아래 커밋 형식을 따릅니다.  
-(플랫폼명) : (작업명) (문제 번호 또는 이름) [풀이 언어]  
+> 본 아카이브에서는 아래 커밋 형식을 따릅니다.  
+> {platform_name} : {type} {panem | pid} [{Language}]  
 
 ### 예시
 - `boj: solve 1000 A+B [java]`
 - `programmers: solve 택배 상자 꺼내기 [python]`
 
-> 작업명 예시: `solve`, `refactor`, `rename`, `optimize`
 
 <br>
 
@@ -22,24 +21,19 @@
 
 플랫폼별로 디렉토리를 분리하여 관리합니다.
 
-- [algospot](/algospot)
+- Algorithm
 - [baekjoon-online-judge](/baekjoon-online-judge)
-    - practice / easy / normal / hard / try-try
-- code-tree
-    - codetree101
-    - novice / intermediate 단계별
+    - bronze | silver | gold | platinum | diamond
+- hackerRank
+  - SQL
 - programmers
     - lv0 ~ lv5
     - algorithm-practice-kit
     - sql-practice-kit
-- leetcode
-    - algorithm (easy / medium / hard)
-    - sql
-- hackerRank
-    - SQL
 - sw-expert-academy
     - D1 ~ D8
-- solved (이미 해결한 문제 모음)
+- templates
+- ohter: 기타 플랫폼 또는 미분류 모음
 
 각 디렉토리 내부에는 문제 번호 또는 문제명을 기준으로 풀이 코드가 정리되어 있습니다.
 
