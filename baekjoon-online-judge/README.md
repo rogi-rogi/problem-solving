@@ -48,6 +48,7 @@ Solve: 1,900+
 > GitHub Actions를 활용하여 매월 1일 기준으로 solved.ac 난이도와 동기화합니다.  
 > - 난이도 변동 반영
 > - 자동화를 통한 폴더 구조 일관성 유지
+구체적인 동기화 방법은 [다음](./SOLVED_AC_LEVEL_GUIDE.md)과 같습니다.
 
 <br/>
 
