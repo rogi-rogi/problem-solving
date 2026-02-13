@@ -2,7 +2,6 @@ name: Sync BOJ tier folders by solved.ac level
 
 on:
   schedule:
-    # GitHub Actions cron은 UTC 기준
     # 매월 1일 00:00 UTC에 실행 (KST 09:00)
     - cron: "0 0 1 * *"
   workflow_dispatch: {}
@@ -25,17 +24,23 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y jq
 
-      - name: Sync files by solved.ac level
+      - name: Sync files by solved.ac level (with progress + per-file log)
         shell: bash
         run: |
           set -euo pipefail
 
+          # ---- KST 기준 1일에만 동작 (schedule이 28~31일에 돌기 때문) ----
+          KST_DAY="$(TZ=Asia/Seoul date +'%d')"
+          if [ "${GITHUB_EVENT_NAME:-}" = "schedule" ] && [ "$KST_DAY" != "01" ]; then
+            echo "Not the 1st day in KST (KST_DAY=$KST_DAY). Exit."
+            exit 0
+          fi
+
           DEST_ROOT="baekjoon-online-judge"
 
-          # 대상 티어 폴더들(요청: diamond 없으면 생성)
+          # 요청: diamond 없으면 생성
           tiers=("bronze" "silver" "gold" "platinum" "diamond")
 
-          # 폴더 존재/생성
           if [ ! -d "$DEST_ROOT" ]; then
             echo "Missing directory: $DEST_ROOT"
             exit 1
@@ -45,19 +50,35 @@ jobs:
             mkdir -p "$DEST_ROOT/$t"
           done
 
+          # ---- 전체 대상 파일 목록 수집(진행률 계산용) ----
+          declare -a all_files=()
+          for t in "${tiers[@]}"; do
+            tier_dir="$DEST_ROOT/$t"
+            while IFS= read -r -d '' f; do
+              all_files+=("$f")
+            done < <(find "$tier_dir" -maxdepth 1 -type f -print0 || true)
+          done
+
+          total=${#all_files[@]}
+          if [ "$total" -eq 0 ]; then
+            echo "No files found under $DEST_ROOT tier folders."
+            exit 0
+          fi
+
+          echo "Total files to check: $total"
+          echo "Format: [idx/total] pid | prev_tier -> curr_tier | action"
+          echo "---------------------------------------------------------"
+
           moved=0
           skipped=0
           checked=0
 
-          # 각 티어 폴더 내 파일을 대상으로 동기화
-          for current_tier in "${tiers[@]}"; do
-            tier_dir="$DEST_ROOT/$current_tier"
+          # ---- 티어별로 실제 처리 ----
+          for prev_tier in "${tiers[@]}"; do
+            tier_dir="$DEST_ROOT/$prev_tier"
 
-            # 폴더가 비어 있어도 실패하지 않게 처리
             mapfile -d '' files < <(find "$tier_dir" -maxdepth 1 -type f -print0 || true)
-
             if [ ${#files[@]} -eq 0 ]; then
-              echo "No files in $tier_dir"
               continue
             fi
 
@@ -65,8 +86,9 @@ jobs:
               checked=$((checked+1))
               base="$(basename "$f")"
 
-              # 파일명이 00000.ext 형식인지 확인
+              # 00000.ext 형식만 처리
               if [[ ! "$base" =~ ^([0-9]{5})\..+ ]]; then
+                echo "[$checked/$total] ----- | $prev_tier -> ----- | skip (invalid filename: $base)"
                 skipped=$((skipped+1))
                 continue
               fi
@@ -76,7 +98,7 @@ jobs:
               # solved.ac API 호출
               json="$(curl -fsSL "https://solved.ac/api/v3/search/suggestion?query=${pid}" || true)"
               if [ -z "$json" ]; then
-                echo "API failed for pid=$pid (file: $f) -> skip"
+                echo "[$checked/$total] $pid | $prev_tier -> ----- | skip (API failed)"
                 skipped=$((skipped+1))
                 continue
               fi
@@ -90,45 +112,47 @@ jobs:
               ')"
 
               if [ -z "$level" ] || [ "$level" = "null" ]; then
-                echo "No level found for pid=$pid (file: $f) -> skip"
+                echo "[$checked/$total] $pid | $prev_tier -> ----- | skip (no level)"
                 skipped=$((skipped+1))
                 continue
               fi
 
               # 레벨 -> 티어 매핑
-              desired_tier=""
-              if   [ "$level" -ge 1  ] && [ "$level" -le 5  ]; then desired_tier="bronze"
-              elif [ "$level" -ge 6  ] && [ "$level" -le 10 ]; then desired_tier="silver"
-              elif [ "$level" -ge 11 ] && [ "$level" -le 15 ]; then desired_tier="gold"
-              elif [ "$level" -ge 16 ] && [ "$level" -le 20 ]; then desired_tier="platinum"
-              elif [ "$level" -ge 21 ] && [ "$level" -le 25 ]; then desired_tier="diamond"
+              curr_tier=""
+              if   [ "$level" -ge 1  ] && [ "$level" -le 5  ]; then curr_tier="bronze"
+              elif [ "$level" -ge 6  ] && [ "$level" -le 10 ]; then curr_tier="silver"
+              elif [ "$level" -ge 11 ] && [ "$level" -le 15 ]; then curr_tier="gold"
+              elif [ "$level" -ge 16 ] && [ "$level" -le 20 ]; then curr_tier="platinum"
+              elif [ "$level" -ge 21 ] && [ "$level" -le 25 ]; then curr_tier="diamond"
               else
-                echo "pid=$pid level=$level -> out of handled range, skip (file: $f)"
+                echo "[$checked/$total] $pid | $prev_tier -> (level=$level) | skip (out of range)"
                 skipped=$((skipped+1))
                 continue
               fi
 
-              # 이미 올바른 폴더면 스킵
-              if [ "$desired_tier" = "$current_tier" ]; then
+              # 이미 올바른 폴더면 keep 로그
+              if [ "$curr_tier" = "$prev_tier" ]; then
+                echo "[$checked/$total] $pid | $prev_tier -> $curr_tier | keep"
                 continue
               fi
 
-              dest="$DEST_ROOT/$desired_tier/$base"
+              dest="$DEST_ROOT/$curr_tier/$base"
 
               # 목적지에 동일 파일명 있으면 스킵
               if [ -e "$dest" ]; then
-                echo "Destination exists: $dest -> skip (from: $f)"
+                echo "[$checked/$total] $pid | $prev_tier -> $curr_tier | skip (dest exists)"
                 skipped=$((skipped+1))
                 continue
               fi
 
-              echo "Move: $f -> $dest (pid=$pid level=$level)"
+              echo "[$checked/$total] $pid | $prev_tier -> $curr_tier | move"
               git mv "$f" "$dest"
               moved=$((moved+1))
             done
           done
 
-          echo "Checked: $checked, Moved: $moved, Skipped: $skipped"
+          echo "---------------------------------------------------------"
+          echo "Summary: Checked=$checked, Moved=$moved, Skipped=$skipped"
 
           # 변경사항 없으면 종료
           if git diff --cached --quiet; then
