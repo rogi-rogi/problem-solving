@@ -17,13 +17,24 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Sync files by solved.ac level
+      - name: Sync files by solved.ac level (batched + cooldown)
         shell: bash
         run: |
           set -euo pipefail
 
           DEST_ROOT="baekjoon-online-judge"
           tiers=("bronze" "silver" "gold" "platinum" "diamond")
+
+          # 배치/쿨다운 설정
+          BATCH_SIZE=500
+          COOLDOWN_SEC=180
+
+          # 재시도 설정
+          RETRY_MAX=5
+          RETRY_SLEEP_SEC=2
+
+          # 배치 안에서도 너무 빡세게 때리지 않도록 최소 딜레이(윈도우 제한 대비)
+          PER_REQUEST_DELAY_SEC="0.05"
 
           if [ ! -d "$DEST_ROOT" ]; then
             echo "Missing directory: $DEST_ROOT"
@@ -34,7 +45,13 @@ jobs:
             mkdir -p "$DEST_ROOT/$t"
           done
 
-          # 전체 파일 목록 수집 (진행률 표시용)
+          # jq 존재 확인(중복 설치 없음)
+          if ! command -v jq >/dev/null 2>&1; then
+            echo "jq not found on runner. (ubuntu-latest usually includes jq)"
+            exit 1
+          fi
+
+          # 전체 파일 수집 (티어 폴더 직속 파일만)
           declare -a all_files=()
           for t in "${tiers[@]}"; do
             while IFS= read -r -d '' f; do
@@ -49,99 +66,132 @@ jobs:
           fi
 
           echo "Total files: $total"
-          echo "Format: [idx/total] pid | prev -> curr | action"
+          echo "Batch size: $BATCH_SIZE, Cooldown: ${COOLDOWN_SEC}s"
+          echo "Format: [global_idx/total] [batch_idx/batch_total] pid | prev -> curr | action"
           echo "---------------------------------------------------------"
 
-          moved=0
-          skipped=0
-          checked=0
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          for prev_tier in "${tiers[@]}"; do
-            mapfile -d '' files < <(find "$DEST_ROOT/$prev_tier" -maxdepth 1 -type f -print0 || true)
-            [ ${#files[@]} -eq 0 ] && continue
+          moved_total=0
+          skipped_total=0
+          checked_total=0
 
-            for f in "${files[@]}"; do
-              checked=$((checked+1))
+          batch_start=0
+          batch_no=0
+
+          while [ "$batch_start" -lt "$total" ]; do
+            batch_no=$((batch_no+1))
+            batch_end=$((batch_start + BATCH_SIZE))
+            if [ "$batch_end" -gt "$total" ]; then
+              batch_end="$total"
+            fi
+
+            batch_count=$((batch_end - batch_start))
+            echo "================ Batch #$batch_no ($batch_count files) ================"
+
+            moved_batch=0
+            skipped_batch=0
+            checked_batch=0
+
+            for ((i=batch_start; i<batch_end; i++)); do
+              f="${all_files[$i]}"
               base="$(basename "$f")"
 
-              # 파일명 형식 확인
+              checked_total=$((checked_total+1))
+              checked_batch=$((checked_batch+1))
+
+              prev_tier="$(basename "$(dirname "$f")")"
+
+              # 파일명 00000.ext 형식만 처리
               if [[ ! "$base" =~ ^([0-9]{5})\..+ ]]; then
-                echo "[$checked/$total] ----- | $prev_tier -> ----- | skip (invalid filename)"
-                skipped=$((skipped+1))
+                echo "[$checked_total/$total] [$checked_batch/$batch_count] ----- | $prev_tier -> ----- | skip (invalid filename)"
+                skipped_total=$((skipped_total+1))
+                skipped_batch=$((skipped_batch+1))
                 continue
               fi
 
               pid="${BASH_REMATCH[1]}"
               url="https://solved.ac/api/v3/search/suggestion?query=${pid}"
 
-              # -------- API 호출 (재시도 + 429 대응) --------
+              # --- 재시도 (429 포함 실패 대응) ---
               json=""
-              for attempt in 1 2 3 4 5; do
+              for attempt in $(seq 1 "$RETRY_MAX"); do
                 json="$(curl -fsSL -H "User-Agent: BOJ-Tier-Sync" "$url" 2>/dev/null || true)"
-                [ -n "$json" ] && break
-                echo "[$checked/$total] $pid | retry $attempt"
-                sleep 2
+                if [ -n "$json" ]; then
+                  break
+                fi
+                echo "[$checked_total/$total] [$checked_batch/$batch_count] $pid | retry $attempt"
+                sleep "$RETRY_SLEEP_SEC"
               done
 
               if [ -z "$json" ]; then
-                echo "[$checked/$total] $pid | $prev_tier -> ----- | skip (API failed)"
-                skipped=$((skipped+1))
+                echo "[$checked_total/$total] [$checked_batch/$batch_count] $pid | $prev_tier -> ----- | skip (API failed)"
+                skipped_total=$((skipped_total+1))
+                skipped_batch=$((skipped_batch+1))
                 continue
               fi
 
-              # 요청 간 딜레이 (rate limit 완화)
-              sleep 0.15
+              # 배치 내 최소 딜레이
+              sleep "$PER_REQUEST_DELAY_SEC"
 
-              # -------- jq로 level 추출 --------
               level="$(echo "$json" | jq -r '.problems[0].level // empty')"
-
               if [ -z "$level" ]; then
-                echo "[$checked/$total] $pid | $prev_tier -> ----- | skip (no level)"
-                skipped=$((skipped+1))
+                echo "[$checked_total/$total] [$checked_batch/$batch_count] $pid | $prev_tier -> ----- | skip (no level)"
+                skipped_total=$((skipped_total+1))
+                skipped_batch=$((skipped_batch+1))
                 continue
               fi
 
-              # -------- 티어 매핑 --------
               if   [ "$level" -le 5  ]; then curr_tier="bronze"
               elif [ "$level" -le 10 ]; then curr_tier="silver"
               elif [ "$level" -le 15 ]; then curr_tier="gold"
               elif [ "$level" -le 20 ]; then curr_tier="platinum"
               elif [ "$level" -le 25 ]; then curr_tier="diamond"
               else
-                echo "[$checked/$total] $pid | $prev_tier -> (level=$level) | skip"
-                skipped=$((skipped+1))
+                echo "[$checked_total/$total] [$checked_batch/$batch_count] $pid | $prev_tier -> (level=$level) | skip"
+                skipped_total=$((skipped_total+1))
+                skipped_batch=$((skipped_batch+1))
                 continue
               fi
 
-              # 이동 필요 없으면 keep
               if [ "$curr_tier" = "$prev_tier" ]; then
-                echo "[$checked/$total] $pid | $prev_tier -> $curr_tier | keep"
+                echo "[$checked_total/$total] [$checked_batch/$batch_count] $pid | $prev_tier -> $curr_tier | keep"
                 continue
               fi
 
               dest="$DEST_ROOT/$curr_tier/$base"
-
               if [ -e "$dest" ]; then
-                echo "[$checked/$total] $pid | $prev_tier -> $curr_tier | skip (dest exists)"
-                skipped=$((skipped+1))
+                echo "[$checked_total/$total] [$checked_batch/$batch_count] $pid | $prev_tier -> $curr_tier | skip (dest exists)"
+                skipped_total=$((skipped_total+1))
+                skipped_batch=$((skipped_batch+1))
                 continue
               fi
 
-              echo "[$checked/$total] $pid | $prev_tier -> $curr_tier | move"
+              echo "[$checked_total/$total] [$checked_batch/$batch_count] $pid | $prev_tier -> $curr_tier | move"
               git mv "$f" "$dest"
-              moved=$((moved+1))
+              moved_total=$((moved_total+1))
+              moved_batch=$((moved_batch+1))
             done
+
+            echo "Batch #$batch_no summary: Checked=$checked_batch, Moved=$moved_batch, Skipped=$skipped_batch"
+
+            # 배치마다 변경사항 있으면 커밋/푸시
+            if ! git diff --cached --quiet; then
+              git commit -m "chore: sync BOJ tiers (batch #$batch_no)"
+              git push
+            else
+              echo "No changes to commit in batch #$batch_no."
+            fi
+
+            batch_start="$batch_end"
+
+            # 마지막 배치가 아니면 쿨다운
+            if [ "$batch_start" -lt "$total" ]; then
+              echo "Cooldown ${COOLDOWN_SEC}s before next batch..."
+              sleep "$COOLDOWN_SEC"
+            fi
           done
 
-          echo "---------------------------------------------------------"
-          echo "Summary: Checked=$checked, Moved=$moved, Skipped=$skipped"
-
-          if git diff --cached --quiet; then
-            echo "No changes to commit."
-            exit 0
-          fi
-
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git commit -m "chore: sync BOJ tier folders by solved.ac level"
-          git push
+          echo "========================================================="
+          echo "Total summary: Checked=$checked_total, Moved=$moved_total, Skipped=$skipped_total"
