@@ -28,7 +28,6 @@ jobs:
         run: |
           set -euo pipefail
 
-          # jq가 없으면 여기서 명확히 실패
           if ! command -v jq >/dev/null 2>&1; then
             echo "jq not found on runner. (ubuntu-latest usually includes jq)"
             exit 1
@@ -49,8 +48,8 @@ jobs:
           mkdir -p "$DEST_ROOT/_sync_state/run_reports"
           mkdir -p "$DEST_ROOT/manual_review"
 
-      # 2단계: 배치 처리(스캔 + 이동) + 3단계용 실패 기록 파일 생성
-      - name: Stage 2 - Batch scan & move + write failure lists
+      # 2단계: 배치 처리(스캔 + 이동) + 실패 기록 + 배치 간 대기(적응형)
+      - name: Stage 2 - Batch scan & move (batch=100, cooldown=60s + adaptive)
         id: batch
         shell: bash
         run: |
@@ -59,9 +58,17 @@ jobs:
           DEST_ROOT="baekjoon-online-judge"
           tiers=("bronze" "silver" "gold" "platinum" "diamond")
 
-          # 배치/호출 설정 (불필요한 쿨다운은 제거하고, 요청 딜레이/재시도로만 버팀)
-          BATCH_SIZE=500
+          # ✅ 요청 반영
+          BATCH_SIZE=100
+
+          # 배치 간 대기(기본 60초, 실패율>=10%면 +60초 누적, 절대 감소 X)
+          BASE_COOLDOWN_SEC=60
+          cooldown_sec="$BASE_COOLDOWN_SEC"
+
+          # 요청 간 딜레이(과속 방지)
           PER_REQUEST_DELAY_SEC="0.05"
+
+          # 짧은 재시도(강한 재시도는 stage 4에서)
           RETRY_MAX=2
           RETRY_SLEEP_SEC=2
 
@@ -91,6 +98,7 @@ jobs:
 
           echo "Total files: $total"
           echo "Batch size: $BATCH_SIZE"
+          echo "Cooldown base: ${BASE_COOLDOWN_SEC}s (non-decreasing, +60s if batch fail rate >= 10%)"
           echo "Format: [global_idx/total] [batch_idx/batch_total] pid | prev -> curr | action"
           echo "---------------------------------------------------------"
 
@@ -106,7 +114,7 @@ jobs:
           }
 
           fetch_level_with_http() {
-            # stdout: "OK:<level>" | "TRANSIENT:<http>" | "LOGIC:<reason>"
+            # stdout: OK:<level> | TRANSIENT:<http> | LOGIC:<reason>
             local pid="$1"
             local url="https://solved.ac/api/v3/search/suggestion?query=${pid}"
             local tmp
@@ -135,7 +143,7 @@ jobs:
                 continue
               fi
 
-              # 그 외 4xx 등은 논리 실패로 간주
+              # 그 외 4xx는 논리 실패
               rm -f "$tmp"
               echo "LOGIC:HTTP_$http"
               return 0
@@ -152,12 +160,19 @@ jobs:
 
           while [ "$batch_start" -lt "$total" ]; do
             batch_no=$((batch_no+1))
+
             batch_end=$((batch_start + BATCH_SIZE))
             if [ "$batch_end" -gt "$total" ]; then
               batch_end="$total"
             fi
             batch_count=$((batch_end - batch_start))
+
+            # 배치 실패 카운터(실패율 계산용)
+            batch_transient=0
+            batch_logical=0
+
             echo "================ Batch #$batch_no ($batch_count files) ================"
+            echo "Current cooldown: ${cooldown_sec}s"
 
             checked_batch=0
 
@@ -172,11 +187,11 @@ jobs:
               if [[ ! "$base" =~ ^([0-9]{5})\..+ ]]; then
                 echo "[$checked_total/$total] [$checked_batch/$batch_count] ----- | $prev_tier -> ----- | skip (invalid filename)"
                 printf "%s\t%s\t%s\t%s\n" "-----" "$f" "$prev_tier" "INVALID_FILENAME" >> "$logical_file"
+                batch_logical=$((batch_logical+1))
                 continue
               fi
 
               pid="${BASH_REMATCH[1]}"
-
               result="$(fetch_level_with_http "$pid")"
               sleep "$PER_REQUEST_DELAY_SEC"
 
@@ -187,6 +202,7 @@ jobs:
                   if [ -z "$curr_tier" ]; then
                     echo "[$checked_total/$total] [$checked_batch/$batch_count] $pid | $prev_tier -> (level=$level) | skip (out of range)"
                     printf "%s\t%s\t%s\t%s\n" "$pid" "$f" "$prev_tier" "OUT_OF_RANGE_LEVEL_$level" >> "$logical_file"
+                    batch_logical=$((batch_logical+1))
                     continue
                   fi
 
@@ -199,6 +215,7 @@ jobs:
                   if [ -e "$dest" ]; then
                     echo "[$checked_total/$total] [$checked_batch/$batch_count] $pid | $prev_tier -> $curr_tier | skip (dest exists)"
                     printf "%s\t%s\t%s\t%s\n" "$pid" "$f" "$prev_tier" "DEST_EXISTS:$dest" >> "$logical_file"
+                    batch_logical=$((batch_logical+1))
                     continue
                   fi
 
@@ -210,26 +227,45 @@ jobs:
                   http="${result#TRANSIENT:}"
                   echo "[$checked_total/$total] [$checked_batch/$batch_count] $pid | $prev_tier -> ----- | transient_fail (http=$http)"
                   echo "$pid" >> "$transient_file"
+                  batch_transient=$((batch_transient+1))
                   ;;
                 LOGIC:*)
                   reason="${result#LOGIC:}"
                   echo "[$checked_total/$total] [$checked_batch/$batch_count] $pid | $prev_tier -> ----- | logical_fail ($reason)"
                   printf "%s\t%s\t%s\t%s\n" "$pid" "$f" "$prev_tier" "$reason" >> "$logical_file"
+                  batch_logical=$((batch_logical+1))
                   ;;
                 *)
                   echo "[$checked_total/$total] [$checked_batch/$batch_count] $pid | $prev_tier -> ----- | logical_fail (UNKNOWN)"
                   printf "%s\t%s\t%s\t%s\n" "$pid" "$f" "$prev_tier" "UNKNOWN" >> "$logical_file"
+                  batch_logical=$((batch_logical+1))
                   ;;
               esac
             done
 
+            # 배치 실패율 계산(정수로 10% 이상인지 판단)
+            batch_fail=$((batch_transient + batch_logical))
+            # fail_rate >= 10%  <=>  batch_fail * 100 >= batch_count * 10
+            if [ $((batch_fail * 100)) -ge $((batch_count * 10)) ]; then
+              cooldown_sec=$((cooldown_sec + 60))
+              echo "Batch failure rate >= 10% (fail=$batch_fail/$batch_count). Cooldown increased to ${cooldown_sec}s"
+            else
+              echo "Batch failure rate < 10% (fail=$batch_fail/$batch_count). Cooldown stays ${cooldown_sec}s"
+            fi
+
             batch_start="$batch_end"
+
+            # 마지막 배치가 아니면 쿨다운
+            if [ "$batch_start" -lt "$total" ]; then
+              echo "Cooldown ${cooldown_sec}s before next batch..."
+              sleep "$cooldown_sec"
+            fi
           done
 
           echo "$checked_total" > "$state_dir/scanned_count.this_run.txt"
           sort -u "$transient_file" -o "$transient_file" || true
 
-      # 3단계: 실패 기록 요약/리포트 작성 + 1~3단계 커밋
+      # 3단계: 리포트 작성 + 1~3단계 커밋
       - name: Stage 3 - Write report + Commit (stages 1~3)
         shell: bash
         run: |
@@ -271,7 +307,6 @@ jobs:
             fi
           } > "$report"
 
-          # 1~3단계 결과를 한 번에 커밋
           if git diff --quiet && git diff --cached --quiet; then
             echo "No changes to commit."
             exit 0
@@ -283,7 +318,6 @@ jobs:
           git commit -m "chore: sync BOJ tiers (stages 1~3)"
           git push
 
-      # job output 세팅(다음 job이 조건 판단에 사용)
       - name: Set job outputs
         id: set_outputs
         shell: bash
@@ -368,7 +402,6 @@ jobs:
               fi
 
               if [[ "$http" =~ ^5 ]] || [ "$http" = "000" ]; then
-                # backoff: 5, 10, 20, 40, 60, 60...
                 sleep_sec=$((5 * (2 ** (attempt-1))))
                 if [ "$sleep_sec" -gt 60 ]; then sleep_sec=60; fi
                 sleep "$sleep_sec"
@@ -395,12 +428,10 @@ jobs:
                 level="${result#OK:}"
                 curr_tier="$(map_level_to_tier "$level")"
                 if [ -z "$curr_tier" ]; then
-                  # out-of-range는 논리 실패로 최종 처리(5단계에서 manual로 보냄)
                   echo -e "$pid\t\t\tOUT_OF_RANGE_LEVEL_$level" >> "$state_dir/logical_failures.retry_extra.tsv"
                   continue
                 fi
 
-                # pid.* 파일들을 티어 폴더에서 찾아 이동(여러 확장자 지원)
                 found_any=0
                 for t in "${tiers[@]}"; do
                   while IFS= read -r -d '' f; do
@@ -442,7 +473,7 @@ jobs:
 
           sort -u "$remaining_out" -o "$remaining_out" || true
 
-      - name: Stage 5 - Manual review move + persist remaining transient for next run
+      - name: Stage 5 - Manual review move + persist remaining transient for next run + Commit
         shell: bash
         run: |
           set -euo pipefail
@@ -467,7 +498,6 @@ jobs:
             local prev="$3"
             local reason="$4"
 
-            # path가 실제 파일일 때만 이동
             if [ -z "$path" ] || [ ! -f "$path" ]; then
               return 0
             fi
@@ -490,7 +520,6 @@ jobs:
             git mv "$path" "$dest/$base"
           }
 
-          # logical_main: pid, path, prev_tier, reason
           if [ -s "$logical_main" ]; then
             while IFS=$'\t' read -r pid path prev reason; do
               [ -z "$pid" ] && continue
@@ -498,7 +527,6 @@ jobs:
             done < "$logical_main"
           fi
 
-          # logical_extra: 일부 라인은 path가 없을 수 있음(스킵)
           if [ -s "$logical_extra" ]; then
             while IFS=$'\t' read -r pid path prev reason; do
               if [ -n "${path:-}" ] && [ -n "${prev:-}" ] && [ -n "${reason:-}" ]; then
@@ -507,7 +535,6 @@ jobs:
             done < "$logical_extra"
           fi
 
-          # 다음 실행용 transient 실패 pid 저장
           next_transient="$state_dir/transient_failed_pids.txt"
           if [ -s "$remaining_transient" ]; then
             sort -u "$remaining_transient" -o "$remaining_transient"
@@ -516,7 +543,6 @@ jobs:
             : > "$next_transient"
           fi
 
-          # 커밋(4~5단계 별도 커밋)
           if git diff --quiet && git diff --cached --quiet; then
             echo "No changes to commit in stages 4~5."
             exit 0
