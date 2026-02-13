@@ -9,32 +9,33 @@ permissions:
   contents: write
 
 jobs:
-  sync-tiers:
+  stage_1_3:
+    name: Stage 1~3 (scan/move + record/report) -> single commit
     runs-on: ubuntu-latest
+
+    outputs:
+      transient_count: ${{ steps.set_outputs.outputs.transient_count }}
+      logical_count: ${{ steps.set_outputs.outputs.logical_count }}
 
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Sync files by solved.ac level (batched + cooldown)
+      # 1단계: 사전 작업
+      - name: Stage 1 - Preflight
         shell: bash
         run: |
           set -euo pipefail
 
+          # jq가 없으면 여기서 명확히 실패
+          if ! command -v jq >/dev/null 2>&1; then
+            echo "jq not found on runner. (ubuntu-latest usually includes jq)"
+            exit 1
+          fi
+
           DEST_ROOT="baekjoon-online-judge"
           tiers=("bronze" "silver" "gold" "platinum" "diamond")
-
-          # 배치/쿨다운 설정
-          BATCH_SIZE=500
-          COOLDOWN_SEC=600
-
-          # 재시도 설정
-          RETRY_MAX=5
-          RETRY_SLEEP_SEC=2
-
-          # 배치 내 최소 딜레이
-          PER_REQUEST_DELAY_SEC="0.05"
 
           if [ ! -d "$DEST_ROOT" ]; then
             echo "Missing directory: $DEST_ROOT"
@@ -45,7 +46,35 @@ jobs:
             mkdir -p "$DEST_ROOT/$t"
           done
 
-          # 전체 파일 수집 (티어 폴더 직속 파일만)
+          mkdir -p "$DEST_ROOT/_sync_state/run_reports"
+          mkdir -p "$DEST_ROOT/manual_review"
+
+      # 2단계: 배치 처리(스캔 + 이동) + 3단계용 실패 기록 파일 생성
+      - name: Stage 2 - Batch scan & move + write failure lists
+        id: batch
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          DEST_ROOT="baekjoon-online-judge"
+          tiers=("bronze" "silver" "gold" "platinum" "diamond")
+
+          # 배치/호출 설정 (불필요한 쿨다운은 제거하고, 요청 딜레이/재시도로만 버팀)
+          BATCH_SIZE=500
+          PER_REQUEST_DELAY_SEC="0.05"
+          RETRY_MAX=2
+          RETRY_SLEEP_SEC=2
+
+          state_dir="$DEST_ROOT/_sync_state"
+          transient_file="$state_dir/transient_failed_pids.this_run.txt"
+          logical_file="$state_dir/logical_failures.this_run.tsv"
+          moved_file="$state_dir/moved.this_run.tsv"
+
+          : > "$transient_file"
+          : > "$logical_file"
+          : > "$moved_file"
+
+          # 전체 파일 수집(티어 폴더 직속 파일만)
           declare -a all_files=()
           for t in "${tiers[@]}"; do
             while IFS= read -r -d '' f; do
@@ -56,21 +85,68 @@ jobs:
           total=${#all_files[@]}
           if [ "$total" -eq 0 ]; then
             echo "No files found."
+            echo "0" > "$state_dir/scanned_count.this_run.txt"
             exit 0
           fi
 
           echo "Total files: $total"
-          echo "Batch size: $BATCH_SIZE, Cooldown: ${COOLDOWN_SEC}s"
+          echo "Batch size: $BATCH_SIZE"
           echo "Format: [global_idx/total] [batch_idx/batch_total] pid | prev -> curr | action"
           echo "---------------------------------------------------------"
 
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          map_level_to_tier() {
+            local level="$1"
+            if   [ "$level" -ge 1  ] && [ "$level" -le 5  ]; then echo "bronze"
+            elif [ "$level" -le 10 ]; then echo "silver"
+            elif [ "$level" -le 15 ]; then echo "gold"
+            elif [ "$level" -le 20 ]; then echo "platinum"
+            elif [ "$level" -le 25 ]; then echo "diamond"
+            else echo ""
+            fi
+          }
 
-          moved_total=0
-          skipped_total=0
+          fetch_level_with_http() {
+            # stdout: "OK:<level>" | "TRANSIENT:<http>" | "LOGIC:<reason>"
+            local pid="$1"
+            local url="https://solved.ac/api/v3/search/suggestion?query=${pid}"
+            local tmp
+            tmp="$(mktemp)"
+
+            local http="000"
+            for attempt in $(seq 1 "$RETRY_MAX"); do
+              http="$(curl -sS -L -H "User-Agent: BOJ-Tier-Sync" -o "$tmp" -w "%{http_code}" "$url" || echo "000")"
+
+              if [ "$http" = "200" ]; then
+                level="$(cat "$tmp" | jq -r '.problems[0].level // empty' || true)"
+                rm -f "$tmp"
+                if [ -n "$level" ]; then
+                  echo "OK:$level"
+                else
+                  echo "LOGIC:NO_LEVEL"
+                fi
+                return 0
+              fi
+
+              # transient: 429, 5xx, 네트워크(000)
+              if [ "$http" = "429" ] || [[ "$http" =~ ^5 ]] || [ "$http" = "000" ]; then
+                if [ "$attempt" -lt "$RETRY_MAX" ]; then
+                  sleep "$RETRY_SLEEP_SEC"
+                fi
+                continue
+              fi
+
+              # 그 외 4xx 등은 논리 실패로 간주
+              rm -f "$tmp"
+              echo "LOGIC:HTTP_$http"
+              return 0
+            done
+
+            rm -f "$tmp"
+            echo "TRANSIENT:$http"
+            return 0
+          }
+
           checked_total=0
-
           batch_start=0
           batch_no=0
 
@@ -80,112 +156,374 @@ jobs:
             if [ "$batch_end" -gt "$total" ]; then
               batch_end="$total"
             fi
-
             batch_count=$((batch_end - batch_start))
             echo "================ Batch #$batch_no ($batch_count files) ================"
 
-            moved_batch=0
-            skipped_batch=0
             checked_batch=0
 
             for ((i=batch_start; i<batch_end; i++)); do
               f="${all_files[$i]}"
               base="$(basename "$f")"
+              prev_tier="$(basename "$(dirname "$f")")"
 
               checked_total=$((checked_total+1))
               checked_batch=$((checked_batch+1))
 
-              prev_tier="$(basename "$(dirname "$f")")"
-
-              # 파일명 00000.ext 형식만 처리
               if [[ ! "$base" =~ ^([0-9]{5})\..+ ]]; then
                 echo "[$checked_total/$total] [$checked_batch/$batch_count] ----- | $prev_tier -> ----- | skip (invalid filename)"
-                skipped_total=$((skipped_total+1))
-                skipped_batch=$((skipped_batch+1))
+                printf "%s\t%s\t%s\t%s\n" "-----" "$f" "$prev_tier" "INVALID_FILENAME" >> "$logical_file"
                 continue
               fi
 
               pid="${BASH_REMATCH[1]}"
-              url="https://solved.ac/api/v3/search/suggestion?query=${pid}"
 
-              # --- 재시도 (429 포함 실패 대응) ---
-              json=""
-              for attempt in $(seq 1 "$RETRY_MAX"); do
-                json="$(curl -fsSL -H "User-Agent: BOJ-Tier-Sync" "$url" 2>/dev/null || true)"
-                if [ -n "$json" ]; then
-                  break
-                fi
-                echo "[$checked_total/$total] [$checked_batch/$batch_count] $pid | retry $attempt"
-                sleep "$RETRY_SLEEP_SEC"
-              done
-
-              if [ -z "$json" ]; then
-                echo "[$checked_total/$total] [$checked_batch/$batch_count] $pid | $prev_tier -> ----- | skip (API failed)"
-                skipped_total=$((skipped_total+1))
-                skipped_batch=$((skipped_batch+1))
-                continue
-              fi
-
-              # 배치 내 최소 딜레이
+              result="$(fetch_level_with_http "$pid")"
               sleep "$PER_REQUEST_DELAY_SEC"
 
-              level="$(echo "$json" | jq -r '.problems[0].level // empty')"
-              if [ -z "$level" ]; then
-                echo "[$checked_total/$total] [$checked_batch/$batch_count] $pid | $prev_tier -> ----- | skip (no level)"
-                skipped_total=$((skipped_total+1))
-                skipped_batch=$((skipped_batch+1))
-                continue
-              fi
+              case "$result" in
+                OK:*)
+                  level="${result#OK:}"
+                  curr_tier="$(map_level_to_tier "$level")"
+                  if [ -z "$curr_tier" ]; then
+                    echo "[$checked_total/$total] [$checked_batch/$batch_count] $pid | $prev_tier -> (level=$level) | skip (out of range)"
+                    printf "%s\t%s\t%s\t%s\n" "$pid" "$f" "$prev_tier" "OUT_OF_RANGE_LEVEL_$level" >> "$logical_file"
+                    continue
+                  fi
 
-              if   [ "$level" -le 5  ]; then curr_tier="bronze"
-              elif [ "$level" -le 10 ]; then curr_tier="silver"
-              elif [ "$level" -le 15 ]; then curr_tier="gold"
-              elif [ "$level" -le 20 ]; then curr_tier="platinum"
-              elif [ "$level" -le 25 ]; then curr_tier="diamond"
-              else
-                echo "[$checked_total/$total] [$checked_batch/$batch_count] $pid | $prev_tier -> (level=$level) | skip"
-                skipped_total=$((skipped_total+1))
-                skipped_batch=$((skipped_batch+1))
-                continue
-              fi
+                  if [ "$curr_tier" = "$prev_tier" ]; then
+                    echo "[$checked_total/$total] [$checked_batch/$batch_count] $pid | $prev_tier -> $curr_tier | keep"
+                    continue
+                  fi
 
-              if [ "$curr_tier" = "$prev_tier" ]; then
-                echo "[$checked_total/$total] [$checked_batch/$batch_count] $pid | $prev_tier -> $curr_tier | keep"
-                continue
-              fi
+                  dest="$DEST_ROOT/$curr_tier/$base"
+                  if [ -e "$dest" ]; then
+                    echo "[$checked_total/$total] [$checked_batch/$batch_count] $pid | $prev_tier -> $curr_tier | skip (dest exists)"
+                    printf "%s\t%s\t%s\t%s\n" "$pid" "$f" "$prev_tier" "DEST_EXISTS:$dest" >> "$logical_file"
+                    continue
+                  fi
 
-              dest="$DEST_ROOT/$curr_tier/$base"
-              if [ -e "$dest" ]; then
-                echo "[$checked_total/$total] [$checked_batch/$batch_count] $pid | $prev_tier -> $curr_tier | skip (dest exists)"
-                skipped_total=$((skipped_total+1))
-                skipped_batch=$((skipped_batch+1))
-                continue
-              fi
-
-              echo "[$checked_total/$total] [$checked_batch/$batch_count] $pid | $prev_tier -> $curr_tier | move"
-              git mv "$f" "$dest"
-              moved_total=$((moved_total+1))
-              moved_batch=$((moved_batch+1))
+                  echo "[$checked_total/$total] [$checked_batch/$batch_count] $pid | $prev_tier -> $curr_tier | move"
+                  git mv "$f" "$dest"
+                  printf "%s\t%s\t%s\t%s\n" "$pid" "$f" "$prev_tier" "$curr_tier" >> "$moved_file"
+                  ;;
+                TRANSIENT:*)
+                  http="${result#TRANSIENT:}"
+                  echo "[$checked_total/$total] [$checked_batch/$batch_count] $pid | $prev_tier -> ----- | transient_fail (http=$http)"
+                  echo "$pid" >> "$transient_file"
+                  ;;
+                LOGIC:*)
+                  reason="${result#LOGIC:}"
+                  echo "[$checked_total/$total] [$checked_batch/$batch_count] $pid | $prev_tier -> ----- | logical_fail ($reason)"
+                  printf "%s\t%s\t%s\t%s\n" "$pid" "$f" "$prev_tier" "$reason" >> "$logical_file"
+                  ;;
+                *)
+                  echo "[$checked_total/$total] [$checked_batch/$batch_count] $pid | $prev_tier -> ----- | logical_fail (UNKNOWN)"
+                  printf "%s\t%s\t%s\t%s\n" "$pid" "$f" "$prev_tier" "UNKNOWN" >> "$logical_file"
+                  ;;
+              esac
             done
 
-            echo "Batch #$batch_no summary: Checked=$checked_batch, Moved=$moved_batch, Skipped=$skipped_batch"
-
-            # 배치마다 변경사항 있으면 커밋/푸시
-            if ! git diff --cached --quiet; then
-              git commit -m "chore: sync BOJ tiers (batch #$batch_no)"
-              git push
-            else
-              echo "No changes to commit in batch #$batch_no."
-            fi
-
             batch_start="$batch_end"
-
-            # 마지막 배치가 아니면 쿨다운
-            if [ "$batch_start" -lt "$total" ]; then
-              echo "Cooldown ${COOLDOWN_SEC}s before next batch..."
-              sleep "$COOLDOWN_SEC"
-            fi
           done
 
-          echo "========================================================="
-          echo "Total summary: Checked=$checked_total, Moved=$moved_total, Skipped=$skipped_total"
+          echo "$checked_total" > "$state_dir/scanned_count.this_run.txt"
+          sort -u "$transient_file" -o "$transient_file" || true
+
+      # 3단계: 실패 기록 요약/리포트 작성 + 1~3단계 커밋
+      - name: Stage 3 - Write report + Commit (stages 1~3)
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          DEST_ROOT="baekjoon-online-judge"
+          state_dir="$DEST_ROOT/_sync_state"
+
+          scanned="$(cat "$state_dir/scanned_count.this_run.txt" || echo 0)"
+          transient_cnt="$(wc -l < "$state_dir/transient_failed_pids.this_run.txt" || echo 0)"
+          logical_cnt="$(wc -l < "$state_dir/logical_failures.this_run.tsv" || echo 0)"
+          moved_cnt="$(wc -l < "$state_dir/moved.this_run.tsv" || echo 0)"
+
+          ts="$(date -u +%Y%m%dT%H%M%SZ)"
+          report="$state_dir/run_reports/report_$ts.md"
+
+          {
+            echo "# BOJ Tier Sync Report ($ts UTC)"
+            echo
+            echo "- Scanned files: $scanned"
+            echo "- Moved files: $moved_cnt"
+            echo "- Transient failures (429/5xx/network): $transient_cnt"
+            echo "- Logical failures: $logical_cnt"
+            echo
+            echo "## Transient failed PIDs"
+            if [ "$transient_cnt" -gt 0 ]; then
+              sed 's/^/- /' "$state_dir/transient_failed_pids.this_run.txt"
+            else
+              echo "- (none)"
+            fi
+            echo
+            echo "## Logical failures (pid, path, prev_tier, reason)"
+            if [ "$logical_cnt" -gt 0 ]; then
+              echo '```'
+              cat "$state_dir/logical_failures.this_run.tsv"
+              echo '```'
+            else
+              echo "(none)"
+            fi
+          } > "$report"
+
+          # 1~3단계 결과를 한 번에 커밋
+          if git diff --quiet && git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git add -A
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: sync BOJ tiers (stages 1~3)"
+          git push
+
+      # job output 세팅(다음 job이 조건 판단에 사용)
+      - name: Set job outputs
+        id: set_outputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          DEST_ROOT="baekjoon-online-judge"
+          state_dir="$DEST_ROOT/_sync_state"
+
+          transient_cnt="$(wc -l < "$state_dir/transient_failed_pids.this_run.txt" 2>/dev/null || echo 0)"
+          logical_cnt="$(wc -l < "$state_dir/logical_failures.this_run.tsv" 2>/dev/null || echo 0)"
+
+          echo "transient_count=$transient_cnt" >> "$GITHUB_OUTPUT"
+          echo "logical_count=$logical_cnt" >> "$GITHUB_OUTPUT"
+
+  stage_4_5:
+    name: Stage 4~5 (retry transient + manual review + persist) -> separate commit
+    runs-on: ubuntu-latest
+    needs: [stage_1_3]
+    if: ${{ needs.stage_1_3.outputs.transient_count != '0' || needs.stage_1_3.outputs.logical_count != '0' }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Stage 4 - Retry transient failures only
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          DEST_ROOT="baekjoon-online-judge"
+          tiers=("bronze" "silver" "gold" "platinum" "diamond")
+          state_dir="$DEST_ROOT/_sync_state"
+
+          transient_in="$state_dir/transient_failed_pids.this_run.txt"
+          remaining_out="$state_dir/transient_failed_pids.remaining.txt"
+          retry_log="$state_dir/retry_moves.this_run.tsv"
+
+          : > "$remaining_out"
+          : > "$retry_log"
+
+          if [ ! -s "$transient_in" ]; then
+            echo "No transient failures to retry."
+            exit 0
+          fi
+
+          map_level_to_tier() {
+            local level="$1"
+            if   [ "$level" -ge 1  ] && [ "$level" -le 5  ]; then echo "bronze"
+            elif [ "$level" -le 10 ]; then echo "silver"
+            elif [ "$level" -le 15 ]; then echo "gold"
+            elif [ "$level" -le 20 ]; then echo "platinum"
+            elif [ "$level" -le 25 ]; then echo "diamond"
+            else echo ""
+            fi
+          }
+
+          fetch_level_strong() {
+            local pid="$1"
+            local url="https://solved.ac/api/v3/search/suggestion?query=${pid}"
+            local tmp
+            tmp="$(mktemp)"
+
+            local http="000"
+            for attempt in 1 2 3 4 5 6; do
+              http="$(curl -sS -L -H "User-Agent: BOJ-Tier-Sync" -o "$tmp" -w "%{http_code}" "$url" || echo "000")"
+
+              if [ "$http" = "200" ]; then
+                level="$(cat "$tmp" | jq -r '.problems[0].level // empty' || true)"
+                rm -f "$tmp"
+                if [ -n "$level" ]; then
+                  echo "OK:$level"
+                else
+                  echo "LOGIC:NO_LEVEL"
+                fi
+                return 0
+              fi
+
+              if [ "$http" = "429" ]; then
+                sleep 60
+                continue
+              fi
+
+              if [[ "$http" =~ ^5 ]] || [ "$http" = "000" ]; then
+                # backoff: 5, 10, 20, 40, 60, 60...
+                sleep_sec=$((5 * (2 ** (attempt-1))))
+                if [ "$sleep_sec" -gt 60 ]; then sleep_sec=60; fi
+                sleep "$sleep_sec"
+                continue
+              fi
+
+              rm -f "$tmp"
+              echo "LOGIC:HTTP_$http"
+              return 0
+            done
+
+            rm -f "$tmp"
+            echo "TRANSIENT:$http"
+            return 0
+          }
+
+          while read -r pid; do
+            [ -z "$pid" ] && continue
+
+            result="$(fetch_level_strong "$pid")"
+
+            case "$result" in
+              OK:*)
+                level="${result#OK:}"
+                curr_tier="$(map_level_to_tier "$level")"
+                if [ -z "$curr_tier" ]; then
+                  # out-of-range는 논리 실패로 최종 처리(5단계에서 manual로 보냄)
+                  echo -e "$pid\t\t\tOUT_OF_RANGE_LEVEL_$level" >> "$state_dir/logical_failures.retry_extra.tsv"
+                  continue
+                fi
+
+                # pid.* 파일들을 티어 폴더에서 찾아 이동(여러 확장자 지원)
+                found_any=0
+                for t in "${tiers[@]}"; do
+                  while IFS= read -r -d '' f; do
+                    found_any=1
+                    base="$(basename "$f")"
+                    prev_tier="$(basename "$(dirname "$f")")"
+
+                    if [ "$prev_tier" = "$curr_tier" ]; then
+                      continue
+                    fi
+
+                    dest="$DEST_ROOT/$curr_tier/$base"
+                    if [ -e "$dest" ]; then
+                      echo -e "$pid\t$f\t$prev_tier\tDEST_EXISTS:$dest" >> "$state_dir/logical_failures.retry_extra.tsv"
+                      continue
+                    fi
+
+                    git mv "$f" "$dest"
+                    echo -e "$pid\t$f\t$prev_tier\t$curr_tier" >> "$retry_log"
+                  done < <(find "$DEST_ROOT/$t" -maxdepth 1 -type f -name "${pid}.*" -print0 2>/dev/null || true)
+                done
+
+                if [ "$found_any" -eq 0 ]; then
+                  echo -e "$pid\t\t\tPID_FILE_NOT_FOUND_AFTER_RETRY" >> "$state_dir/logical_failures.retry_extra.tsv"
+                fi
+                ;;
+              LOGIC:*)
+                reason="${result#LOGIC:}"
+                echo -e "$pid\t\t\t$reason" >> "$state_dir/logical_failures.retry_extra.tsv"
+                ;;
+              TRANSIENT:*)
+                echo "$pid" >> "$remaining_out"
+                ;;
+              *)
+                echo "$pid" >> "$remaining_out"
+                ;;
+            esac
+          done < "$transient_in"
+
+          sort -u "$remaining_out" -o "$remaining_out" || true
+
+      - name: Stage 5 - Manual review move + persist remaining transient for next run
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          DEST_ROOT="baekjoon-online-judge"
+          state_dir="$DEST_ROOT/_sync_state"
+
+          logical_main="$state_dir/logical_failures.this_run.tsv"
+          logical_extra="$state_dir/logical_failures.retry_extra.tsv"
+          remaining_transient="$state_dir/transient_failed_pids.remaining.txt"
+
+          manual_root="$DEST_ROOT/manual_review"
+          mkdir -p "$manual_root/invalid_filename"
+          mkdir -p "$manual_root/dest_exists"
+          mkdir -p "$manual_root/no_level_or_4xx"
+          mkdir -p "$manual_root/out_of_range"
+          mkdir -p "$manual_root/unknown"
+
+          move_to_manual() {
+            local pid="$1"
+            local path="$2"
+            local prev="$3"
+            local reason="$4"
+
+            # path가 실제 파일일 때만 이동
+            if [ -z "$path" ] || [ ! -f "$path" ]; then
+              return 0
+            fi
+
+            base="$(basename "$path")"
+
+            if [ "$reason" = "INVALID_FILENAME" ]; then
+              dest="$manual_root/invalid_filename/$prev"
+            elif [[ "$reason" == DEST_EXISTS:* ]]; then
+              dest="$manual_root/dest_exists/$prev"
+            elif [ "$reason" = "NO_LEVEL" ] || [[ "$reason" == HTTP_* ]]; then
+              dest="$manual_root/no_level_or_4xx/$prev"
+            elif [[ "$reason" == OUT_OF_RANGE_LEVEL_* ]]; then
+              dest="$manual_root/out_of_range/$prev"
+            else
+              dest="$manual_root/unknown/$prev"
+            fi
+
+            mkdir -p "$dest"
+            git mv "$path" "$dest/$base"
+          }
+
+          # logical_main: pid, path, prev_tier, reason
+          if [ -s "$logical_main" ]; then
+            while IFS=$'\t' read -r pid path prev reason; do
+              [ -z "$pid" ] && continue
+              move_to_manual "$pid" "$path" "$prev" "$reason"
+            done < "$logical_main"
+          fi
+
+          # logical_extra: 일부 라인은 path가 없을 수 있음(스킵)
+          if [ -s "$logical_extra" ]; then
+            while IFS=$'\t' read -r pid path prev reason; do
+              if [ -n "${path:-}" ] && [ -n "${prev:-}" ] && [ -n "${reason:-}" ]; then
+                move_to_manual "$pid" "$path" "$prev" "$reason"
+              fi
+            done < "$logical_extra"
+          fi
+
+          # 다음 실행용 transient 실패 pid 저장
+          next_transient="$state_dir/transient_failed_pids.txt"
+          if [ -s "$remaining_transient" ]; then
+            sort -u "$remaining_transient" -o "$remaining_transient"
+            cp "$remaining_transient" "$next_transient"
+          else
+            : > "$next_transient"
+          fi
+
+          # 커밋(4~5단계 별도 커밋)
+          if git diff --quiet && git diff --cached --quiet; then
+            echo "No changes to commit in stages 4~5."
+            exit 0
+          fi
+
+          git add -A
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: retry failed BOJ tier sync (stages 4~5)"
+          git push
