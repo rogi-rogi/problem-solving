@@ -27,13 +27,13 @@ jobs:
 
           # 배치/쿨다운 설정
           BATCH_SIZE=500
-          COOLDOWN_SEC=180
+          COOLDOWN_SEC=600
 
           # 재시도 설정
           RETRY_MAX=5
           RETRY_SLEEP_SEC=2
 
-          # 배치 안에서도 너무 빡세게 때리지 않도록 최소 딜레이(윈도우 제한 대비)
+          # 배치 내 최소 딜레이
           PER_REQUEST_DELAY_SEC="0.05"
 
           if [ ! -d "$DEST_ROOT" ]; then
@@ -44,12 +44,6 @@ jobs:
           for t in "${tiers[@]}"; do
             mkdir -p "$DEST_ROOT/$t"
           done
-
-          # jq 존재 확인(중복 설치 없음)
-          if ! command -v jq >/dev/null 2>&1; then
-            echo "jq not found on runner. (ubuntu-latest usually includes jq)"
-            exit 1
-          fi
 
           # 전체 파일 수집 (티어 폴더 직속 파일만)
           declare -a all_files=()
