@@ -6,7 +6,7 @@ public class Main {
 
 		// Input
 		String doc = br.readLine();
-		String word = br.readLine();
+		String word = br.readLine()
 
 		// Solve
 		int cnt = 0;
