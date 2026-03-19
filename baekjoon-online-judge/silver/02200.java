@@ -16,7 +16,8 @@ public class Main {
 		for (int i = N - 1; i >= 0; --i) {
 			int a = Integer.parseInt(st.nextToken());
 			if (a == 0) continue;
-			++cnt; // +
+
+			++cnt; // op
 			if (i == 0) {
 				cnt += String.valueOf(a).length();
 			} else if (a == 1) {
