@@ -9,19 +9,20 @@ public class Main {
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		int N = Integer.parseInt(st.nextToken());
 
-		int[] P = new int[2*N];
-		for (int i = 0; i < 2*N; i += 2) {
+		final int LEN = 2 * N;
+		int[] P = new int[LEN];
+		for (int i = 0; i < LEN; i += 2) {
 			st = new StringTokenizer(br.readLine());
-			int k = Integer.parseInt(st.nextToken());
+			int K = Integer.parseInt(st.nextToken());
 
 			// Solve
-			P[i] = Integer.parseInt(st.nextToken());
-			for (int j = 2; j < k; ++j) st.nextToken();
-			P[i + 1] = Integer.parseInt(st.nextToken());
+			P[i] = Integer.parseInt(st.nextToken());	// start
+			for (int k = 2; k < K; ++k) st.nextToken();
+			P[i + 1] = Integer.parseInt(st.nextToken()); // end
 		}
 		Arrays.sort(P);
 
 		// Output
-		System.out.print(P[N - 1]);
+		System.out.print(P[N - 1]); // (LEN / 2) - 1
 	}
 }
