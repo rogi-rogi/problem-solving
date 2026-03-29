@@ -12,13 +12,13 @@ RETRY_MAX=2
 RETRY_SLEEP_SEC=2
 
 state_dir="$DEST_ROOT/_sync_state"
-transient_file="$state_dir/transient_failed_pids.this_run.txt"
-logical_file="$state_dir/logical_failures.this_run.tsv"
 moved_file="$state_dir/moved.this_run.tsv"
+failed_file="$state_dir/failed.this_run.tsv"
 
-: > "$transient_file"
-: > "$logical_file"
 : > "$moved_file"
+: > "$failed_file"
+printf "문제 번호\t경로\t이전\t이후\n" >> "$moved_file"
+printf "문제 번호\t경로\t이전\t이후\n" >> "$failed_file"
 
 declare -a all_files=()
 for t in "${tiers[@]}"; do
@@ -166,7 +166,7 @@ while [ "$batch_start" -lt "$total" ]; do
 
     if [[ ! "$base" =~ ^([0-9]{5})\..+ ]]; then
       echo "[$checked_total/$total] [$checked_batch/$batch_count] ----- | $prev_tier -> ----- | skip (invalid filename)"
-      printf "%s\t%s\t%s\t%s\n" "-----" "$f" "$prev_tier" "INVALID_FILENAME" >> "$logical_file"
+      printf "%s\t%s\t%s\t%s\n" "-----" "$f" "$prev_tier" "INVALID_FILENAME" >> "$failed_file"
       batch_logical=$((batch_logical+1))
       continue
     fi
@@ -212,7 +212,7 @@ while [ "$batch_start" -lt "$total" ]; do
           curr_tier="$(map_level_to_tier "$level")"
           if [ -z "$curr_tier" ]; then
             echo "[$disp_total/$total] [$disp_batch/$batch_count] $pid | $prev_tier -> (level=$level) | skip (out of range)"
-            printf "%s\t%s\t%s\t%s\n" "$pid" "$f" "$prev_tier" "OUT_OF_RANGE_LEVEL_$level" >> "$logical_file"
+            printf "%s\t%s\t%s\t%s\n" "$pid" "$f" "$prev_tier" "OUT_OF_RANGE_LEVEL_$level" >> "$failed_file"
             batch_logical=$((batch_logical+1))
             continue
           fi
@@ -225,7 +225,7 @@ while [ "$batch_start" -lt "$total" ]; do
           dest="$DEST_ROOT/$curr_tier/$base"
           if [ -e "$dest" ]; then
             echo "[$disp_total/$total] [$disp_batch/$batch_count] $pid | $prev_tier -> $curr_tier | skip (dest exists)"
-            printf "%s\t%s\t%s\t%s\n" "$pid" "$f" "$prev_tier" "DEST_EXISTS:$dest" >> "$logical_file"
+            printf "%s\t%s\t%s\t%s\n" "$pid" "$f" "$prev_tier" "DEST_EXISTS:$dest" >> "$failed_file"
             batch_logical=$((batch_logical+1))
             continue
           fi
@@ -237,12 +237,12 @@ while [ "$batch_start" -lt "$total" ]; do
         TRANSIENT)
           http="$reason"
           echo "[$disp_total/$total] [$disp_batch/$batch_count] $pid | $prev_tier -> ----- | transient_fail (http=$http)"
-          echo "$pid" >> "$transient_file"
+          printf "%s\t%s\t%s\t%s\n" "$pid" "$f" "$prev_tier" "TRANSIENT_HTTP_$http" >> "$failed_file"
           batch_transient=$((batch_transient+1))
           ;;
         LOGIC|*)
           echo "[$disp_total/$total] [$disp_batch/$batch_count] $pid | $prev_tier -> ----- | logical_fail ($reason)"
-          printf "%s\t%s\t%s\t%s\n" "$pid" "$f" "$prev_tier" "$reason" >> "$logical_file"
+          printf "%s\t%s\t%s\t%s\n" "$pid" "$f" "$prev_tier" "$reason" >> "$failed_file"
           batch_logical=$((batch_logical+1))
           ;;
       esac
@@ -268,4 +268,3 @@ while [ "$batch_start" -lt "$total" ]; do
 done
 
 echo "$checked_total" > "$state_dir/scanned_count.this_run.txt"
-sort -u "$transient_file" -o "$transient_file" || true

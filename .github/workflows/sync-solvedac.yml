@@ -14,10 +14,6 @@ jobs:
     name: Stage 1~3 (scan/move + record/report) -> single commit
     runs-on: ubuntu-latest
 
-    outputs:
-      transient_count: ${{ steps.set_outputs.outputs.transient_count }}
-      logical_count: ${{ steps.set_outputs.outputs.logical_count }}
-
     steps:
       - uses: actions/checkout@v4
         with:
@@ -25,7 +21,7 @@ jobs:
 
       - name: Stage 1 - Validate jq/root & prepare tier/state directories
         shell: bash
-        run: bash .github/scripts/boj-tier-sync/preflight.sh
+        run: bash .github/scripts/boj-tier-sync/stage1_preflight.sh
 
       - name: Stage 2 - Batch scan & move (batch=100, cooldown=60s + adaptive)
         id: batch
@@ -35,31 +31,4 @@ jobs:
       - name: Stage 3 - Write report + Commit (stages 1~3)
         shell: bash
         run: bash .github/scripts/boj-tier-sync/stage3_report_commit.sh
-
-      - name: Set job outputs
-        id: set_outputs
-        shell: bash
-        run: bash .github/scripts/boj-tier-sync/set_outputs.sh
-
-  stage_4_5:
-    # Stage 4~5 in a separate commit when failures exist.
-    name: Stage 4~5 (retry transient + manual review) -> separate commit
-    runs-on: ubuntu-latest
-    needs: [stage_1_3]
-    if: ${{ needs.stage_1_3.outputs.transient_count != '0' || needs.stage_1_3.outputs.logical_count != '0' }}
-
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      # Stage 4: retry only transient failures with stronger policy.
-      - name: Stage 4 - Retry transient failures only
-        shell: bash
-        run: bash .github/scripts/boj-tier-sync/stage4_retry_transient.sh
-
-      # Stage 5: move logical failures to manual_review and commit.
-      - name: Stage 5 - Manual review move + Commit
-        shell: bash
-        run: bash .github/scripts/boj-tier-sync/stage5_manual_review_commit.sh
 

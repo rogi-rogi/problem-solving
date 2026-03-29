@@ -5,9 +5,18 @@ DEST_ROOT="baekjoon-online-judge"
 state_dir="$DEST_ROOT/_sync_state"
 
 scanned="$(cat "$state_dir/scanned_count.this_run.txt" || echo 0)"
-transient_cnt="$(wc -l < "$state_dir/transient_failed_pids.this_run.txt" || echo 0)"
-logical_cnt="$(wc -l < "$state_dir/logical_failures.this_run.tsv" || echo 0)"
-moved_cnt="$(wc -l < "$state_dir/moved.this_run.tsv" || echo 0)"
+moved_lines="$(wc -l < "$state_dir/moved.this_run.tsv" || echo 0)"
+failed_lines="$(wc -l < "$state_dir/failed.this_run.tsv" || echo 0)"
+if [ "$moved_lines" -gt 0 ]; then
+  moved_cnt=$((moved_lines - 1))
+else
+  moved_cnt=0
+fi
+if [ "$failed_lines" -gt 0 ]; then
+  failed_cnt=$((failed_lines - 1))
+else
+  failed_cnt=0
+fi
 
 ts="$(date -u +%Y%m%dT%H%M%SZ)"
 report="$state_dir/run_reports/report_$ts.md"
@@ -17,24 +26,7 @@ report="$state_dir/run_reports/report_$ts.md"
   echo
   echo "- Scanned files: $scanned"
   echo "- Moved files: $moved_cnt"
-  echo "- Transient failures (429/5xx/network): $transient_cnt"
-  echo "- Logical failures: $logical_cnt"
-  echo
-  echo "## Transient failed PIDs"
-  if [ "$transient_cnt" -gt 0 ]; then
-    sed 's/^/- /' "$state_dir/transient_failed_pids.this_run.txt"
-  else
-    echo "- (none)"
-  fi
-  echo
-  echo "## Logical failures (pid, path, prev_tier, reason)"
-  if [ "$logical_cnt" -gt 0 ]; then
-    echo '```'
-    cat "$state_dir/logical_failures.this_run.tsv"
-    echo '```'
-  else
-    echo "(none)"
-  fi
+  echo "- Failed files: $failed_cnt"
 } > "$report"
 
 if git diff --quiet && git diff --cached --quiet; then
