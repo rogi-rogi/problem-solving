@@ -5,7 +5,7 @@ DEST_ROOT="baekjoon-online-judge"
 tiers=("unrank" "bronze" "silver" "gold" "platinum" "diamond")
 
 BATCH_SIZE=100
-BASE_COOLDOWN_SEC=60
+BASE_COOLDOWN_SEC=1
 cooldown_sec="$BASE_COOLDOWN_SEC"
 PER_REQUEST_DELAY_SEC="0.05"
 RETRY_MAX=2
