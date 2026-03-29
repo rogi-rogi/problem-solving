@@ -333,7 +333,7 @@ jobs:
           echo "logical_count=$logical_cnt" >> "$GITHUB_OUTPUT"
 
   stage_4_5:
-    name: Stage 4~5 (retry transient + manual review + persist) -> separate commit
+    name: Stage 4~5 (retry transient + manual review) -> separate commit
     runs-on: ubuntu-latest
     needs: [stage_1_3]
     if: ${{ needs.stage_1_3.outputs.transient_count != '0' || needs.stage_1_3.outputs.logical_count != '0' }}
@@ -353,11 +353,8 @@ jobs:
           state_dir="$DEST_ROOT/_sync_state"
 
           transient_in="$state_dir/transient_failed_pids.this_run.txt"
-          remaining_out="$state_dir/transient_failed_pids.remaining.txt"
-          retry_log="$state_dir/retry_moves.this_run.tsv"
-
-          : > "$remaining_out"
-          : > "$retry_log"
+          logical_extra="$state_dir/logical_failures.retry_extra.tsv"
+          : > "$logical_extra"
 
           if [ ! -s "$transient_in" ]; then
             echo "No transient failures to retry."
@@ -428,7 +425,7 @@ jobs:
                 level="${result#OK:}"
                 curr_tier="$(map_level_to_tier "$level")"
                 if [ -z "$curr_tier" ]; then
-                  echo -e "$pid\t\t\tOUT_OF_RANGE_LEVEL_$level" >> "$state_dir/logical_failures.retry_extra.tsv"
+                  echo -e "$pid\t\t\tOUT_OF_RANGE_LEVEL_$level" >> "$logical_extra"
                   continue
                 fi
 
@@ -445,35 +442,33 @@ jobs:
 
                     dest="$DEST_ROOT/$curr_tier/$base"
                     if [ -e "$dest" ]; then
-                      echo -e "$pid\t$f\t$prev_tier\tDEST_EXISTS:$dest" >> "$state_dir/logical_failures.retry_extra.tsv"
+                      echo -e "$pid\t$f\t$prev_tier\tDEST_EXISTS:$dest" >> "$logical_extra"
                       continue
                     fi
 
                     git mv "$f" "$dest"
-                    echo -e "$pid\t$f\t$prev_tier\t$curr_tier" >> "$retry_log"
                   done < <(find "$DEST_ROOT/$t" -maxdepth 1 -type f -name "${pid}.*" -print0 2>/dev/null || true)
                 done
 
                 if [ "$found_any" -eq 0 ]; then
-                  echo -e "$pid\t\t\tPID_FILE_NOT_FOUND_AFTER_RETRY" >> "$state_dir/logical_failures.retry_extra.tsv"
+                  echo -e "$pid\t\t\tPID_FILE_NOT_FOUND_AFTER_RETRY" >> "$logical_extra"
                 fi
                 ;;
               LOGIC:*)
                 reason="${result#LOGIC:}"
-                echo -e "$pid\t\t\t$reason" >> "$state_dir/logical_failures.retry_extra.tsv"
+                echo -e "$pid\t\t\t$reason" >> "$logical_extra"
                 ;;
               TRANSIENT:*)
-                echo "$pid" >> "$remaining_out"
+                http="${result#TRANSIENT:}"
+                echo -e "$pid\t\t\tRETRY_TRANSIENT_HTTP_$http" >> "$logical_extra"
                 ;;
               *)
-                echo "$pid" >> "$remaining_out"
+                echo -e "$pid\t\t\tRETRY_UNKNOWN_RESULT" >> "$logical_extra"
                 ;;
             esac
           done < "$transient_in"
 
-          sort -u "$remaining_out" -o "$remaining_out" || true
-
-      - name: Stage 5 - Manual review move + persist remaining transient for next run + Commit
+      - name: Stage 5 - Manual review move + Commit
         shell: bash
         run: |
           set -euo pipefail
@@ -483,7 +478,6 @@ jobs:
 
           logical_main="$state_dir/logical_failures.this_run.tsv"
           logical_extra="$state_dir/logical_failures.retry_extra.tsv"
-          remaining_transient="$state_dir/transient_failed_pids.remaining.txt"
 
           manual_root="$DEST_ROOT/manual_review"
           mkdir -p "$manual_root/invalid_filename"
@@ -533,14 +527,6 @@ jobs:
                 move_to_manual "$pid" "$path" "$prev" "$reason"
               fi
             done < "$logical_extra"
-          fi
-
-          next_transient="$state_dir/transient_failed_pids.txt"
-          if [ -s "$remaining_transient" ]; then
-            sort -u "$remaining_transient" -o "$remaining_transient"
-            cp "$remaining_transient" "$next_transient"
-          else
-            : > "$next_transient"
           fi
 
           if git diff --quiet && git diff --cached --quiet; then
