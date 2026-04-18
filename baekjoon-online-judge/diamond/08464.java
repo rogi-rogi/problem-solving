@@ -2,16 +2,19 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 public class Main {
-	static final int MAX = 42000;
-
+	static final int MAX = 200000;
 	static int[] mobius = new int[MAX + 1];
 
 	static long countSquareFree(long x) {
 		long count = 0;
 		for (int i = 1; (long) i * i <= x; i++) {
-			count += mobius[i] * (x / ((long) i * i));
+			count += (long) mobius[i] * (x / ((long) i * i));
 		}
 		return count;
+	}
+
+	static long countNonSquareFree(long x) {
+		return x - countSquareFree(x);
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -23,20 +26,24 @@ public class Main {
 		// Solve
 		mobius[1] = 1;
 		for (int i = 1; i <= MAX; i++) {
-			for (int j = 2 * i; j <= MAX; j += i) {
+			for (int j = i + i; j <= MAX; j += i) {
 				mobius[j] -= mobius[i];
 			}
 		}
 
 		long left = 0;
-		long right = K * 2;
+		long right = 1;
 
-		while (left < right - 1) {
-			long mid = (left + right) / 2;
-			if (countSquareFree(mid) < K) {
-				left = mid;
-			} else {
+		while (countNonSquareFree(right) < K) {
+			right <<= 1;
+		}
+
+		while (left + 1 < right) {
+			long mid = (left + right) >>> 1;
+			if (countNonSquareFree(mid) >= K) {
 				right = mid;
+			} else {
+				left = mid;
 			}
 		}
 
