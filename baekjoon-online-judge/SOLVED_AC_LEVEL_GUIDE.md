@@ -4,7 +4,7 @@
 
 ### 동작 흐름
 - GitHub Actions를 활용해 다음 작업을 자동(매월 1일)으로 수행한다.
-- 티어 폴더(`unrank`, `bronze`, `silver`, `gold`, `platinum`, `diamond`) 내 문제 파일을 스캔한다.
+- 티어 폴더(`unrated`, `bronze`, `silver`, `gold`, `platinum`, `diamond`) 내 문제 파일을 스캔한다.
 - 파일명에서 추출한 문제 번호(pid)들을 배치 단위로 solved.ac에 조회한다.
 - 조회된 `level` 값을 바탕으로 대상 티어 폴더를 결정한다.
 - 기존 파일을 티어 폴더로 이동(동기화)한다.
@@ -49,7 +49,7 @@ GET https://solved.ac/api/v3/problem/lookup?problemIds=${pid_csv}
 
 ### 분류 기준
 ```
-level = 0        -> unrank
+level = 0        -> unrated
 level = 1 ~ 5    -> bronze
 level = 6 ~ 10   -> silver
 level = 11 ~ 15  -> gold

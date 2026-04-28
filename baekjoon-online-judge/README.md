@@ -14,9 +14,10 @@
 
 </a>
 
-Started: 2022.01.31  
-Streak: [1,300+](https://solved.ac/profile/polygon)  
-Solve: 1,900+  
+
+Active Period: 2022.01.31 ~ 2026.04.27
+Streak: [1,400](https://solved.ac/profile/polygon)
+Solve: 2,026
 
 <br/>
 
@@ -34,13 +35,14 @@ Solve: 1,900+
 
 ## Repository Structure
 
-문제 풀이 후, solved.ac 기준 난이도에 따라 정답 코드를 분류합니다.  
-난이도 분류는 개인 기준이 아닌, solved.ac의 집단 지성 기반 난이도 시스템을 따릅니다.
+문제 풀이 후, solved.ac 기준 난이도에 따라 정답 코드를 분류합니다.
+
+- unrated
 - bronze
 - silver 
 - gold 
 - platinum 
-- try-try : 미해결 문제 또는 증명 과정이 필요한 문제
+- diamond
 
 <br/>
 
@@ -83,3 +85,5 @@ Solve: 1,900+
 - 2026.02.09
   - 자체 난이도 체계 → solved.ac 기준으로 전환
   - solved.ac 난이도 기여 데이터가 충분히 축적되어 신뢰 가능한 기준이라 판단
+- 2026.04.27
+  - 백준 서비스 종료에 따른 아카이빙 및 문제 난이도 동기화 GitHub Actions 워크플로우 비활성화
