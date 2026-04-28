@@ -1,10 +1,10 @@
 ﻿name: Sync BOJ problem tiers by solved.ac level
 
-on:
-  schedule:
-    # UTC 매월 1일 00:00 실행 (= KST 매월 1일 09:00)
-    - cron: "0 0 1 * *"
-  workflow_dispatch: {}
+#on:
+#  schedule:
+#    # UTC 매월 1일 00:00 실행 (= KST 매월 1일 09:00)
+#    - cron: "0 0 1 * *"
+#  workflow_dispatch: {}
 
 permissions:
   contents: write
