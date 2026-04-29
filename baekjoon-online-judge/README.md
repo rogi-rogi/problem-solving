@@ -15,9 +15,9 @@
 
 </a>
 
-Active Period: 2022.01.31 ~ 2026.04.27
-Streak: [1,400](https://solved.ac/profile/polygon)
-Solve: 2,026
+Active Period: 2022.01.31 ~ 2026.04.27  
+Streak: [1,400](https://solved.ac/profile/polygon)  
+Solve: 2,026  
 
 <br/>
 
