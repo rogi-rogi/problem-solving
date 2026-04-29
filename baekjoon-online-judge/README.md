@@ -10,10 +10,10 @@
 
 <a href="https://solved.ac/profile/polygon">
 
-![Baekjoon Online Judge Badge](http://mazassumnida.wtf/api/v2/generate_badge?boj=polygon)
+![BOJ Profile Backup](./boj-profile-backup.png)
+<!-- ![Baekjoon Online Judge Badge](http://mazassumnida.wtf/api/v2/generate_badge?boj=polygon) -->
 
 </a>
-
 
 Active Period: 2022.01.31 ~ 2026.04.27
 Streak: [1,400](https://solved.ac/profile/polygon)
