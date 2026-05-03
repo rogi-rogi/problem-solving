@@ -1,14 +1,14 @@
 from collections import defaultdict
 
 def solve():
-    direction_freq = defaultdict(bool)
+    direction_exists = defaultdict(bool)
 
     for a in A:
-        direction_freq[a] = True
+        direction_exists[a] = True
 
     return (
-        direction_freq["N"] == direction_freq["S"]
-        and direction_freq["E"] == direction_freq["W"]
+        direction_exists["N"] == direction_exists["S"]
+        and direction_exists["E"] == direction_exists["W"]
     )
 
 if __name__ == '__main__':
