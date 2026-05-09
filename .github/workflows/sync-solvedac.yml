@@ -1,5 +1,8 @@
 ﻿name: Sync BOJ problem tiers by solved.ac level
 
+on:
+  workflow_dispatch:
+
 #on:
 #  schedule:
 #    # UTC 매월 1일 00:00 실행 (= KST 매월 1일 09:00)
