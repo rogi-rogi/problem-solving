@@ -1,6 +1,7 @@
 """Shared solved.ac v4 lookup and BOJ file classification."""
 import json
 import os
+import re
 import time
 from collections import defaultdict
 from datetime import datetime, timezone
@@ -37,6 +38,22 @@ def retry_delay(header, attempt):
         return max(0, parsedate_to_datetime(header).timestamp() - time.time())
 
 
+def http_failure(page, exc):
+    reason = f"목록 {page}페이지 HTTP {exc.code}"
+    if exc.headers.get("cf-mitigated", "").lower() == "challenge":
+        return f"{reason} — Cloudflare 확인 페이지가 반환됨"
+    if exc.headers.get_content_type() == "application/json":
+        try:
+            body = json.loads(exc.read(8192))
+            error = body.get("error") if isinstance(body, dict) else None
+            code = error.get("code") if isinstance(error, dict) else None
+            if isinstance(code, str) and re.fullmatch(r"[A-Z][A-Z0-9_]{0,79}", code):
+                return f"{reason} — solved.ac 오류 코드 {code}"
+        except (ValueError, OSError, HTTPException):
+            pass
+    return f"{reason} — 응답 유형 {exc.headers.get_content_type()}"
+
+
 def fetch_page(page, headers):
     url = f"https://solved.ac/api/v4/problems?sort=id&direction=asc&page={page}"
     for attempt in range(5):
@@ -45,7 +62,7 @@ def fetch_page(page, headers):
                 return json.load(response)
         except HTTPError as exc:
             if exc.code not in (429, 500, 502, 503, 504) or attempt == 4:
-                raise RuntimeError(f"목록 {page}페이지 HTTP {exc.code}") from exc
+                raise RuntimeError(http_failure(page, exc)) from exc
             delay = retry_delay(exc.headers.get("Retry-After"), attempt)
         except (URLError, TimeoutError, HTTPException) as exc:
             if attempt == 4:
@@ -164,6 +181,10 @@ def run(backup=False):
             lines.extend([f"## {title}", "", *rows, ""])
     report = "\n".join(lines) + "\n"
     print(report)
+    if os.environ.get("GITHUB_ACTIONS") and errors:
+        for message in errors:
+            escaped = message.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+            print(f"::error title=BOJ 난이도 분류::{escaped}")
     if os.environ.get("GITHUB_STEP_SUMMARY"):
         with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as summary:
             summary.write(report)
