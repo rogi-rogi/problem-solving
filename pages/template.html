@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>풀이 아카이브 · Problem Solving</title>
+<style>
+:root{color-scheme:light;--ink:#182334;--muted:#576679;--line:#e1e5eb;--paper:#fafbfd;--accent:#1d6653;font:16px/1.55 "Inter","Apple SD Gothic Neo",system-ui,sans-serif;color:var(--ink);background:var(--paper)}
+*{box-sizing:border-box}body{margin:0}button,input,select{font:inherit;color:inherit}button,select{cursor:pointer}button{background:none;border:0}a{color:inherit}button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #b0862b;outline-offset:2px}
+.wrap{width:min(1240px,92%);margin:auto}header{background:#ffffff;color:#182334}nav{display:flex;justify-content:space-between;align-items:center;padding:19px 0;border-bottom:1px solid #e6e9ed;font:14px/1.5 ui-monospace,monospace}nav b{color:#3455d5;font-size:17px;margin-right:10px}nav a{text-decoration:none}nav a:hover{text-decoration:underline}.hero{display:flex;justify-content:space-between;align-items:end;gap:35px;padding:44px 0 40px}.hero h1{font-size:clamp(34px,4.5vw,56px);letter-spacing:-.075em;line-height:1.08;margin:0}.stats{margin:13px 0 0;color:#536174}
+main{display:grid;grid-template-columns:270px minmax(0,1fr);gap:44px;padding:30px 0 60px}h2{font-size:21px;margin:0}aside h2{font-size:15px;margin:4px 10px 14px}.platforms{display:grid;gap:3px}.platforms button{padding:9px 10px;text-align:left;border-radius:5px;display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:15px}.platforms button[aria-pressed=true]{background:#eaf0ff;color:#203d91;font-weight:bold}.platforms button:hover,.row:hover{background:#eff3f8}.number,.lang{font:13px ui-monospace,monospace}.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin:15px 0}.toolbar input,.toolbar select{min-width:0;padding:9px 11px;border:1px solid #ccd4de;border-radius:5px;background:white;font-size:15px}.toolbar input{flex:1 1 190px}.toolbar select{max-width:100%;flex:0 1 auto}.section-title{display:flex;gap:10px;align-items:baseline}.section-title span,small{color:var(--muted)}.row{width:100%;text-align:left;display:grid;grid-template-columns:minmax(0,1fr) minmax(100px,27%) 85px;gap:14px;align-items:center;padding:12px 10px;border-bottom:1px solid var(--line)}.row strong,.cat{overflow-wrap:anywhere}.cat{font-size:14px;color:var(--muted)}.colhead{background:#f1f4f8;font-size:13px;font-weight:600;cursor:default;border-top:1px solid var(--line)}.colhead:hover{background:#f1f4f8}.pager{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:20px}.pager button{border:1px solid var(--line);background:white;padding:5px 13px;border-radius:5px}.pager button:disabled{opacity:.4;cursor:default}dialog{padding:0;width:min(850px,94vw);max-height:86vh;border:1px solid var(--line);border-radius:10px;color:var(--ink)}dialog::backdrop{background:#0c211bc9}.detail{padding:18px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px}.detail h2{overflow-wrap:anywhere}#path{display:block;overflow-wrap:anywhere}pre{background:#202737;color:#f1f3f8;margin:0;padding:22px;overflow:auto;max-height:64vh;tab-size:4;font:14px/1.65 ui-monospace,monospace}.empty{padding:24px;color:var(--muted)}[hidden]{display:none}
+@media(max-width:750px){.hero{display:block;padding:28px 0}main{display:block;padding-top:18px}aside h2{display:none}.platforms{display:flex;overflow:auto;padding:2px 0 10px;margin-bottom:18px}.platforms button{white-space:nowrap}.row{grid-template-columns:minmax(0,1fr) minmax(60px,25%) 58px;gap:7px;padding:11px 4px}.toolbar input{flex-basis:100%}.toolbar select{flex:1}.cat,.lang{font-size:12px}.detail{padding:12px}}
+
+header{border-bottom:1px solid var(--line)}
+.platforms button{justify-content:flex-start;min-height:44px}
+.platforms .number{margin-left:auto;padding-left:7px;color:var(--muted)}
+.collection-symbol{display:inline-grid;place-items:center;flex:0 0 32px;width:32px;height:32px;border-radius:6px;background:#eaf0f6;color:#344c68;font:700 12px/1 ui-monospace,monospace}
+.platforms [data-key="baekjoon-online-judge"] .collection-symbol{background:#e2edfa;color:#265079}
+.collection-logo{display:block;width:24px;height:24px;object-fit:contain}
+@media(max-width:750px){.platforms .number{padding-left:0}}
+
+.language-summary{margin-block:12px;max-width:100%;font-size:14px}
+.language-icons{list-style:none;margin:6px 0;padding:0;display:flex;flex-wrap:wrap;gap:clamp(8px,2vw,22px)}
+.language-icons .language-tile{display:grid;justify-items:center;min-width:48px;line-height:1.4}
+.language-icons img{width:52px;height:52px;background:#f4f5f7;border-radius:12px}
+.language-icons b{margin-top:4px;font-size:13px}.language-icons span{font:13px/1.5 ui-monospace,monospace}
+.language-open{width:100%;padding:7px;text-align:left;color:inherit;background:transparent;border:0;border-radius:8px}
+.language-open:hover{background:rgba(120,130,145,.09)}.language-open small{margin-left:8px}
+.language-initial{display:grid;place-items:center;width:52px;height:52px}
+.language-dialog{box-sizing:border-box;width:min(610px,94%);max-height:78vh;overflow:auto;padding:22px;border-radius:12px;border:1px solid var(--line,#bbb);background:var(--paper,Canvas);color:var(--ink,CanvasText)}
+.language-dialog::backdrop{background:rgba(15,23,36,.55)}
+.language-title{display:flex;align-items:center;justify-content:space-between;gap:12px}
+dialog .modal-close{display:grid;place-items:center;width:36px;height:36px;padding:0;border:0;border-radius:50%;background:#bc2636;color:white;font:24px/1 Arial,sans-serif}
+dialog .modal-close:hover{background:#982030}
+dialog .modal-close:focus-visible{outline:3px solid #223c78;outline-offset:3px}
+.language-dialog table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+.language-dialog td,.language-dialog th{text-align:right;padding:5px 0;border-bottom:1px solid var(--line,#bbb)}
+.language-dialog th:first-child{text-align:left}
+
+.language-name{display:flex;align-items:center;gap:7px}
+.language-name img,.language-name .language-initial{height:32px;width:32px;flex:none}
+.language-name .language-initial{display:grid;place-items:center;border-radius:6px;background:#e8edf3;color:#34465a;font:600 12px/1 ui-monospace,monospace}
+.language-dialog td:nth-child(2){width:38%;padding-inline:8px}
+.share-track{display:block;height:8px;border-radius:8px;background:#e8edf3;overflow:hidden}
+.share-track>span{display:block;height:100%;background:#436cb5;border-radius:inherit}
+@media(max-width:480px){.language-dialog{padding:14px}.language-dialog td:nth-child(2){width:23%}.language-dialog th,.language-dialog td{font-size:13px}}
+#viewer[open]{display:flex;flex-direction:column}
+#viewer pre{min-height:0}
+.file-nav{display:flex;justify-content:space-between;align-items:center;padding:6px 16px;border-top:1px solid var(--line)}
+.file-nav button{width:44px;height:40px;border-radius:6px;font:24px/1 system-ui;color:#284981}
+.file-nav button:hover:enabled{background:#eaf0ff}
+.file-nav button:disabled{opacity:.3;cursor:default}
+#source .comment{color:#a1aec2;font-style:italic}
+#source :is(.keyword,.atrule,.directive,.boolean){color:#e4afff}
+#source :is(.string,.char,.attr-value){color:#abdda6}
+#source :is(.number,.constant){color:#ffc990}
+#source :is(.function,.builtin,.class-name){color:#8ed6ff}
+#source :is(.operator,.symbol){color:#8edcd6}
+#source .punctuation{color:#bac7da}
+</style></head><body>
+<header><div class="wrap"><nav><span><b aria-hidden="true">{ }</b>rogi-rogi / problem-solving</span><a href="https://github.com/rogi-rogi/problem-solving">GitHub</a></nav>
+<div class="hero"><div><h1>풀이 아카이브</h1><p class="stats" id="stats"></p></div>LANGUAGE_SUMMARY</div></div></header>
+<main class="wrap"><aside><h2>컬렉션</h2><div class="platforms" id="platforms"></div></aside>
+<section><div class="section-title"><h2 id="heading">전체 파일</h2><span id="count" aria-live="polite"></span></div>
+<div class="toolbar"><input id="search" type="search" placeholder="문제 번호, 이름 또는 경로 검색" aria-label="문제 검색"><select id="category" aria-label="난이도 또는 분류"></select><select id="language" aria-label="언어"></select></div>
+<div class="row colhead"><span>파일명</span><span>분류</span><span>언어</span></div><div id="list"></div>
+<div class="pager"><button id="prev">이전</button><span id="page"></span><button id="next">다음</button></div></section></main>
+<dialog id="viewer" aria-labelledby="filename"><div class="detail"><div><h2 id="filename"></h2><small id="path"></small></div><form method="dialog"><button class="modal-close" aria-label="닫기" autofocus>×</button></form></div><pre><code id="source"></code></pre>
+<div class="file-nav">
+<button id="previous-file" aria-label="이전 파일" title="이전 파일">←</button>
+<button id="next-file" aria-label="다음 파일" title="다음 파일">→</button>
+</div></dialog>
+<script data-manual>PRISM_BUNDLE</script>
+<script type="application/json" id="data">ARCHIVE_DATA</script>
+<script>
+document.querySelectorAll('.language-open').forEach(button => {
+ button.addEventListener('click', () => button.nextElementSibling.showModal());
+});
+const records=JSON.parse(document.getElementById('data').textContent);
+const el=id=>document.getElementById(id);
+const num=n=>n.toLocaleString('ko-KR');
+const make=(tag,text,cls)=>{const n=document.createElement(tag);n.textContent=text;if(cls)n.className=cls;return n};
+const tally=key=>{const counts=new Map();for(const row of records)counts.set(row[key],(counts.get(row[key])||0)+1);return counts};
+const collections=tally('platform');
+el('stats').textContent=collections.size+'개 컬렉션 · '+num(records.length)+'개 파일';
+let platform='',page=0;
+const pageSize=25;
+function options(id,label,values){const select=el(id);select.replaceChildren(new Option(label,''));for(const v of values)select.add(new Option(v,v))}
+function choose(value){
+ platform=value;page=0;
+ const scope=records.filter(r=>!platform||r.platform===platform);
+ options('category','전체 분류',[...new Set(scope.map(r=>r.category).filter(Boolean))].sort());
+ options('language','전체 언어',[...new Set(scope.map(r=>r.language))].sort());
+ el('heading').textContent=value||'전체 파일';
+ for(const b of el('platforms').children)b.setAttribute('aria-pressed',String(b.dataset.key===value));render()
+}
+const collectionIcons = COLLECTION_ICONS;
+for(const [key,n] of [['',records.length],...collections]){
+ const button = make('button','');
+ button.dataset.key = key;
+ const badge = make('span','','collection-symbol');
+ badge.setAttribute('aria-hidden','true');
+ if (collectionIcons[key]) {
+   const logo = document.createElement('img');
+   logo.src = collectionIcons[key];
+   logo.alt = '';
+   logo.className = 'collection-logo';
+   badge.append(logo);
+ } else {
+   badge.textContent = key === 'baekjoon-online-judge' ? 'BOJ' : key.slice(0,2).toUpperCase();
+ }
+ button.append(badge);
+ button.append(make('span',key||'전체 파일'),make('span',num(n),'number'));
+ button.onclick = ()=>choose(key);
+ el('platforms').append(button);
+}
+let rows = [];
+let fileIndex = 0;
+// Prism has no bundled grammars for these two archive languages.
+Prism.languages.golfscript = {
+ comment: /#.*/,
+ string: /'(?:\\[\s\S]|[^'\\])*'|"(?:\\[\s\S]|[^"\\])*"/,
+ number: /-?\d+/,
+ punctuation: /[{}\[\]]/,
+ operator: /[^\w\s]/
+};
+Prism.languages.algol68 = {
+ comment: /#[^#]*#|\bCOMMENT\b[\s\S]*?\bCOMMENT\b/i,
+ string: /"(?:[^"]|"")*"/,
+ keyword: /\b(?:begin|end|if|then|else|fi|for|from|by|to|while|do|od|proc|int|real|bool|char|string|ref|mode)\b/i,
+ builtin: /\b(?:print|read|newline)\b/i,
+ number: /\b\d+(?:\.\d+)?\b/,
+ punctuation: /[(),;]/
+};
+const grammarNames = {'C++':'cpp', 'Visual Basic':'visual-basic', 'ALGOL 68':'algol68'};
+function showFile(index){
+ const row = rows[index];
+ const viewer = el('viewer');
+ fileIndex = index;
+ el('filename').textContent = row.name;
+ el('path').textContent = row.path;
+ const code = el('source');
+ const language = grammarNames[row.language] || row.language.toLowerCase();
+ const grammar = Prism.languages[language];
+ if (grammar) {
+   code.innerHTML = Prism.highlight(row.source, grammar, language);
+ } else {
+   code.textContent = row.source;
+ }
+ el('previous-file').disabled = index === 0;
+ el('next-file').disabled = index === rows.length - 1;
+ if (!viewer.open) viewer.showModal();
+ viewer.querySelector('pre').scrollTo(0, 0);
+}
+el('previous-file').onclick = () => showFile(fileIndex - 1);
+el('next-file').onclick = () => showFile(fileIndex + 1);
+function render(){
+ const query=el('search').value.trim().normalize().toLowerCase();
+ rows=records.filter(r=>(!platform||r.platform===platform)&&(!el('category').value||r.category===el('category').value)&&(!el('language').value||r.language===el('language').value)&&r.path.normalize().toLowerCase().includes(query));
+ const pages=Math.max(1,Math.ceil(rows.length/pageSize));page=Math.min(page,pages-1);
+ el('count').textContent=num(rows.length)+'개';el('list').replaceChildren();
+ for(let i=page*pageSize;i<Math.min((page+1)*pageSize,rows.length);i++){
+   const r=rows[i];
+   const b=make('button','','row');b.append(make('strong',r.name),make('span',r.category||r.platform,'cat'),make('span',r.language,'lang'));b.onclick=()=>showFile(i);el('list').append(b)
+ }
+ if(!rows.length)el('list').append(make('p','조건에 맞는 파일이 없어요.','empty'));
+ el('page').textContent=(page+1)+' / '+pages;el('prev').disabled=page===0;el('next').disabled=page+1>=pages
+}
+el('prev').onclick=()=>{page--;render()};el('next').onclick=()=>{page++;render()};
+for(const id of ['search','category','language'])el(id).addEventListener('input',()=>{page=0;render()});
+// A drag that starts inside the dialog should not dismiss it.
+for (const dialog of document.querySelectorAll('dialog')) {
+ function onBackdrop(event) {
+   const {left, right, top, bottom} = dialog.getBoundingClientRect();
+   return event.target === dialog && (event.clientX < left || event.clientX >= right ||
+          event.clientY < top || event.clientY >= bottom);
+ }
+ let startedOutside = false;
+ dialog.addEventListener('pointerdown', event => { startedOutside = onBackdrop(event); });
+ dialog.addEventListener('click', event => {
+   if (startedOutside && onBackdrop(event)) dialog.close();
+   startedOutside = false;
+ });
+}
+choose('');
+</script></body></html>
