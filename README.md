@@ -8,7 +8,7 @@
 problem-solving/
 ├── Algorithm/              # 주제별 알고리즘 구현
 │   └── Data Structure | Graph | String | …
-├── baekjoon-online-judge/  # 백준 난이도별 풀이
+├── Baekjoon Online Judge/  # 백준 난이도별 풀이
 │   └── bronze | silver | gold | platinum | diamond | unrated
 ├── HackerRank/             # SQL 주제별 풀이
 │   └── Basic Select | Aggregation
@@ -16,10 +16,12 @@ problem-solving/
 │   └── Coding Test High Score Kit | SQL High Score Kit | PCCE | …
 ├── SW Expert Academy/      # 난이도별 풀이
 │   └── D1 ~ D4
-├── jungol/                 # 정올 문제 풀이
+├── Jungol/                 # 정올 문제 풀이
 │   └── Intermediate
-├── other/                  # 기타 플랫폼 및 미분류 풀이
-│   └── code-tree | goorm | leetcode | …
+├── Algospot/               # 알고스팟 문제 풀이
+├── Codetree/              # 코드트리 Trail별 풀이
+├── goorm/                  # 구름 문제 풀이
+├── LeetCode/               # LeetCode SQL 풀이
 └── templates/              # 풀이 템플릿
     └── Main.java | Main.py
 ```
