@@ -1,81 +1,31 @@
-﻿# solved.ac 문제 난이도 수집 가이드
+# 백준 풀이 난이도 분류
 
-이 문서는 solved.ac API를 이용해 BOJ(백준) 문제 난이도(level)를 수집하고, 이를 기반으로 폴더(언랭크/브론즈/실버/골드/플래티넘/다이아)로 자동 분류하는 현재 동작을 정리합니다.
+GitHub Actions의 **BOJ 난이도 분류 → Run workflow**에서 작업을 선택해요.
+저장소의 Actions secrets에 `SOLVED_AC_CLIENT_ID`와 `SOLVED_AC_CLIENT_SECRET`을 등록해요.
 
-### 동작 흐름
-- GitHub Actions를 활용해 다음 작업을 자동(매월 1일)으로 수행한다.
-- 티어 폴더(`unrated`, `bronze`, `silver`, `gold`, `platinum`, `diamond`) 내 문제 파일을 스캔한다.
-- 파일명에서 추출한 문제 번호(pid)들을 배치 단위로 solved.ac에 조회한다.
-- 조회된 `level` 값을 바탕으로 대상 티어 폴더를 결정한다.
-- 기존 파일을 티어 폴더로 이동(동기화)한다.
-- 실행 결과를 `_sync_state`에 기록하고 리포트를 생성한 뒤 커밋/푸시한다.
+| 작업 | 입력 폴더 | 실행 시점 |
+| --- | --- | --- |
+| `classify-backup` | `other/solved/` | 백업을 정리할 때 수동 실행 |
+| `sync` | `bronze/`부터 `diamond/`까지 다섯 난이도 폴더 | 매월 1일 오전 9시(KST) 또는 수동 실행 |
 
-<br/>
+두 작업 모두 파일명에서 백준 번호를 읽고, 대상 폴더에 같은 이름이 있으면 원본을 보존하고 실패로 기록해요. 파일명과 확장자는 이동 후에도 유지해요.
 
-## API 엔드포인트
+## 난이도 조회
 
-### 요청
-```
-GET https://solved.ac/api/v3/problem/lookup?problemIds=${pid_csv}
-```
-- `pid_csv`: 문제 번호를 쉼표로 연결한 문자열 (예: `1000,1001,1002`)
-- 워크플로우에서는 URL 인코딩된 쉼표(`%2C`)로 배치 조회한다.
+solved.ac v4 문제 목록을 ID 오름차순으로 페이지당 50문제씩 읽어요. 응답의 `judgeIds`에서 BOJ 번호가 일치하는 항목의 `level`을 사용해요. 필요한 번호를 모두 찾거나 마지막 페이지에 도달하면 종료해요. 여러 언어로 푼 같은 문제는 조회 결과 하나를 공유해요. 검색 요청 비용과 기본 충전 속도에 맞춰 페이지 사이에 1.5초를 기다리고, HTTP 429는 `Retry-After`를 따라 재시도해요. [공식 API 명세](https://backstage.solved.ac/api/v4/openapi)
 
-### 응답 구조
+| level | 대상 폴더 |
+| --- | --- |
+| 0 | unrated |
+| 1–5 | bronze |
+| 6–10 | silver |
+| 11–15 | gold |
+| 16–20 | platinum |
+| 21–25 | diamond |
+| 26–30 | ruby |
 
-```json
-[
-  {
-    "problemId": 1000,
-    "titleKo": "A+B",
-    ...
-    "level": 1
-    ...
-  },
-  ...
-]
-```
+## 정기 실행 기록
 
-### 주요 필드
+실행 요약은 GitHub Actions에서 확인할 수 있어요. 정기 동기화는 변경이 없는 날에도 [실행 보고서](./_sync_state/run_reports/)를 저장해요. 보고서에는 시작·종료 시각(UTC), 대상·이동·실패 파일 수, 문제별 이전·현재 난이도와 이동 경로, 실패 사유가 담겨요.
 
-- `problemId`: 문제 번호
-- `level`: solved.ac 난이도 레벨 (정수, 0~25)
-
-<br/>
-
-# 티어 폴더 분류 규칙
-
-> 현재 분류 방식: level 구간으로 티어를 결정한다.
-
-### 분류 기준
-```
-level = 0        -> unrated
-level = 1 ~ 5    -> bronze
-level = 6 ~ 10   -> silver
-level = 11 ~ 15  -> gold
-level = 16 ~ 20  -> platinum
-level = 21 ~ 25  -> diamond
-level >= 26
-```
-
-<br/>
-
-## 실행 스크립트
-
-- 워크플로우: `/.github/workflows/sync-solvedac.yml`
-- Stage 1: `/.github/scripts/boj-tier-sync/stage1_preflight.sh`
-- Stage 2: `/.github/scripts/boj-tier-sync/stage2_scan_move.sh`
-- Stage 3: `/.github/scripts/boj-tier-sync/stage3_report_commit.sh`
-
-### 운영 파라미터(현재 Stage 2 기준)
-- 배치 크기: `100`
-- 배치 간 기본 쿨다운: `1초`
-- 요청 간 지연: `0.05초`
-- 재시도: 최대 `2회` (재시도 간 `2초`)
-- 배치 실패율이 10% 이상이면 다음 배치부터 쿨다운 `+60초`
-
-### 결과 파일
-- 이동 내역: `baekjoon-online-judge/_sync_state/moved.this_run.tsv`
-- 실패 내역: `baekjoon-online-judge/_sync_state/failed.this_run.tsv`
-- 스캔 수: `baekjoon-online-judge/_sync_state/scanned_count.this_run.txt`
-- 실행 리포트: `baekjoon-online-judge/_sync_state/run_reports/report_<UTC_TIMESTAMP>.md`
+최초 조회는 `_sync_state/levels.json`에 문제별 기준 레벨을 기록해요. 첫 실행의 이동 내역으로 기존 폴더와 새 난이도를 확인할 수 있고, 두 번째 조회부터는 Silver III → Silver II처럼 같은 폴더 안의 난이도 변경도 기록돼요. 일부 파일이 실패하면 성공한 이동과 보고서는 커밋하고 Actions 실행은 실패로 표시해요.

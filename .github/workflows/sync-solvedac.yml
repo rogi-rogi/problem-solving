@@ -1,37 +1,53 @@
-﻿name: Sync BOJ problem tiers by solved.ac level
+name: BOJ 난이도 분류
 
 on:
+  schedule:
+    - cron: '0 0 1 * *' # 매월 1일 09:00 KST
   workflow_dispatch:
-
-#on:
-#  schedule:
-#    # UTC 매월 1일 00:00 실행 (= KST 매월 1일 09:00)
-#    - cron: "0 0 1 * *"
-#  workflow_dispatch: {}
+    inputs:
+      operation:
+        description: 실행할 작업
+        type: choice
+        default: sync
+        options:
+          - sync
+          - classify-backup
 
 permissions:
   contents: write
 
-jobs:
-  stage_1_3:
-    name: Stage 1~3 (scan/move + record/report) -> single commit
-    runs-on: ubuntu-latest
+concurrency:
+  group: boj-tiers-${{ github.ref }}
+  cancel-in-progress: false
 
+jobs:
+  classify:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
 
-      - name: Stage 1 - Validate jq/root & prepare tier/state directories
-        shell: bash
-        run: bash .github/scripts/boj-tier-sync/stage1_preflight.sh
+      - name: 난이도 조회 및 분류
+        id: classify
+        env:
+          SOLVED_AC_CLIENT_ID: ${{ secrets.SOLVED_AC_CLIENT_ID }}
+          SOLVED_AC_CLIENT_SECRET: ${{ secrets.SOLVED_AC_CLIENT_SECRET }}
+          OPERATION: ${{ inputs.operation }}
+        run: |
+          if [[ "$OPERATION" == "classify-backup" ]]; then
+            python3 -B .github/scripts/boj-tier-sync/classify_backup.py
+          else
+            python3 -B .github/scripts/boj-tier-sync/sync_tiers.py
+          fi
 
-      - name: Stage 2 - Batch scan & move (batch=100, cooldown=60s + adaptive)
-        id: batch
-        shell: bash
-        run: bash .github/scripts/boj-tier-sync/stage2_scan_move.sh
-
-      - name: Stage 3 - Write report + Commit (stages 1~3)
-        shell: bash
-        run: bash .github/scripts/boj-tier-sync/stage3_report_commit.sh
-
+      - name: 이동 및 실행 기록 저장
+        if: ${{ !cancelled() && steps.classify.outcome != 'skipped' }}
+        run: |
+          git add -A -- baekjoon-online-judge
+          if [[ -d other/solved ]] || git ls-files other/solved | grep . >/dev/null; then
+            git add -A -- other/solved
+          fi
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m "chore: classify BOJ solutions by solved.ac tier"
+          git push
