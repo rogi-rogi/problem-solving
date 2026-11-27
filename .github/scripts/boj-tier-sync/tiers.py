@@ -51,6 +51,22 @@ def http_failure(page, exc):
                 return f"{reason} — solved.ac 오류 코드 {code}"
         except (ValueError, OSError, HTTPException):
             pass
+    if exc.headers.get_content_type() == "text/plain":
+        try:
+            message = exc.read(4096).decode("utf-8", errors="replace")
+        except (OSError, HTTPException):
+            message = ""
+        # Responses may echo request details. Keep credentials out of public reports.
+        for name in ("SOLVED_AC_CLIENT_SECRET", "SOLVED_AC_CLIENT_ID"):
+            value = os.environ.get(name)
+            if value:
+                message = message.replace(value, "[redacted]")
+        message = " ".join(message.split())[:240]
+        if message:
+            reason += f" — 서버 메시지: {message}"
+        ray = exc.headers.get("cf-ray", "")
+        if re.fullmatch(r"[0-9a-fA-F]{12,32}-[A-Z]{3}", ray):
+            reason += f" (CF-Ray {ray})"
     return f"{reason} — 응답 유형 {exc.headers.get_content_type()}"
 
 
